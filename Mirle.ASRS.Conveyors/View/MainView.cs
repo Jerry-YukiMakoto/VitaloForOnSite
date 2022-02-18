@@ -22,6 +22,10 @@ namespace Mirle.ASRS.Conveyors.View
         }
         private void MainView_Load(object sender, EventArgs e)
         {
+            pnlHP.Visible = true;
+            pnlUpper.Visible = false;
+            pnlLower.Visible = false;
+
             timerMainProc.Enabled = true;
             //Start Timer
             timerMainProc.Interval = 300;
@@ -33,11 +37,8 @@ namespace Mirle.ASRS.Conveyors.View
             timerMainProc.Enabled = false;
             try
             {
-                //Check PLC
-                lblPLCConnSts.BackColor = _conveyor.IsConnected ? Color.Lime : Color.Red;
-
-               if(!_conveyor.IsConnected)
-               {
+                if(!_conveyor.IsConnected)
+                {
                     for (int index = 1; index <= bufferCount; index++)
                     {
                         if (splitContainer1.Panel1.Controls.Find("A" + index, true).FirstOrDefault() is BufferView bufferView)
@@ -49,20 +50,48 @@ namespace Mirle.ASRS.Conveyors.View
                         }
                     }
                 }
-               else 
-               {
-                    for (int index = 1; index <= bufferCount; index++)
+                else 
+                {
+                    if (pnlHP.Visible)
                     {
-                        if (splitContainer1.Panel1.Controls.Find("A"+ index, true).FirstOrDefault() is BufferView bufferView)
+                        for (int index = 0; index < pnlHP.Controls.Count; index++) 
                         {
-                            if (_conveyor.TryGetBuffer(bufferView.BufferIndex, out var buffer))
+                            if (pnlHP.Controls[index] is BufferView bufferView) 
                             {
-                                bufferView.Refresh_Buffer(buffer);
+                                if (_conveyor.TryGetBuffer(bufferView.BufferIndex, out var buffer)) 
+                                {
+                                    bufferView.Refresh_Buffer(buffer);
+                                }
                             }
                         }
                     }
-               }
-                
+                    else if (pnlLower.Visible)
+                    {
+                        for (int index = 0; index < pnlHP.Controls.Count; index++)
+                        {
+                            if (pnlHP.Controls[index] is BufferView bufferView)
+                            {
+                                if (_conveyor.TryGetBuffer(bufferView.BufferIndex, out var buffer))
+                                {
+                                    bufferView.Refresh_Buffer(buffer);
+                                }
+                            }
+                        }
+                    }
+                    else if (pnlUpper.Visible) 
+                    {
+                        for (int index = 0; index < pnlHP.Controls.Count; index++)
+                        {
+                            if (pnlHP.Controls[index] is BufferView bufferView)
+                            {
+                                if (_conveyor.TryGetBuffer(bufferView.BufferIndex, out var buffer))
+                                {
+                                    bufferView.Refresh_Buffer(buffer);
+                                }
+                            }
+                        }
+                    }
+                }                
             }
             catch (Exception ex)
             {
@@ -72,6 +101,26 @@ namespace Mirle.ASRS.Conveyors.View
             {
                 timerMainProc.Enabled = true;
             }
+        }
+        private void btnHP_Click(object sender, EventArgs e)
+        {
+            pnlHP.Visible = true;
+            pnlUpper.Visible = false;
+            pnlLower.Visible = false;
+        }
+
+        private void btnLower_Click(object sender, EventArgs e)
+        {
+            pnlHP.Visible = false;
+            pnlUpper.Visible = false;
+            pnlLower.Visible = true;
+        }
+
+        private void btnUpper_Click(object sender, EventArgs e)
+        {
+            pnlHP.Visible = false;
+            pnlUpper.Visible = true;
+            pnlLower.Visible = false;
         }
     }
 }

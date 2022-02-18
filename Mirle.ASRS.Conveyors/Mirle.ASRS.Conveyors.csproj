@@ -76,6 +76,12 @@
     <Compile Include="Signal\SignalMapper.cs" />
     <Compile Include="Signal\SystemControllerSignal.cs" />
     <Compile Include="Signal\SystemSignal.cs" />
+    <Compile Include="View\BarcodeDataView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\BarcodeDataView.Designer.cs">
+      <DependentUpon>BarcodeDataView.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\BufferView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -103,6 +109,9 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\BarcodeDataView.resx">
+      <DependentUpon>BarcodeDataView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\BufferView.resx">
       <DependentUpon>BufferView.cs</DependentUpon>

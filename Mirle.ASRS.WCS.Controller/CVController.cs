@@ -41,12 +41,12 @@ namespace Mirle.ASRS.WCS.Controller
                 _plcHost.MPLCTimeout = 600;
                 _plcHost.EnableWriteRawData = false;
                 _plcHost.EnableWriteShareMemory = true;
-                var smReader = new SMReadOnlyCachedReader();
-                var blockInfos = GetBlockInfos();
-                foreach (var block in blockInfos)
-                {
-                    smReader.AddDataBlock(new SMDataBlockInt32(block.DeviceRange, $@"Global\{block.SharedMemoryName}"));
-                }
+                //var smReader = new SMReadOnlyCachedReader();
+                //var blockInfos = GetBlockInfos();
+                //foreach (var block in blockInfos)
+                //{
+                //    smReader.AddDataBlock(new SMDataBlockInt32(block.DeviceRange, $@"Global\{block.SharedMemoryName}"));
+                //}
                 _converyor = new Conveyors.Conveyor(_plcHost);
                 _plcHost.Start();
             }
@@ -62,8 +62,8 @@ namespace Mirle.ASRS.WCS.Controller
 
         private IEnumerable<BlockInfo> GetBlockInfos()
         {    
-                yield return new BlockInfo(new DDeviceRange("D101", "D210"), "Read", 0);
-                yield return new BlockInfo(new DDeviceRange("D3101", "D3210"), "Write", 1);
+            yield return new BlockInfo(new DDeviceRange("D101", "D210"), "Read", 0);
+            yield return new BlockInfo(new DDeviceRange("D3101", "D3210"), "Write", 1);
         }
 
 

@@ -32,7 +32,8 @@ namespace Mirle.ASRS.WCS.View
         {
             InitializeComponent();
             timRead.Elapsed += new System.Timers.ElapsedEventHandler(timRead_Elapsed);
-            timRead.Enabled = false; timRead.Interval = 500;
+            timRead.Enabled = false; 
+            timRead.Interval = 500;
         }
 
         #region Event
@@ -211,7 +212,8 @@ namespace Mirle.ASRS.WCS.View
             timer1.Stop();
             try
             {
-                lblDBConn.BackColor = DB.Proc.clsHost.IsConn ? Color.Blue : Color.Red;
+                lblDBConn.BackColor = DB.Proc.clsHost.IsConn ? Color.Lime : Color.Red;
+                lblPLCConn.BackColor = ControllerReader.GetCVControllerr().GetConnect() ? Color.Lime : Color.Red;
                 lblTimer.Text = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             }
             catch (Exception ex)
