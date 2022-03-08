@@ -15,11 +15,13 @@ namespace Mirle.ASRS.WCS.Controller
     {
         
         private static CVController _cvController;
+        private static CVController _cvController2;
         private static LoggerManager _loggerManager;
         
         public static void FunGetController(clsPlcConfig CVConfig) {
             _loggerManager = new LoggerManager();
-            _cvController = new CVController(CVConfig.MPLCIP, CVConfig.MPLCPort, CVConfig.InMemorySimulator);
+            _cvController = new CVController(CVConfig.MPLCIP, CVConfig.MPLCPort, CVConfig.InMemorySimulator, CVConfig.MPLCNo);
+            _cvController2 = new CVController(CVConfig.MPLCIP, CVConfig.MPLCPort, CVConfig.InMemorySimulator, CVConfig.MPLCNo);
         }
 
         #region Get_Manager
@@ -31,6 +33,11 @@ namespace Mirle.ASRS.WCS.Controller
         public static CVController GetCVControllerr()
         {
             return _cvController;
+        }
+
+        public static CVController GetCVControllerr2()
+        {
+            return _cvController2;
         }
         #endregion Get_Manager
 

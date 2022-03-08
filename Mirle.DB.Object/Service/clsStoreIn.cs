@@ -13,8 +13,8 @@ namespace Mirle.DB.Object.Service
         {
             try
             {
-                int bufferIndex = 3;
-                clsDB_Proc.GetDB_Object().GetProcess().FunStoreInWriPlc(StnNo.A3, bufferIndex);
+                int bufferIndex = 48;
+                clsDB_Proc.GetDB_Object().GetProcess().FunOutsourceStoreInWriPlc(StnNo.A11_06, bufferIndex);
             }
             catch (Exception ex)
             {

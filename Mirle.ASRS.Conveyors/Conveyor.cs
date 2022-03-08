@@ -28,10 +28,10 @@ namespace Mirle.ASRS.Conveyors
 
         public IEnumerable<Buffer> Buffers => _buffers.Values;
 
-        public Conveyor(IMPLCProvider plcHost)
+        public Conveyor(IMPLCProvider plcHost,int PLCNo)
         {
             _plcHost = plcHost;
-            _signal = new SignalMapper(_plcHost);
+            _signal = new SignalMapper(_plcHost,PLCNo);
 
             foreach (var buffer in _signal.BufferSignals)
             {

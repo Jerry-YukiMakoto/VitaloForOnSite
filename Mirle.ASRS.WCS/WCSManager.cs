@@ -32,6 +32,7 @@ namespace Mirle.ASRS.WCS
         public WCSManager()
         {
             _conveyor = ControllerReader.GetCVControllerr().GetConveryor();
+            _conveyor = ControllerReader.GetCVControllerr2().GetConveryor();
             _loggerManager = ControllerReader.GetLoggerManager();
 
             _storeOutProcess.Interval = 500;
@@ -148,9 +149,9 @@ namespace Mirle.ASRS.WCS
 
                     clsStoreOut.StoreOut_A1_CreateEquCmd();
 
-                    clsStoreOut.StoreOut_A2ToA4_WriteCV();
+                    clsStoreOut.StoreOut_A01_01ToA01_11_WriteCV();
 
-                    clsStoreOut.StoreOut_A2ToA4_CreateEquCmd();
+                    clsStoreOut.StoreOutt_A01_01ToA01_11_CreateEquCmd();
 
                     clsStoreOut.StoreOut_EquCmdFinish();
                 }

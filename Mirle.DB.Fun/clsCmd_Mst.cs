@@ -68,57 +68,30 @@ namespace Mirle.DB.Fun
 
         public GetDataResult GetCmdMstByStoreOutStart(string stations, out DataObject<CmdMst> dataObject, SqlServer db)
         {
-            string sql = "SELECT * FROM CMDMST ";
-            sql += $"WHERE CMDMODE IN ('{clsConstValue.CmdMode.StockOut}', '{clsConstValue.CmdMode.Cycle}') ";
-            sql += $"AND CmdSts='{clsConstValue.CmdSts.strCmd_Initial}' ";
-            sql += $"AND STNNO = '{stations}'";
-            return db.GetData(sql, out dataObject);
-        }
-
-        public GetDataResult GetCmdMstByStoreOutFinish(string cmdsno, out DataObject<CmdMst> dataObject, SqlServer db)
-        {
-            string sql = "SELECT * FROM CMDMST ";
-            sql += $"WHERE CMDMODE IN ('{clsConstValue.CmdMode.CMDFInish}') ";
-            sql += $"AND Cmdsno='{cmdsno}' ";
-            sql += $"AND Remark<>'{Remark.WMSReportComplete}' ";
-            sql += $"AND Iotype =='{IOtype.NormalstoreOut}' ";
-            return db.GetData(sql, out dataObject);
-        }
-
-        public GetDataResult GetCmdMstByStoreOutcheck(string stations, out DataObject<CmdMst> dataObject, SqlServer db)
-        {
-            string sql = "SELECT COUNT(CmdSno) as COUNT FROM CMDMST ";
-            sql += $"WHERE CMDMODE IN ('{clsConstValue.CmdMode.StockOut}') ";
-            sql += $"AND CmdSts='{clsConstValue.CmdSts.strCmd_Initial}' ";
-            sql += $"AND STNNO = '{stations}'";
-            return db.GetData(sql, out dataObject);
-        }
-
-        public GetDataResult GetCmdMstByLOC(string sInsideLoc, out DataObject<CmdMst> dataObject, SqlServer db)
-        {
-            string sql = "SELECT * FROM CMDMST ";
-            sql += $"WHERE LOC = '{sInsideLoc}'";
-            sql += $"AND CmdSts IN ('{clsConstValue.CmdSts.strCmd_Initial}','{clsConstValue.CmdSts.strCmd_Running}') ";
+            string sql = "SELECT * FROM Cmd_Mst ";
+            sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockOut}', '{clsConstValue.CmdMode.Cycle}') ";
+            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Initial}' ";
+            sql += $"AND New_Loc = '{stations}'";
             return db.GetData(sql, out dataObject);
         }
 
         public GetDataResult GetCmdMstByStoreOutCrane(string CmdSno, out DataObject<CmdMst> dataObject, SqlServer db)
         {
-            string sql = "SELECT * FROM CMDMST ";
-            sql += $"WHERE CMDMODE IN ('{clsConstValue.CmdMode.StockOut}', '{clsConstValue.CmdMode.Cycle}') ";
-            sql += $"AND CmdSno='{CmdSno}' ";
+            string sql = "SELECT * FROM Cmd_Mst ";
+            sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockOut}', '{clsConstValue.CmdMode.Cycle}') ";
+            sql += $"AND Cmd_Sno='{CmdSno}' ";
             sql += $"AND TRACE='{Trace.StoreOutWriteCraneCmdToCV}' ";
-            sql += $"AND CMDSTS='{clsConstValue.CmdSts.strCmd_Running}' ";
+            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
             return db.GetData(sql, out dataObject);
         }
 
         public GetDataResult GetCmdMstByStoreOutFinish(IEnumerable<string> stations, out DataObject<CmdMst> dataObject, SqlServer db)//盤點出庫不要在這裡被更新到
         {
-            string sql = "SELECT * FROM CMDMST ";
-            sql += $"WHERE CMDMODE IN ('{clsConstValue.CmdMode.StockOut}','{clsConstValue.CmdMode.Cycle}') ";
-            sql += $"AND CmdSts='{clsConstValue.CmdSts.strCmd_Running}' ";
+            string sql = "SELECT * FROM Cmd_Mst ";
+            sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockOut}','{clsConstValue.CmdMode.Cycle}') ";
+            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
             sql += $"AND TRACE IN ('{Trace.StoreOutCreateCraneCmd}') ";
-            sql += $"AND STNNO IN (";
+            sql += $"AND New_Loc IN (";
             foreach (var stn in stations)
             {
                 if (stations.Last() == stn)
@@ -137,7 +110,6 @@ namespace Mirle.DB.Fun
             sql += $")";
             return db.GetData(sql, out dataObject);
         }
-
         #endregion Store Out
 
 
@@ -233,9 +205,9 @@ namespace Mirle.DB.Fun
 
         public GetDataResult GetLocToLoc(out DataObject<CmdMst> dataObject, SqlServer db)
         {
-            string sql = "SELECT * FROM CMDMST ";
-            sql += $"WHERE CMDMODE IN ('{clsConstValue.CmdMode.L2L}') ";
-            sql += $"AND CmdSts='{clsConstValue.CmdSts.strCmd_Initial}' ";
+            string sql = "SELECT * FROM Cmd_Mst ";
+            sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.L2L}') ";
+            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Initial}' ";
             return db.GetData(sql, out dataObject);
         }
 
@@ -267,23 +239,23 @@ namespace Mirle.DB.Fun
 
         public ExecuteSQLResult UpdateCmdMst(string cmdSno, string cmdSts, string trace, SqlServer db)
         {
-            string sql = "UPDATE CMDMST ";
+            string sql = "UPDATE Cmd_Mst ";
             sql += $"SET TRACE='{trace}', ";
-            sql += $"CmdSts='{cmdSts}' ";
-            sql += $"WHERE CmdSno='{cmdSno}' ";
-            sql += $"AND CmdSts='{clsConstValue.CmdSts.strCmd_Running}' ";
+            sql += $"Cmd_Sts='{cmdSts}' ";
+            sql += $"WHERE Cmd_Sno='{cmdSno}' ";
+            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
             return db.ExecuteSQL2(sql);
         }
 
         public ExecuteSQLResult UpdateCmdMstTransferring(string cmdSno, string trace, SqlServer db)
         {
-            string sql = "UPDATE CMDMST ";
-            sql += $"SET CmdSts='{clsConstValue.CmdSts.strCmd_Running}', ";
+            string sql = "UPDATE Cmd_Mst ";
+            sql += $"SET Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}', ";
             sql += $"TRACE='{trace}', ";
             sql += $"Remark='', ";
-            sql += $"ExpDate='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
-            sql += $"WHERE CmdSno='{cmdSno}' ";
-            sql += $"AND CmdSts='{clsConstValue.CmdSts.strCmd_Initial}' ";
+            sql += $"EXP_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
+            sql += $"WHERE Cmd_Sno='{cmdSno}' ";
+            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Initial}' ";
             return db.ExecuteSQL2(sql);
         }
 
@@ -299,21 +271,21 @@ namespace Mirle.DB.Fun
 
         public ExecuteSQLResult UpdateCmdMstRemark(string cmdSno, string REMARK, SqlServer db)
         {
-            string sql = "UPDATE CMDMST ";
-            sql += $"SET ExpDate='{DateTime.Now:yyyy-MM-dd HH:mm:ss}', ";
+            string sql = "UPDATE Cmd_Mst ";
+            sql += $"SET Exp_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}', ";
             sql += $"REMARK='{REMARK}' ";
-            sql += $"WHERE CmdSno='{cmdSno}' ";
+            sql += $"WHERE Cmd_Sno='{cmdSno}' ";
             return db.ExecuteSQL2(sql);
         }
 
         public ExecuteSQLResult UpdateCmdMstRemarkandAbnormal(string cmdSno, string REMARK,string abnormal, SqlServer db)
         {
-            string sql = "UPDATE CMDMST ";
-            sql += $"SET ExpDate='{DateTime.Now:yyyy-MM-dd HH:mm:ss}', ";
-            sql += $"EndDate='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ,";
+            string sql = "UPDATE Cmd_Mst ";
+            sql += $"SET Exp_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}', ";
+            sql += $"End_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ,";
             sql += $"REMARK='{REMARK}' ,";
             sql += $"Cmd_Abnormal='{abnormal}' ";
-            sql += $"WHERE CmdSno='{cmdSno}' ";
+            sql += $"WHERE Cmd_Sno='{cmdSno}' ";
             return db.ExecuteSQL2(sql);
         }
 

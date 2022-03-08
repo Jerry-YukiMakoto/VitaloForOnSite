@@ -20,22 +20,22 @@ namespace Mirle.ASRS.WCS.Controller
         private readonly bool _InMemorySimulator;
        
 
-        public CVController(string ipAddress, int tcpPort, bool InMemorySimulator)
+        public CVController(string ipAddress, int tcpPort, bool InMemorySimulator,int PLCNo)
         {
             if (InMemorySimulator)
             {
                 var smWriter = new SMReadWriter();
-                var blockInfos = GetBlockInfos();
+                var blockInfos = GetBlockInfos(PLCNo);
                 foreach (var block in blockInfos)
                 {
                     smWriter.AddDataBlock(new SMDataBlockInt32(block.DeviceRange, $@"Global\{block.SharedMemoryName}"));
                 }
-                _converyor = new Conveyors.Conveyor(smWriter);
+                _converyor = new Conveyors.Conveyor(smWriter,PLCNo);
                 _InMemorySimulator = InMemorySimulator;
             }
             else
             {
-                var plcHostInfo = new PLCHostInfo("Gold", ipAddress, tcpPort, GetBlockInfos());
+                var plcHostInfo = new PLCHostInfo("VITALON", ipAddress, tcpPort, GetBlockInfos(PLCNo));
                 _plcHost = new PLCHost(plcHostInfo);
                 _plcHost.Interval = 200;
                 _plcHost.MPLCTimeout = 600;
@@ -47,7 +47,7 @@ namespace Mirle.ASRS.WCS.Controller
                 //{
                 //    smReader.AddDataBlock(new SMDataBlockInt32(block.DeviceRange, $@"Global\{block.SharedMemoryName}"));
                 //}
-                _converyor = new Conveyors.Conveyor(_plcHost);
+                _converyor = new Conveyors.Conveyor(_plcHost,PLCNo);
                 _plcHost.Start();
             }
 
@@ -60,10 +60,18 @@ namespace Mirle.ASRS.WCS.Controller
             _mainView = new MainView(_converyor);
         }
 
-        private IEnumerable<BlockInfo> GetBlockInfos()
-        {    
-            yield return new BlockInfo(new DDeviceRange("D101", "D210"), "Read", 0);
-            yield return new BlockInfo(new DDeviceRange("D3101", "D3210"), "Write", 1);
+        private IEnumerable<BlockInfo> GetBlockInfos(int PLCNo)
+        {
+            if (PLCNo == 1)
+            {
+                yield return new BlockInfo(new DDeviceRange("D101", "D600"), "Read", 0);
+                yield return new BlockInfo(new DDeviceRange("D3101", "D3590"), "Write", 1);
+            }
+            else if(PLCNo == 2)
+            {
+                yield return new BlockInfo(new DDeviceRange("D101", "D365"), "Read", 0);
+                yield return new BlockInfo(new DDeviceRange("D3101", "D3360"), "Write", 1);
+            }
         }
 
 

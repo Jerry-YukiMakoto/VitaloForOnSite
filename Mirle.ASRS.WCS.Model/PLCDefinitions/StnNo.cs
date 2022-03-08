@@ -2,9 +2,13 @@
 {
     public struct StnNo
     {
-        public const string A1 = "A1";
-        public const string A3 = "A3";
-        public const string A4 = "A4";
+        public const string A01_01 = "A01_01";
+        public const string A01_03 = "A01_03";
+        public const string A01_05 = "A01_05";
+        public const string A01_07 = "A01_07";
+        public const string A01_09 = "A01_09";
+        public const string A01_11 = "A01_11";
+        public const string A11_06 = "A11_06";
         public const string A5 = "A5";
         public const string A6 = "A6";
         public const string A7 = "A7";

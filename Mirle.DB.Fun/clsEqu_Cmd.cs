@@ -41,7 +41,7 @@ namespace Mirle.DB.Fun
             }
             else
             {
-                if (checkCraneNoReapeat(out var dataObject, db) == GetDataResult.Success)
+                if (checkCraneNoReapeat(craneNo, out var dataObject, db) == GetDataResult.Success)
                 {
                     int intCraneCount = int.Parse(dataObject[0].COUNT.ToString());
                     if (intCraneCount != 0)
@@ -87,9 +87,10 @@ namespace Mirle.DB.Fun
                 dtTmp = null;
             }
         }
-        public GetDataResult checkCraneNoReapeat(out DataObject<CmdMst> dataObject, SqlServer db)
+        public GetDataResult checkCraneNoReapeat(int CraneNo,out DataObject<CmdMst> dataObject, SqlServer db)
         {
             string sql = $"SELECT COUNT (*) AS COUNT FROM EQUCMD WHERE CMDSTS IN ('{clsConstValue.CmdSts.strCmd_Initial}', '{clsConstValue.CmdSts.strCmd_Running}')";
+            sql += $"AND EquNo='{CraneNo}'";
             return db.GetData(sql, out dataObject);
         }
 

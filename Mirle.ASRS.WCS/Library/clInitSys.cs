@@ -41,7 +41,6 @@ namespace Mirle.ASRS.WCS.Library
                 FunApiConfig(lcsini);
                 FunDeviceConfig(lcsini);
                 FunPlcConfig(lcsini);
-                FunStnNoConfig(lcsini);
             }
             catch(Exception ex)
             {
@@ -102,14 +101,7 @@ namespace Mirle.ASRS.WCS.Library
             CV_Config.UseMCProtocol = lcsini.CV.UseMCProtocol == 1 ? true : false;
         }
 
-        private static void FunStnNoConfig(ASRSINI lcsini) 
-        {
-            string str = "000000";
-            CranePortNo.A1 = str + lcsini.StnNo.A1;
-            CranePortNo.A5 = str + lcsini.StnNo.A5;
-            CranePortNo.A7 = str + lcsini.StnNo.A7;
-            CranePortNo.A9 = str + lcsini.StnNo.A9;
-        }
+
 
         /// <summary>
         /// 讀取ini檔的單一欄位
