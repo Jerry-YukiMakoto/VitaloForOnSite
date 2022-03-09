@@ -9,7 +9,7 @@ using Mirle.DataBase;
 
 namespace Mirle.ASRS.WCS.Model.DataAccess
 {
-    public sealed class CmdMst : ValueObject
+    public sealed class LocMst : ValueObject
     {
         public string Cmd_Sno { get; private set; }
         public string Cmd_Mode { get; private set; }

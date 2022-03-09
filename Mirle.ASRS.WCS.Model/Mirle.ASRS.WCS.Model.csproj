@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\LocMst.cs" />
     <Compile Include="DataAccess\CmdMst.cs" />
     <Compile Include="DataAccess\CmdSts.cs" />
     <Compile Include="DataAccess\EmpMst.cs" />

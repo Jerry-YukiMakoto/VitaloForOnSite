@@ -15,12 +15,14 @@ namespace Mirle.DB.Fun
 
         #region Store In
 
-        public GetDataResult GetCmdMstByStoreInStart(string stations, out DataObject<CmdMst> dataObject, SqlServer db)
+        public GetDataResult GetCmdMstByStoreInStart(string stations, string Item_No,string Lot_No, out DataObject<CmdMst> dataObject, SqlServer db)
         {
-            string sql = "SELECT * FROM CMDMST ";
-            sql += $"WHERE CMDMODE IN ('{clsConstValue.CmdMode.StockIn}') ";
-            sql += $"AND CmdSts='{clsConstValue.CmdSts.strCmd_Initial}' ";
-            sql += $"AND STNNO = '{stations}'";
+            string sql = "SELECT * FROM Cmd_Mst as A full join Cmd_Dtl as B On A.Cmd_Sno=B.Cmd_Sno ";
+            sql += $"WHERE A.Cmd_Mode IN ('{clsConstValue.CmdMode.StockIn}') ";
+            sql += $"AND A.Cmd_Sts='{clsConstValue.CmdSts.strCmd_Initial}' ";
+            sql += $"AND A.Stn_No = '{stations}'";
+            sql += $"AND B.Item_No = '{Item_No}'";
+            sql += $"AND B.Lot_No = '{Lot_No}'";
             return db.GetData(sql, out dataObject);
         }
 
@@ -254,6 +256,28 @@ namespace Mirle.DB.Fun
             sql += $"TRACE='{trace}', ";
             sql += $"Remark='', ";
             sql += $"EXP_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
+            sql += $"WHERE Cmd_Sno='{cmdSno}' ";
+            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Initial}' ";
+            return db.ExecuteSQL2(sql);
+        }
+
+        public ExecuteSQLResult UpdateCmdMstTransferring(string cmdSno, string trace,string Plt_Id, SqlServer db)
+        {
+            string sql = "UPDATE Cmd_Mst ";
+            sql += $"SET Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}', ";
+            sql += $"Plt_Id='{Plt_Id}', ";
+            sql += $"TRACE='{trace}', ";
+            sql += $"Remark='', ";
+            sql += $"EXP_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
+            sql += $"WHERE Cmd_Sno='{cmdSno}' ";
+            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Initial}' ";
+            return db.ExecuteSQL2(sql);
+        }
+
+        public ExecuteSQLResult UpdateCmdDtlTransferring(string cmdSno, string Plt_Id, SqlServer db)
+        {
+            string sql = "UPDATE Cmd_Dtl ";
+            sql += $"SET Plt_Id='{Plt_Id}' ";
             sql += $"WHERE Cmd_Sno='{cmdSno}' ";
             sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Initial}' ";
             return db.ExecuteSQL2(sql);

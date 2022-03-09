@@ -11,6 +11,9 @@ namespace Mirle.DB.Fun
 {
     public class clsEqu_Cmd
     {
+
+        private string[] sCrnMode = new string[6];
+
         /// <summary>
         /// 檢查是否有執行中命令；有執行中命令傳回true，否則傳回false
         /// </summary>
@@ -348,6 +351,14 @@ namespace Mirle.DB.Fun
             string sql = "SELECT * FROM EQUCMD ";
             sql += $"WHERE EquNo='{craneNo}' ";
             sql += $"AND CMDMODE ='{EquCmdMode.LocToLoc}' ";
+            return db.GetData(sql, out dataObject);
+        }
+
+        public GetDataResult GetEquStatus(out DataObject<EquCmd> dataObject, SqlServer db)
+        {
+            string sql = "SELECT * FROM EquModeLog ";
+            sql += $"WHERE  EquMode <>'C' ";
+            sql += $" AND EndDT IN ('',' ') ";
             return db.GetData(sql, out dataObject);
         }
 

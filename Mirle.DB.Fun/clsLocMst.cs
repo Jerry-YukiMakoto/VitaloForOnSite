@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Mirle.Def;
 using System.Data;
 using Mirle.DataBase;
+using Mirle.ASRS.WCS.Model.DataAccess;
+using System.Linq;
 
 namespace Mirle.DB.Fun
 {
@@ -29,32 +31,33 @@ namespace Mirle.DB.Fun
                 return DBResult.Exception;
             }
         }
-
-        public int GetTeachLoc_byBoxID(string BoxID, SqlServer db)
+        public GetDataResult GetLocMst_EmptyLoc(string Equ_No, out DataObject<LocMst> dataObject, SqlServer db)
         {
-            DataTable dtTmp = new DataTable();
-            try
             {
-                string strEM = "";
-                string strSql = $"select Loc from Teach_Loc where BoxId = '{BoxID}' ";
-                int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
-                if (iRet != DBResult.Success && iRet != DBResult.NoDataSelect)
-                {
-                    clsWriLog.Log.FunWriTraceLog_CV($"{strSql} => {strEM}");
-                }
+                string strSql = $"select Top 1 Loc from Loc_Mst where LOC_STS='N' and Equ_No ='{Equ_No}'";
+                strSql += $" ORDER BY LVL_Z,BAY_Y,ROW_X desc ";
 
-                return iRet;
+                return db.GetData(strSql, out dataObject);
             }
-            catch (Exception ex)
+        }
+        public GetDataResult GetLocMst_EmptyLochigh(string Equ_No, out DataObject<LocMst> dataObject, SqlServer db)
+        {   
             {
-                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
-                return DBResult.Exception;
+                string strSql = $"select Top 1 Loc from Loc_Mst where LOC_STS='N' and Equ_No ='{Equ_No}' and Loc_Size='H'";
+                       strSql += $" ORDER BY LVL_Z,BAY_Y,ROW_X desc ";
+                
+                return db.GetData(strSql, out dataObject);
             }
-            finally
-            {
-                dtTmp = null;
-            }
+        }
+
+        public ExecuteSQLResult UpdateStoreInLocMst(string Loc, SqlServer db)
+        {
+            string sql = "UPDATE Loc_Mst ";
+            sql += $"SET Loc_sts='I', ";
+            sql += $"TRN_DATE='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ,";
+            sql += $"TRN_USER='WCS'";
+            sql += $"WHERE LOC='{Loc}' ";
+            return db.ExecuteSQL2(sql);
         }
 
         public string GetLoc(string BoxID, SqlServer db)

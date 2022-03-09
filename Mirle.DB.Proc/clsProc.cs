@@ -22,6 +22,7 @@ namespace Mirle.DB.Proc
         private clsPortDef PortDef = new clsPortDef();
         private Fun.clsCmd_Mst CMD_MST = new Fun.clsCmd_Mst();
         private Fun.clsEqu_Cmd EQU_CMD = new Fun.clsEqu_Cmd();
+        private Fun.clsLocMst Loc_Mst = new Fun.clsLocMst();
         private Fun.clsSno SNO = new Fun.clsSno();
         private Fun.clsLocMst LocMst = new Fun.clsLocMst();
         private Fun.clsProc proc;
@@ -134,6 +135,13 @@ namespace Mirle.DB.Proc
         #region StoreIn
         public bool FunOutsourceStoreInWriPlc(string sStnNo, int bufferIndex)
         {
+            string Item_No="";
+            string Plt_Id="";
+            string Lot_No="";
+            string Loc = "";
+            string Equ_No = "";
+            string IsHigh = "";
+            string[] Cranests = new string[6];
             try
             {
                 using (var db = clsGetDB.GetDB(_config))
@@ -141,13 +149,14 @@ namespace Mirle.DB.Proc
                     int iRet = clsGetDB.FunDbOpen(db);
                     if (iRet == DBResult.Success)
                     {
-                        if (CMD_MST.GetCmdMstByStoreInStart(sStnNo, out var dataObject, db).ResultCode == DBResult.Success) //讀取CMD_MST
+                        if (CMD_MST.GetCmdMstByStoreInStart(sStnNo,Item_No,Lot_No ,out var dataObject, db).ResultCode == DBResult.Success) //讀取CMD_MST
                         {
 
                             string cmdSno = dataObject[0].Cmd_Sno;
                             int CmdMode = Convert.ToInt32(dataObject[0].Cmd_Mode);
                             int IOType = Convert.ToInt32(dataObject[0].IO_Type);
-                            var _conveyor = ControllerReader.GetCVControllerr2().GetConveryor();
+                            var _conveyor = ControllerReader.GetCVControllerr().GetConveryor();
+                            
 
                             clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Get StoreIn Command => {cmdSno}, " +
                                     $"{CmdMode}");
@@ -173,43 +182,77 @@ namespace Mirle.DB.Proc
                                 CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.CmdLeftOver, db);
                                 return false;
                             }
-                            if (_conveyor.GetBuffer(bufferIndex).CmdMode == 6 || _conveyor.GetBuffer(bufferIndex - 1).CmdMode == 6 || _conveyor.GetBuffer(bufferIndex - 2).CmdMode == 6)//為了不跟撿料命令衝突的條件
-                            {
-                                CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.CycleOperating, db);
-                                return false;
-                            }
                             if (_conveyor.GetBuffer(bufferIndex).Presence == true)
                             {
                                 CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.PresenceExist, db);
                                 return false;
                             }
-                            if (_conveyor.GetBuffer(bufferIndex - 2).Ready != Ready.StoreInReady)
+                            if (_conveyor.GetBuffer(bufferIndex).Ready != Ready.StoreInReady)
                             {
                                 CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.NotStoreInReady, db);
                                 return false;
                             }
-                            //&& _conveyor.GetBuffer(bufferIndex + 1).Presence == true) //在一般入庫時要確認A4是否有空棧板，沒有則不寫入命令=>目前不加入條件因為會與空棧版入庫衝突
                             #endregion
 
                             clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Ready Receive StoreIn Command=> {cmdSno}");
 
+                            if (EQU_CMD.GetEquStatus( out var dataObject1, db).ResultCode == DBResult.Success)
+                            {
+                                for(int i=0; i< dataObject1.Count;i++)
+                                {  
+                                   Cranests[i]=dataObject1[i].EquNo;
+                                }    
+                            }
+
+                            if(IsHigh=="H")
+                            {
+                                if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, out var dataObject2, db).ResultCode == DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Loc succeess => {cmdSno}");
+                                    Loc = dataObject2[0].Loc;
+                                }
+                            }
+                            else
+                            {
+                                if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No, out var dataObject2, db).ResultCode == DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Loc succeess => {cmdSno}");
+                                    Loc = dataObject2[0].Loc;
+                                }
+                            }
+
+                            
                             if (db.TransactionCtrl2(TransactionTypes.Begin).ResultCode != DBResult.Success)
                             {
                                 clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "begin fail");
                                 return false;
                             }
-                            if (CMD_MST.UpdateCmdMstTransferring(cmdSno, Trace.StoreInWriteCmdToCV, db).ResultCode == DBResult.Success)
+                            if (CMD_MST.UpdateCmdMstTransferring(cmdSno, Trace.StoreInWriteCmdToCV,Plt_Id, db).ResultCode == DBResult.Success)
                             {
-                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Upadte cmd succeess => {cmdSno}");
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Upadte cmd_mst succeess => {cmdSno}");
                             }
                             else
                             {
-                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Upadte cmd fail => {cmdSno}");
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Upadte cmd_mst fail => {cmdSno}");
 
                                 db.TransactionCtrl2(TransactionTypes.Rollback);
                                 return false;
                             }
+                            if (CMD_MST.UpdateCmdDtlTransferring(cmdSno, Plt_Id, db).ResultCode == DBResult.Success)
+                            {
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Upadte cmd_dtl succeess => {cmdSno}");
+                            }
+                            else
+                            {
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Upadte cmd_dtl fail => {cmdSno}");
 
+                                db.TransactionCtrl2(TransactionTypes.Rollback);
+                                return false;
+                            }
+                            if (Loc_Mst.UpdateStoreInLocMst(Loc, db).ResultCode == DBResult.Success)
+                            {
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Loc succeess => {cmdSno}");
+                            }
                             var WritePlccheck = _conveyor.GetBuffer(bufferIndex).WriteCommandIdAsync(cmdSno, CmdMode).Result;//確認寫入PLC的方法是否正常運作，傳回結果和有異常的時候的訊息
                             bool Result = WritePlccheck;
                             if (Result != true)//寫入命令和模式
@@ -226,37 +269,8 @@ namespace Mirle.DB.Proc
                                 db.TransactionCtrl2(TransactionTypes.Rollback);
                                 return false;
                             }
-                            else
-                            {
-                                DisplayTaskStatusInfo info = new DisplayTaskStatusInfo
-                                {
-                                    //填入回報訊息
-                                    lineId = "1",
-                                    locationID = "1",
-                                    taskNo = cmdSno.ToString(),
-                                    state = "1", //任務開始
-                                };
-                                if (!clsWmsApi.GetApiProcess().GetDisplayTaskStatus().FunReport(info))
-                                {
-                                    return false;
-                                }
-                                //填入訊息
-                                TaskStateUpdateInfo info1 = new TaskStateUpdateInfo
-                                {
-                                    lineId = "1",
-                                    taskNo = cmdSno,
-                                    palletNo = cmdSno,
-                                    businessType = IOType.ToString(),
-                                    state = "12",
-                                    errMsg = ""
-                                };
-                                if (!clsWmsApi.GetApiProcess().GetTaskStateUpdate().FunReport(info1))
-                                {
-                                    db.TransactionCtrl(TransactionTypes.Rollback);
-                                    return false;
-                                }
-                                return true;
-                            }
+                            return true;
+
                         }
                         else return false;
 
@@ -464,8 +478,7 @@ namespace Mirle.DB.Proc
                             string source = $"{CranePortNo.A1}";
                             string IOType = dataObject[0].IOType;
                             string dest = "";
-                            int pickup = Convert.ToInt32(dataObject[0].pickup);
-                            if (IOType == IOtype.NormalstoreOut.ToString() && pickup==0)//如果是撿料，入庫儲位欄位是LOC，一般入庫是NewLoc
+                            if (IOType == IOtype.NormalstoreOut.ToString() )//如果是撿料，入庫儲位欄位是LOC，一般入庫是NewLoc
                             {
                                 dest = $"{dataObject[0].Loc}";
                             }
@@ -577,8 +590,8 @@ namespace Mirle.DB.Proc
                             }
                             string IOType = dataObject[0].IOType;
                             string dest = "";
-                            int pickup = Convert.ToInt32(dataObject[0].pickup);
-                            if (IOType == IOtype.NormalstoreOut.ToString() && pickup == 0)//如果是撿料，入庫儲位欄位是LOC，一般入庫是NewLoc
+
+                            if (IOType == IOtype.NormalstoreOut.ToString())//如果是撿料，入庫儲位欄位是LOC，一般入庫是NewLoc
                             {
                                 dest = $"{dataObject[0].Loc}";
                             }

@@ -9,6 +9,7 @@ namespace Mirle.ASRS.WCS.Model.DataAccess
     {
         public string CmdSno { get; private set; }
         public string CmdMode { get; private set; }
+        public string EquNo { get; private set; }
         public string CmdSts { get; private set; }
         public string CompleteCode { get; private set; }
         public string ReNeqFlag { get; private set; }
