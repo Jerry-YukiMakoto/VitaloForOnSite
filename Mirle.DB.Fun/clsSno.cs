@@ -31,9 +31,9 @@ namespace Mirle.DB.Fun
 
                 intGetCnt = intGetCnt + 1;
 
-                strSql = "SELECT C.SNOTYP,C.TrnDate,C.SNO,M.MONTH_FLAG,M.INIT_SNO,M.MAX_SNO,M.SNO_LEN";
-                strSql += " FROM SNO_CTL C LEFT JOIN SNO_MAX M ON C.SNOTYP=M.SNO_TYPE";
-                strSql += " WHERE C.SNOTYP='" + objType.ToString() + "'";
+                strSql = "SELECT C.Sno_Type,C.Trn_Month,C.SNO,M.MONTH_FLAG,M.INIT_SNO,M.MAX_SNO,M.SNO_LEN";
+                strSql += " FROM SNO_CTL C LEFT JOIN SNO_MAX M ON C.Sno_Type=M.SNO_TYPE";
+                strSql += " WHERE C.Sno_Type='" + objType.ToString() + "'";
 
                 intRtn = db.GetDataTable(strSql, ref dtSno, ref strEM);
                 if (intRtn == DBResult.Success)
@@ -62,7 +62,7 @@ namespace Mirle.DB.Fun
                     //{
                     //    strSql += ",TRN_MONTH = '" + strGetYearMonth + "'";
                     //}
-                    strSql += " WHERE SNOTYP = '" + objType.ToString() + "'";
+                    strSql += " WHERE Sno_Type = '" + objType.ToString() + "'";
                     strSql += " AND SNO = " + lngSeq2;
                 }
                 else if (intRtn == DBResult.NoDataSelect)
@@ -76,7 +76,7 @@ namespace Mirle.DB.Fun
                     int iInitial = int.Parse(dtSno.Rows[0]["Init_Sno"].ToString());
                     #endregion v1.3 找尋序號長度 by Ian
 
-                    strSql = "INSERT INTO SNO_CTL (SNOTYP,TrnDate,SNO) VALUES ('" + objType.ToString() + "','" +
+                    strSql = "INSERT INTO SNO_CTL (Sno_Type,Trn_Month,SNO) VALUES ('" + objType.ToString() + "','" +
                         DateTime.Now.ToString("yyyyMMdd") + "'," + iInitial.ToString() + ")";
 
                     lngSeq1 = iInitial;
@@ -104,8 +104,8 @@ namespace Mirle.DB.Fun
                     case clsEnum.enuSnoType.CMDSNO:
                     case clsEnum.enuSnoType.CMDSUO:
                         string sCmdSno = lngSeq1.ToString().PadLeft(intSnoLen, '0');
-                        CmdMstInfo cmd = new CmdMstInfo(); int iRet = DBResult.Initial;
-                        if (cmd_Mst.FunGetCommand(sCmdSno, ref cmd, ref iRet, db)) goto ProNext;
+                        int iRet = DBResult.Initial;
+                        if (cmd_Mst.FunGetCommand(sCmdSno, ref iRet, db)) goto ProNext;
                         else return sCmdSno;
                     case clsEnum.enuSnoType.WCSTrxNo:
                         return DateTime.Now.ToString("HHmmss") + lngSeq1.ToString().PadLeft(intSnoLen, '0');

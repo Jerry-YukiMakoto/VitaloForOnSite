@@ -9,7 +9,7 @@ using Mirle.DataBase;
 
 namespace Mirle.ASRS.WCS.Model.DataAccess
 {
-    public sealed class CmdMst : ValueObject
+    public sealed class CmdDtl : ValueObject
     {
         public string Cmd_Sno { get; private set; }
         public string Cmd_Mode { get; private set; }
@@ -63,34 +63,22 @@ namespace Mirle.ASRS.WCS.Model.DataAccess
             return this;
         }
     }
-    public struct struCmdMst
+    public struct struCmdDtl
     {
-        public string CmdSno { get; set; }
-        public string CmdSts { get; set; }
-        public string CmdAbnormal { get; set; }
-        public string Prty { get; set; }
-        public string StnNo { get; set; }
-        public string CmdMode { get; set; }
-        public string IoType { get; set; }
-        public string WhId { get; set; }
+        public string Cmd_Txno { get; set; }         
+        public string Cmd_Sno { get; set; }
+        public double Plt_Qty { get; set; }
+        public double Trn_Qty { get; set; }
         public string Loc { get; set; }
-        public string NewLoc { get; set; }
-        public int MixQty { get; set; }
-        public double Avail { get; set; }
-        public string ZoneId { get; set; }
-        public string LocId { get; set; }
-        public string CrtDate { get; set; }
-        public string ExpDate { get; set; }
-        public string EndDate { get; set; }
-        public string TrnUser { get; set; }
-        public string HostName { get; set; }
-        public string FinLoc { get; set; }
-        public string PltCount { get; set; }
-        public string EquNo { get; set; }
-        public string Trace { get; set; }
-        public string Tkt_IO { get; set; }
-        public string Remark { get; set; }
+        public string In_Date { get; set; }
+        public string Item_No { get; set; }
+        public string Lot_No { get; set; }
         public string Plt_Id { get; set; }
+        public string Company_ID { get; set; }
+        public string Item_Desc { get; set; }
+        public string Uom { get; set; }
+        public string Created_by { get; set; }
+        public string Created_Date { get; set; }
 
 
         /// <summary>
@@ -98,30 +86,20 @@ namespace Mirle.ASRS.WCS.Model.DataAccess
         /// </summary>
         public void Clear()
         {
-            CmdSno = "";
-            CmdSts = "";
-            CmdAbnormal = "";
-            Prty = "";
-            StnNo = "";
-            CmdMode = "";
-            IoType = "";
-            WhId = "";
+            Cmd_Txno = "";
+            Cmd_Sno = "";
+            Plt_Qty = 0;
+            Trn_Qty = 0;
             Loc = "";
-            NewLoc = "";
-            MixQty = 0;
-            Avail = 0;
-            ZoneId = "";
-            LocId = "";
-            CrtDate = "";
-            ExpDate = "";
-            EndDate = "";
-            TrnUser = "";
-            HostName = "";
-            FinLoc = "";
-            PltCount = "";
-            EquNo = "";
-            Trace = "";
-            Tkt_IO = "";
+            Plt_Id = "";
+            Lot_No = "";
+            In_Date = "";
+            Item_No = "";
+            Company_ID = "";
+            Item_Desc = "";
+            Uom = "";
+            Created_by = "";
+            Created_Date = "";
         }
     }
 }

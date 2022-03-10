@@ -149,10 +149,6 @@
       <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
       <Name>Mirle.Def</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WCS_API_Server\WCS_API_Server.csproj">
-      <Project>{9f191071-9953-42ea-a7db-8e525821462e}</Project>
-      <Name>WCS_API_Server</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

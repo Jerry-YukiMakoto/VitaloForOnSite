@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="clsItemMst.cs" />
     <Compile Include="clsAlarmData.cs" />
     <Compile Include="clsCmd_Mst.cs" />
     <Compile Include="clsCmd_Mst_His.cs" />

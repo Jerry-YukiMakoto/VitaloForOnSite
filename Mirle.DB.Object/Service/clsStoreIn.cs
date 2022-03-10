@@ -28,23 +28,9 @@ namespace Mirle.DB.Object.Service
         {
             try
             {
-                string stn = "";
-                for (int bufferIndex = 6; bufferIndex <= 10; bufferIndex += 2)
-                {
-                    if (bufferIndex == 6)
-                    {
-                        stn = StnNo.A6;
-                    }
-                    else if (bufferIndex == 8)
-                    {
-                        stn = StnNo.A8;
-                    }
-                    else if (bufferIndex == 10)
-                    {
-                        stn = StnNo.A10;
-                    }
-                    clsDB_Proc.GetDB_Object().GetProcess().FunStoreInA2ToA4WriPlc(stn, bufferIndex);
-                }
+                int bufferIndex = 43;
+                clsDB_Proc.GetDB_Object().GetProcess().FunProduceStoreInWriPlc(StnNo.A08, bufferIndex);
+                
             }
             catch (Exception ex)
             {
@@ -54,28 +40,15 @@ namespace Mirle.DB.Object.Service
             }
         }
 
-        public static void StoreIn_A1_CreateEquCmd()
-        {
-            try
-            {
-                int bufferIndex = 1;
-                clsDB_Proc.GetDB_Object().GetProcess().FunStoreInCreateEquCmd(bufferIndex);
-            }
-            catch (Exception ex)
-            {
-                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
-                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
-            }
-        }
 
-        public static void StoreIn_A2toA4_CreateEquCmd()
+
+        public static void StoreIn_CreateEquCmd()
         {
             try
             {
-                for (int bufferIndex = 5; bufferIndex <= 9; bufferIndex += 2)
+                for (int bufferIndex = 1; bufferIndex <= 11; bufferIndex += 2)
                 {
-                    clsDB_Proc.GetDB_Object().GetProcess().FunStoreInA2toA4CreateEquCmd(bufferIndex);
+                    clsDB_Proc.GetDB_Object().GetProcess().FunStoreIn_CreateEquCmd(bufferIndex);
                 }     
             }
             catch (Exception ex)

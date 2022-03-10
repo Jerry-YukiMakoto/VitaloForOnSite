@@ -35,6 +35,8 @@ namespace Mirle.ASRS.Conveyors
         public int PathNotice => Signal.PathChangeNotice.GetValue();
         public int CmdMode => Signal.CmdMode.GetValue();
         public int Ready => Signal.Ready.GetValue();
+        public int BcrNotice => Signal.BCRnotice.GetValue();
+        public int LoadHeight => Signal.LoadHeight.GetValue();
         public int InitialNotice => Signal.InitialNotice.GetValue();
         public bool InMode => Signal.StatusSignal.InMode.IsOn() && Signal.StatusSignal.OutMode.IsOff();
         public bool OutMode => Signal.StatusSignal.InMode.IsOff() && Signal.StatusSignal.OutMode.IsOn();
@@ -132,6 +134,25 @@ namespace Mirle.ASRS.Conveyors
                     Signal.ControllerSignal.CmdMode.SetValue(commandMode);
                     Signal.ControllerSignal.CommandId.SetValue(Convert.ToInt32(Command));
 
+                    Task.Delay(500).Wait();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            });
+        }
+
+        public Task<bool> BCRNoticeComplete(int BCRNoticeComplete)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    if (CommandId != 0) return false;
+
+                    Signal.ControllerSignal.BcrComplete.SetValue(BCRNoticeComplete);
                     Task.Delay(500).Wait();
                     return true;
                 }

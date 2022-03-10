@@ -266,7 +266,7 @@ namespace Mirle.ASRS.Conveyors.Signal
 
                     if (PathchangeBufferIndex.ContainsKey(bufferIndex + 1))
                     {
-                        buffer.ControllerSignal.PathChangeNotice = new Word(_mplc, $"D{plcIndex + (bufferIndex * 10) + 4}");
+                        buffer.ControllerSignal.PathChangeNotice = new Word(_mplc, $"D{pcIndex + (bufferIndex * 10) + 4}");
                     }
                     else
                     {
@@ -275,7 +275,7 @@ namespace Mirle.ASRS.Conveyors.Signal
 
                     if (BCRcompleteBufferIndex.ContainsKey(bufferIndex + 1))
                     {
-                        buffer.ControllerSignal.BcrComplete = new Word(_mplc, $"D{plcIndex + (bufferIndex * 10) + 3}");
+                        buffer.ControllerSignal.BcrComplete = new Word(_mplc, $"D{pcIndex + (bufferIndex * 10) + 3}");
                     }
                     else
                     {

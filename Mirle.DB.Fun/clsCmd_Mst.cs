@@ -31,18 +31,18 @@ namespace Mirle.DB.Fun
             string sql = "SELECT * FROM CMDMST ";
             sql += $"WHERE CMDMODE IN ('{clsConstValue.CmdMode.StockIn}', '{clsConstValue.CmdMode.Cycle}') ";
             sql += $"AND CmdSno='{cmdsno}' ";
-            sql += $"AND TRACE IN ('{Trace.StoreInWriteCmdToCV}','{Trace.StoreOutCreateCraneCmd}') "; 
+            sql += $"AND TRACE IN ('{Trace.StoreInWriteCmdToCV}','{Trace.StoreOutCraneCmdFinish}') "; 
             sql += $"AND CmdSts='{clsConstValue.CmdSts.strCmd_Running}' ";
             return db.GetData(sql, out dataObject);
         }
 
         public GetDataResult GetCmdMstByStoreInFinish(IEnumerable<string> stations, out DataObject<CmdMst> dataObject, SqlServer db)
         {
-            string sql = "SELECT * FROM CMDMST ";
-            sql += $"WHERE CMDMODE IN ('{clsConstValue.CmdMode.StockIn}', '{clsConstValue.CmdMode.Cycle}') ";
-            sql += $"AND CmdSts='{clsConstValue.CmdSts.strCmd_Running}' ";
+            string sql = "SELECT * FROM Cmd_Mst ";
+            sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockIn}', '{clsConstValue.CmdMode.Cycle}') ";
+            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
             sql += $"AND TRACE IN ('{Trace.StoreInCreateCraneCmd}') ";
-            sql += $"AND STNNO IN (";
+            sql += $"AND Stn_No IN (";
             foreach (var stn in stations)
             {
                 if (stations.Last() == stn)
@@ -115,94 +115,6 @@ namespace Mirle.DB.Fun
         #endregion Store Out
 
 
-
-
-        #region Empty Store In
-
-        public GetDataResult GetEmptyCmdMstByStoreIn(string cmdsno, out DataObject<CmdMst> dataObject, SqlServer db)
-        {
-            string sql = "SELECT * FROM CMDMST ";
-            sql += $"WHERE CMDMODE IN ('{clsConstValue.CmdMode.StockIn}') ";
-            sql += $"AND CmdSno='{cmdsno}' ";
-            sql += $"AND TRACE IN ('{Trace.EmptyStoreInWriteCraneCmdToCV}') ";
-            sql += $"AND CmdSts='{clsConstValue.CmdSts.strCmd_Running}' ";
-            return db.GetData(sql, out dataObject);
-        }
-
-        public GetDataResult GetEmptyCmdMstByStoreInFinish(IEnumerable<string> stations, out DataObject<CmdMst> dataObject, SqlServer db)
-        {
-            string sql = "SELECT * FROM CMDMST ";
-            sql += $"WHERE CMDMODE IN ('{clsConstValue.CmdMode.StockIn}') ";
-            sql += $"AND CmdSts='{clsConstValue.CmdSts.strCmd_Running}' ";
-            sql += $"AND TRACE IN ('{Trace.EmptyStoreInCreateCraneCmd}') ";
-            sql += $"AND STNNO IN (";
-            foreach (var stn in stations)
-            {
-                if (stations.Last() == stn)
-                {
-                    sql += $" '{stn}'";
-                }
-                else if (sql.EndsWith(","))
-                {
-                    sql += $" '{stn}',";
-                }
-                else
-                {
-                    sql += $"'{stn}',";
-                }
-            }
-            sql += $")";
-            return db.GetData(sql, out dataObject);
-        }
-
-        #endregion  Empty Store In
-
-
-
-
-        #region Empty Store Out
-
-        public GetDataResult GetCmdMstByEmptyStoreOutCrane(string CmdSno, out DataObject<CmdMst> dataObject, SqlServer db)
-        {
-            string sql = "SELECT * FROM CMDMST ";
-            sql += $"WHERE CMDMODE IN ('{clsConstValue.CmdMode.StockOut}') ";
-            sql += $"AND CmdSno='{CmdSno}' ";
-            sql += $"AND TRACE='{Trace.EmptyStoreOutWriteCraneCmdToCV}' ";
-            sql += $"AND CmdSts='{clsConstValue.CmdSts.strCmd_Running}' ";
-            return db.GetData(sql, out dataObject);
-        }
-
-        public GetDataResult GetEmptyCmdMstByStoreOutFinish(IEnumerable<string> stations, out DataObject<CmdMst> dataObject, SqlServer db)
-        {
-            string sql = "SELECT * FROM CMDMST ";
-            sql += $"WHERE CMDMODE IN ('{clsConstValue.CmdMode.StockOut}') ";
-            sql += $"AND CmdSts='{clsConstValue.CmdSts.strCmd_Running}' ";
-            sql += $"AND TRACE IN ('{Trace.EmptyStoreOutCreateCraneCmd}') ";
-            sql += $"AND STNNO IN (";
-            foreach (var stn in stations)
-            {
-                if (stations.Last() == stn)
-                {
-                    sql += $" '{stn}'";
-                }
-                else if (sql.EndsWith(","))
-                {
-                    sql += $" '{stn}',";
-                }
-                else
-                {
-                    sql += $"'{stn}',";
-                }
-            }
-            sql += $")";
-            return db.GetData(sql, out dataObject);
-        }
-
-        #endregion Empty Store Out
-
-
-
-
         #region L2L
 
         public GetDataResult GetLocToLoc(out DataObject<CmdMst> dataObject, SqlServer db)
@@ -215,9 +127,9 @@ namespace Mirle.DB.Fun
 
         public GetDataResult GetLoctoLocFinish( out DataObject<CmdMst> dataObject, SqlServer db)
         {
-            string sql = "SELECT * FROM CMDMST ";
-            sql += $"WHERE CMDMODE IN ('{clsConstValue.CmdMode.L2L}') ";
-            sql += $"AND CmdSts='{clsConstValue.CmdSts.strCmd_Running}' ";
+            string sql = "SELECT * FROM Cmd_Mst ";
+            sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.L2L}') ";
+            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
             sql += $"AND TRACE IN ('{Trace.LoctoLocReady}') ";
             return db.GetData(sql, out dataObject);
         }
@@ -231,11 +143,11 @@ namespace Mirle.DB.Fun
 
         public ExecuteSQLResult UpdateCmdMst(string cmdSno, string trace, SqlServer db)
         {
-            string sql = "UPDATE CMDMST ";
+            string sql = "UPDATE Cmd_Mst  ";
             sql += $"SET TRACE='{trace}',";
             sql += $"Remark=''";
-            sql += $"WHERE CmdSno='{cmdSno}' ";
-            sql += $"AND CmdSts='{clsConstValue.CmdSts.strCmd_Running}' ";
+            sql += $"WHERE Cmd_Sno='{cmdSno}' ";
+            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
             return db.ExecuteSQL2(sql);
         }
 
@@ -261,12 +173,13 @@ namespace Mirle.DB.Fun
             return db.ExecuteSQL2(sql);
         }
 
-        public ExecuteSQLResult UpdateCmdMstTransferring(string cmdSno, string trace,string Plt_Id, SqlServer db)
+        public ExecuteSQLResult UpdateCmdMstTransferring(string cmdSno, string trace,string New_Loc,string Plt_Id, SqlServer db)
         {
             string sql = "UPDATE Cmd_Mst ";
             sql += $"SET Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}', ";
             sql += $"Plt_Id='{Plt_Id}', ";
             sql += $"TRACE='{trace}', ";
+            sql += $"New_Loc='{New_Loc}', ";
             sql += $"Remark='', ";
             sql += $"EXP_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
             sql += $"WHERE Cmd_Sno='{cmdSno}' ";
@@ -317,78 +230,49 @@ namespace Mirle.DB.Fun
 
 
 
-        public bool FunGetCommand_byTaskNo(string taskNo, ref CmdMstInfo cmd, SqlServer db)
-        {
-            DataTable dtTmp = new DataTable();
-            try
-            {
-                string strEM = "";
-                string strSql = "select * from CMDMST where CmdSno'" + taskNo + "' ";
-                int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
-                if (iRet == DBResult.Success)
-                {
-                    cmd = tool.GetCommand(dtTmp);
-                    return true;
-                }
-                else
-                {
-                    clsWriLog.Log.FunWriTraceLog_CV(strSql + " => " + strEM);
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
-                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
-                return false;
-            }
-            finally
-            {
-                dtTmp = null;
-            }
-        }
 
-        public bool FunInsCmdMst(CmdMstInfo stuCmdMst, ref string strErrMsg, SqlServer db)
+        public ExecuteSQLResult FunInsCmdMst(struCmdMst stuCmdMst, SqlServer db)
         {
-            string sSQL = "";
-            try
-            {
-                sSQL = "INSERT INTO CMDMST (CmdSno, CmdSts, PRT, Cmd_Abnormal, Trace, StnNo, CmdMode, Iotype, PickUp, Loc, NewLoc,";
-                sSQL += "CrtDate, ExpDate, EndDate, Remark, UserID, EquNO) values(";
+                string sSQL = "INSERT INTO Cmd_Mst (Cmd_Sno, Cmd_Sts, Prty, Cmd_Abnormal, Trace, Stn_No, Cmd_Mode, IO_Type, WH_ID,Equ_No, Loc, New_Loc,";
+                sSQL += "CrtDate, Trn_User,Host_Name, Plt_Id) values(";
                 sSQL += "'" + stuCmdMst.CmdSno + "', ";
-                sSQL += "'" + clsConstValue.CmdSts.strCmd_Initial + "', ";
-                sSQL += "'" + stuCmdMst.Prt + "', 'NA', '', ";
+                sSQL += "'" + stuCmdMst.CmdSts + "', ";
+                sSQL += "'" + stuCmdMst.Prty + "', ";
+                sSQL += "'" + stuCmdMst.CmdAbnormal + "', ";
+                sSQL += "'" + stuCmdMst.Trace + "', ";
                 sSQL += "'" + stuCmdMst.StnNo + "', ";
                 sSQL += "'" + stuCmdMst.CmdMode + "', ";
                 sSQL += "'" + stuCmdMst.IoType + "', ";
-                sSQL += "'" + stuCmdMst.PickUp + "', ";
+                sSQL += "'" + stuCmdMst.WhId + "', ";
+                sSQL += "'" + stuCmdMst.EquNo + "', ";
                 sSQL += "'" + stuCmdMst.Loc + "', ";
                 sSQL += "'" + stuCmdMst.NewLoc + "', ";
-                sSQL += "'" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '', '', ";
-                sSQL += "'WMS下命令', ";
-                sSQL += "'" +stuCmdMst.Userid+"', ";
-                sSQL += "'" + stuCmdMst.EquNo + "')";
+                sSQL += "'" + stuCmdMst.CrtDate + "', ";
+                sSQL += "'" + stuCmdMst.TrnUser + "', ";
+                sSQL += "'" + stuCmdMst.HostName+"', ";
+                sSQL += "'" + stuCmdMst.Plt_Id + "')";
+                return db.ExecuteSQL2(sSQL);
+        }
 
-                
-
-                if (db.ExecuteSQL(sSQL, ref strErrMsg) == DBResult.Success)
-                {
-                    clsWriLog.Log.FunWriTraceLog_CV(sSQL);
-                    return true;
-                }
-                else
-                {
-                    clsWriLog.Log.FunWriTraceLog_CV(sSQL + " => " + strErrMsg);
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
-                return false;
-            }
+        public ExecuteSQLResult FunInsCmdDtl(struCmdDtl stuCmdDtl, SqlServer db)
+        {
+            string sSQL = "INSERT INTO Cmd_Dtl (Cmd_Sno, Cmd_Sts, Prty, Cmd_Abnormal, Trace, Stn_No, Cmd_Mode, IO_Type, WH_ID,Equ_No, Loc, New_Loc,";
+            sSQL += "Mix_Qty,Avail,CrtDate, Trn_User,Host_Name, Plt_Id) values(";
+            sSQL += "'" + stuCmdDtl.Cmd_Txno + "', ";
+            sSQL += "'" + stuCmdDtl.Cmd_Sno + "', ";
+            sSQL += "'" + stuCmdDtl.Plt_Qty + "', ";
+            sSQL += "'" + stuCmdDtl.Trn_Qty + "', ";
+            sSQL += "'" + stuCmdDtl.Loc + "', ";
+            sSQL += "'" + stuCmdDtl.In_Date + "', ";
+            sSQL += "'" + stuCmdDtl.Item_No + "', ";
+            sSQL += "'" + stuCmdDtl.Lot_No + "', ";
+            sSQL += "'" + stuCmdDtl.Plt_Id + "', ";
+            sSQL += "'" + stuCmdDtl.Company_ID + "', ";
+            sSQL += "'" + stuCmdDtl.Item_Desc + "', ";
+            sSQL += "'" + stuCmdDtl.Uom+ "', ";
+            sSQL += "'" + stuCmdDtl.Created_by + "', ";
+            sSQL += "'" + stuCmdDtl.Created_Date + "')";
+            return db.ExecuteSQL2(sSQL);
         }
 
         public GetDataResult EmptyInOutCheck(int Iotype,out DataObject<CmdMst> dataObject, SqlServer db)
@@ -421,17 +305,16 @@ namespace Mirle.DB.Fun
             }
         }
 
-        public bool FunGetCommand(string sCmdSno, ref CmdMstInfo cmd, ref int iRet, SqlServer db)
+        public bool FunGetCommand(string sCmdSno, ref int iRet, SqlServer db)
         {
             DataTable dtTmp = new DataTable();
             try
             {
                 string strEM = "";
-                string strSql = "select * from CMDMST where CmdSno = '" + sCmdSno + "' ";
+                string strSql = "select * from CMD_MST where Cmd_Sno = '" + sCmdSno + "' ";
                 iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
                 if (iRet == DBResult.Success)
                 {
-                    cmd = tool.GetCommand(dtTmp);
                     return true;
                 }
                 else

@@ -47,8 +47,6 @@ namespace Mirle.ASRS.WCS
             _storeInProcess.Elapsed += StoreInProcess;
             _otherProcess.Elapsed += OtherProcess;
             
-            _emptyInReport.Elapsed += EmptyStoreInProcess;
-            _emptyOutReport.Elapsed += EmptyStoreOutProcess;
             _KanBanstoreOutrepotfinish.Elapsed += KanBanstoreOutrepotfinish;
 
         }
@@ -69,50 +67,6 @@ namespace Mirle.ASRS.WCS
             _storeOutProcess.Stop();
             _storeInProcess.Stop();
             _otherProcess.Stop();
-        }
-
-        private void EmptyStoreInProcess(object sender, ElapsedEventArgs e)
-        {
-            _emptyInReport.Stop();
-            try
-            {
-                if (IsConnected)
-                {
-                    clsEmptyStoreIn.EmptyInWMS();
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Reflection.MethodBase cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                var log = new StoreOutLogTrace(999, cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
-                _loggerManager.WriteLogTrace(log);
-            }
-            finally
-            {
-                _emptyInReport.Start();
-            }
-        }
-
-        private void EmptyStoreOutProcess(object sender, ElapsedEventArgs e)
-        {
-            _emptyOutReport.Stop();
-            try
-            {
-                if (IsConnected)
-                {
-                    clsEmptyStoreOut.EmptyOutWMS();
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Reflection.MethodBase cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                var log = new StoreOutLogTrace(999, cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
-                _loggerManager.WriteLogTrace(log);
-            }
-            finally
-            {
-                _emptyOutReport.Start();
-            }
         }
 
         private void KanBanstoreOutrepotfinish(object sender, ElapsedEventArgs e)
@@ -175,18 +129,16 @@ namespace Mirle.ASRS.WCS
             {
                 if (IsConnected)
                 {
-                    SwitchInMode.Switch_InMode(_conveyor, _loggerManager);//自動切入庫模式
+                   
 
-                    if (_conveyor.GetBuffer(1).Ready == Ready.StoreInReady)
-                    {
+
                         clsStoreIn.StoreIn_A1_WriteCV();
 
-                        clsStoreIn.StoreIn_A1_CreateEquCmd();
-                    }
+                    
 
                     clsStoreIn.StoreIn_A2ToA4_WriteCV();
 
-                    clsStoreIn.StoreIn_A2toA4_CreateEquCmd();
+                    clsStoreIn.StoreIn_CreateEquCmd();
 
                     clsStoreIn.StoreIn_EquCmdFinish();//OK
                 }

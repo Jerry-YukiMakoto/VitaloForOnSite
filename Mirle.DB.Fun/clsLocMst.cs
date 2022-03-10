@@ -54,7 +54,7 @@ namespace Mirle.DB.Fun
         {
             string sql = "UPDATE Loc_Mst ";
             sql += $"SET Loc_sts='I', ";
-            sql += $"TRN_DATE='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ,";
+            sql += $"TRN_DATE='{DateTime.Now:yyyy-MM-dd HH:mm:ss}',";
             sql += $"TRN_USER='WCS'";
             sql += $"WHERE LOC='{Loc}' ";
             return db.ExecuteSQL2(sql);
