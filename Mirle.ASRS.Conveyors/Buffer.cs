@@ -73,6 +73,11 @@ namespace Mirle.ASRS.Conveyors
                 Signal.ControllerSignal.PathChangeNotice.SetValue(0);
                 OnBufferPathNoticeChange?.Invoke(this, new BufferEventArgs(Signal.BufferIndex, Signal.BufferName));
             }
+            if (Signal.BCRnotice.GetValue() == 0 && Signal.ControllerSignal.BcrComplete.GetValue()==1)
+            {
+                Signal.ControllerSignal.BcrComplete.SetValue(0);
+                OnBufferPathNoticeChange?.Invoke(this, new BufferEventArgs(Signal.BufferIndex, Signal.BufferName));
+            }
             if (Signal.ControllerSignal.A4Emptysupply.GetValue() > 0)//待修改，需要知道什麼時候電控運送母托到A3
             {
                 Signal.ControllerSignal.A4Emptysupply.SetValue(0);

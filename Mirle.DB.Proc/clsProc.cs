@@ -60,6 +60,7 @@ namespace Mirle.DB.Proc
             string Lot_No="";
             string New_Loc = "";
             string Equ_No = "";
+            int path = 0;
             int IsHigh = 0;
             string[] Cranests = new string[6];
             try
@@ -121,14 +122,20 @@ namespace Mirle.DB.Proc
                                     }
                                 }
 
-                                IsHigh=_conveyor.GetBuffer(bufferIndex).LoadHeight;//根據荷高去選儲位位置
+                                IsHigh = _conveyor.GetBuffer(bufferIndex).LoadHeight;//根據荷高去選儲位位置
 
                                 if (IsHigh == 1)
                                 {
                                     if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, out var dataObject2, db).ResultCode == DBResult.Success)
                                     {
-                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Loc succeess => {cmdSno}");
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find High Loc succeess => {cmdSno}");
                                         New_Loc = dataObject2[0].New_Loc;
+                                    }
+                                    else
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                            , $"Find High Loc fail");
+                                        return false;
                                     }
                                 }
                                 else
@@ -138,7 +145,15 @@ namespace Mirle.DB.Proc
                                         clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Loc succeess => {cmdSno}");
                                         New_Loc = dataObject2[0].New_Loc;
                                     }
+                                    else
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                            , $"Find Loc fail");
+                                        return false;
+                                    }
                                 }
+
+                                path = StoreInfindpathbyEquNo(Convert.ToInt32(Equ_No));
 
                                 if (db.TransactionCtrl2(TransactionTypes.Begin).ResultCode != DBResult.Success)
                                 {
@@ -169,7 +184,7 @@ namespace Mirle.DB.Proc
                                 }
                                 if (Loc_Mst.UpdateStoreInLocMst(New_Loc, db).ResultCode == DBResult.Success)
                                 {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Loc succeess => {cmdSno}");
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Update Loc succeess => {cmdSno}");
                                 }
                                 var WritePlccheck = _conveyor.GetBuffer(bufferIndex).WriteCommandIdAsync(cmdSno, CmdMode).Result;//確認寫入PLC的方法是否正常運作，傳回結果和有異常的時候的訊息
                                 bool Result = WritePlccheck;
@@ -180,20 +195,20 @@ namespace Mirle.DB.Proc
                                     db.TransactionCtrl2(TransactionTypes.Rollback);
                                     return false;
                                 }
-                                WritePlccheck = _conveyor.GetBuffer(bufferIndex).BCRNoticeComplete(1).Result;
+                                WritePlccheck = _conveyor.GetBuffer(bufferIndex).WritePathChabgeNotice(path).Result;
                                 Result = WritePlccheck;
-                                if (Result != true)//通知讀取完成
+                                if (Result != true)//路徑編號寫入
                                 {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC Command-mode Fail");
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC Path-mode Fail");
 
                                     db.TransactionCtrl2(TransactionTypes.Rollback);
                                     return false;
                                 }
-                                WritePlccheck = _conveyor.GetBuffer(bufferIndex).BCRNoticeComplete(0).Result;
+                                WritePlccheck = _conveyor.GetBuffer(bufferIndex).BCRNoticeComplete(1).Result;
                                 Result = WritePlccheck;
                                 if (Result != true)//通知讀取完成
                                 {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC Command-mode Fail");
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC BCR-Notice Fail");
 
                                     db.TransactionCtrl2(TransactionTypes.Rollback);
                                     return false;
@@ -208,7 +223,19 @@ namespace Mirle.DB.Proc
                                 return true;
 
                             }
-                            else return false;
+                            else
+                            {
+                                var WritePlccheck = _conveyor.GetBuffer(bufferIndex).WritePathChabgeNotice(path).Result;
+                                bool Result = WritePlccheck;
+                                if (Result != true)//路徑編號寫入
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC WithDraw-Path-mode Fail");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                return false; 
+                            }
 
                         }
                         else
@@ -244,6 +271,7 @@ namespace Mirle.DB.Proc
             string Item_Unit = "";
             string Item_Type = "";
             Double Qty_Plt = 0;
+            int path = 0;
             string[] Cranests = new string[6];
             try
             {
@@ -410,9 +438,15 @@ namespace Mirle.DB.Proc
                                 }
                                 if (Loc_Mst.UpdateStoreInLocMst(New_Loc, db).ResultCode == DBResult.Success)
                                 {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Loc succeess => {cmdSno}");
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Update StoreIn Loc succeess => {cmdSno}");
                                 }
-                                var WritePlccheck = _conveyor.GetBuffer(bufferIndex).WriteCommandIdAsync(cmdSno, CmdMode).Result;//確認寫入PLC的方法是否正常運作，傳回結果和有異常的時候的訊息
+                                else
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Update StoreIn Loc fail => {cmdSno}");
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                var WritePlccheck = _conveyor.GetBuffer(bufferIndex).WriteCommandIdAsync(cmdSno, 1).Result;//確認寫入PLC的方法是否正常運作，傳回結果和有異常的時候的訊息
                                 bool Result = WritePlccheck;
                                 if (Result != true)//寫入命令和模式
                                 {
@@ -421,20 +455,20 @@ namespace Mirle.DB.Proc
                                     db.TransactionCtrl2(TransactionTypes.Rollback);
                                     return false;
                                 }
-                                WritePlccheck = _conveyor.GetBuffer(bufferIndex).BCRNoticeComplete(1).Result;
+                                WritePlccheck = _conveyor.GetBuffer(bufferIndex).WritePathChabgeNotice(path).Result;
                                 Result = WritePlccheck;
-                                if (Result != true)//通知讀取完成
+                                if (Result != true)//寫入路徑
                                 {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC Command-mode Fail");
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC Path-mode Fail");
 
                                     db.TransactionCtrl2(TransactionTypes.Rollback);
                                     return false;
                                 }
-                                WritePlccheck = _conveyor.GetBuffer(bufferIndex).BCRNoticeComplete(0).Result;
+                                WritePlccheck = _conveyor.GetBuffer(bufferIndex).BCRNoticeComplete(1).Result;
                                 Result = WritePlccheck;
                                 if (Result != true)//通知讀取完成
                                 {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC Command-mode Fail");
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC BCR-Notice Fail");
 
                                     db.TransactionCtrl2(TransactionTypes.Rollback);
                                     return false;
@@ -498,6 +532,68 @@ namespace Mirle.DB.Proc
                                 stuCmdDtl.Uom = Item_Unit;
                                 stuCmdDtl.Created_by = "WCS";
                                 stuCmdDtl.Created_Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+                                if (db.TransactionCtrl2(TransactionTypes.Begin).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "begin fail");
+                                    return false;
+                                }
+                                if (CMD_MST.FunInsCmdMst(stuCmdMst, db).ResultCode == DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert cmd_mst succeess => {cmdSno}");
+                                }
+                                else
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert cmd_mst fail => {cmdSno}");
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                if (CMD_MST.FunInsCmdDtl(stuCmdDtl, db).ResultCode == DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert cmd_dtl succeess => {cmdSno}");
+                                }
+                                else
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert cmd_dtl fail => {cmdSno}");
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                var WritePlccheck = _conveyor.GetBuffer(bufferIndex).WriteCommandIdAsync(cmdSno, 9).Result;//確認寫入PLC的方法是否正常運作，傳回結果和有異常的時候的訊息
+                                bool Result = WritePlccheck;
+                                if (Result != true)//寫入命令和模式
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC Command-mode Fail");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                WritePlccheck = _conveyor.GetBuffer(bufferIndex).WritePathChabgeNotice(31).Result; //退版路徑編號
+                                Result = WritePlccheck;
+                                if (Result != true)//寫入路徑
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC Path-mode Fail");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                WritePlccheck = _conveyor.GetBuffer(bufferIndex).BCRNoticeComplete(1).Result;
+                                Result = WritePlccheck;
+                                if (Result != true)//通知讀取完成
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC BCR-Notice Fail");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                if (db.TransactionCtrl2(TransactionTypes.Commit).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "Commit Fail");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+
+
                                 return false;
                             }
 
@@ -835,7 +931,7 @@ namespace Mirle.DB.Proc
                                 Result = WritePlccheck;
                                 if (Result != true)
                                 {
-                                    clsWriLog.StoreOutLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC Path2_toA3 Fail");
+                                    clsWriLog.StoreOutLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC Path-Mode Fail");
                                     db.TransactionCtrl2(TransactionTypes.Rollback);
                                     return false;
                                 }
@@ -1238,7 +1334,38 @@ namespace Mirle.DB.Proc
         #endregion
 
 
-      
+        #region//根據線別判斷路徑編號
+        private int StoreInfindpathbyEquNo(int Equ_No)
+        {
+            if (Equ_No==1)
+            {
+                return 11; //B01_1
+            }
+            else if(Equ_No==2)
+            {
+                return 12; //B02_1
+            }
+            else if(Equ_No==3)
+            {
+                return 13; //B03_1
+            }
+            else if(Equ_No==4)
+            {
+                return 14; //B04_1
+            }
+            else if(Equ_No==5)
+            {
+                return 15; //B05_1
+            }
+            else if (Equ_No==6)
+            {
+                return 16; //B06_1
+            }
+            return 0;
+        }
+        #endregion
+
+
 
 
     }
