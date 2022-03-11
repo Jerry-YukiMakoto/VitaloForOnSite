@@ -446,6 +446,7 @@ namespace Mirle.DB.Proc
                                     db.TransactionCtrl2(TransactionTypes.Rollback);
                                     return false;
                                 }
+
                                 var WritePlccheck = _conveyor.GetBuffer(bufferIndex).WriteCommandIdAsync(cmdSno, 1).Result;//確認寫入PLC的方法是否正常運作，傳回結果和有異常的時候的訊息
                                 bool Result = WritePlccheck;
                                 if (Result != true)//寫入命令和模式
