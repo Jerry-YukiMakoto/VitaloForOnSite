@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using Mirle.Grid.U0NXMA30;
 using Mirle.DB.Object;
-using WCS_API_Server;
 using Unity;
 using Mirle.Logger;
 using WCS_API_Client.View;
@@ -23,7 +22,6 @@ namespace Mirle.ASRS.WCS.View
         
 
         private DB.ClearCmd.Proc.clsHost clearCmd;
-        private WebApiHost _webApiHost;
         private UnityContainer _unityContainer;
         private static WCSManager _wcsManager;
         private static System.Timers.Timer timRead = new System.Timers.Timer();
@@ -241,9 +239,6 @@ namespace Mirle.ASRS.WCS.View
 
             _wcsManager = new WCSManager();
             _wcsManager.Start();
-            _unityContainer = new UnityContainer();
-            _unityContainer.RegisterInstance(new WMSWCSController());
-            //_webApiHost = new WebApiHost(new Startup(_unityContainer), clInitSys.WcsApi_Config.IP);
             clearCmd = new DB.ClearCmd.Proc.clsHost();
             ChangeSubForm(ControllerReader.GetCVControllerr().GetMainView());
         }

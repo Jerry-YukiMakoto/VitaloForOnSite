@@ -9,21 +9,7 @@ namespace Mirle.DB.Object.Service
 {
     public class clsStoreOut
     {
-        public static void StoreOut_A1_WriteCV()
-        {
-            try
-            {
-                int bufferIndex = 1; //A1
-                clsDB_Proc.GetDB_Object().GetProcess().FunStoreOutWriPlc(StnNo.A3, bufferIndex);
-            }
-            catch (Exception ex)
-            {
-                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
-                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
-            }
-        }
-
+       
         public static void StoreOut_A01_01ToA01_11_WriteCV()
         {
             try
@@ -57,21 +43,6 @@ namespace Mirle.DB.Object.Service
                     }
                     clsDB_Proc.GetDB_Object().GetProcess().FunStoreOut_A01_01ToA01_11_WriPlc(stn, bufferIndex);
                 }
-            }
-            catch (Exception ex)
-            {
-                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
-                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
-            }
-        }
-
-        public static void StoreOut_A1_CreateEquCmd()
-        {
-            try
-            {
-                int bufferIndex = 1; //A1
-                clsDB_Proc.GetDB_Object().GetProcess().FunStoreOutCreateEquCmd(bufferIndex);
             }
             catch (Exception ex)
             {

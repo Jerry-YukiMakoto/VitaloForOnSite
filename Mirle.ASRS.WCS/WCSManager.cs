@@ -19,9 +19,6 @@ namespace Mirle.ASRS.WCS
         private readonly Conveyors.Conveyor _conveyor;
         private readonly LoggerManager _loggerManager;
 
-        private readonly Timer _emptyInReport = new Timer();
-        private readonly Timer _emptyOutReport = new Timer();
-
         private readonly Timer _KanBanstoreOutrepotfinish = new Timer();
 
         private readonly Timer _storeInProcess = new Timer();
@@ -38,9 +35,7 @@ namespace Mirle.ASRS.WCS
             _storeOutProcess.Interval = 500;
             _storeInProcess.Interval = 500;
             _otherProcess.Interval = 500;
-            
-            _emptyInReport.Interval = 500;
-            _emptyOutReport.Interval = 500;
+
             _KanBanstoreOutrepotfinish.Interval = 500;
 
             _storeOutProcess.Elapsed += StoreOutProcess;
@@ -54,16 +49,12 @@ namespace Mirle.ASRS.WCS
         public void Start()
         {
             _otherProcess.Start();
-            _emptyInReport.Start();
-            _emptyOutReport.Start();
             _storeOutProcess.Start();
             _storeInProcess.Start();
             
         }
         public void Stop()
         {
-            _emptyInReport.Stop();
-            _emptyOutReport.Stop();
             _storeOutProcess.Stop();
             _storeInProcess.Stop();
             _otherProcess.Stop();
@@ -71,7 +62,7 @@ namespace Mirle.ASRS.WCS
 
         private void KanBanstoreOutrepotfinish(object sender, ElapsedEventArgs e)
         {
-            _emptyOutReport.Stop();
+            _KanBanstoreOutrepotfinish.Stop();
             try
             {
                 if (IsConnected)
@@ -87,7 +78,7 @@ namespace Mirle.ASRS.WCS
             }
             finally
             {
-                _emptyOutReport.Start();
+                _KanBanstoreOutrepotfinish.Start();
             }
         }
 
@@ -99,9 +90,7 @@ namespace Mirle.ASRS.WCS
             {
                 if (IsConnected)
                 {
-                    clsStoreOut.StoreOut_A1_WriteCV();
 
-                    clsStoreOut.StoreOut_A1_CreateEquCmd();
 
                     clsStoreOut.StoreOut_A01_01ToA01_11_WriteCV();
 
@@ -165,14 +154,6 @@ namespace Mirle.ASRS.WCS
                     clsOther.clsL2L.Other_LocToLoc();
 
                     clsOther.clsL2L.Other_LocToLocfinish();
-
-                    clsOther.clsEmptyPallets.EmptyStoreIn_A1_WriteCV();
-
-                    clsOther.clsEmptyPallets.EmptyStoreIn_A1_CreateEquCmd();
-
-                    clsOther.clsEmptyPallets.EmptyStoreIn_EquCmdFinish();
-
-                    clsOther.clsEmptyPallets.EmptyStoreOut_A1_WriteCV();
 
                     //clsOther.clsEmptyPallets.EmptyStoreOut_A1_CreateEquCmd();
 

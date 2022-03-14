@@ -89,6 +89,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "icon", "icon", "{B8FD38F5-B
 		icon\UpArrow.png = icon\UpArrow.png
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject1", "UnitTestProject1\UnitTestProject1.csproj", "{C0E20E08-92E3-4746-8F64-3C436D0A3CB4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -171,6 +173,10 @@ Global
 		{DCBE44B8-7C23-4DBA-86AE-9CA5F9CB3774}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCBE44B8-7C23-4DBA-86AE-9CA5F9CB3774}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCBE44B8-7C23-4DBA-86AE-9CA5F9CB3774}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0E20E08-92E3-4746-8F64-3C436D0A3CB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0E20E08-92E3-4746-8F64-3C436D0A3CB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0E20E08-92E3-4746-8F64-3C436D0A3CB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0E20E08-92E3-4746-8F64-3C436D0A3CB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

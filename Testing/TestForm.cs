@@ -7,7 +7,6 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WCS_API_Server;
 using Unity;
 using Mirle.DB.Object;
 using Mirle.ASRS.WCS.Library;
@@ -17,7 +16,6 @@ namespace test
 {
     public partial class TestForm : Form
     {
-        private WebApiHost _webApiHost;
         private UnityContainer _unityContainer;
         public TestForm()
         {
@@ -28,9 +26,6 @@ namespace test
         {
             clInitSys.FunLoadIniSys();
             clsDB_Proc.Initial(clInitSys.DbConfig, clInitSys.DbConfig_WMS);
-            _unityContainer = new UnityContainer();
-            _unityContainer.RegisterInstance(new WMSWCSController());
-            _webApiHost = new WebApiHost(new Startup(_unityContainer), "127.0.0.1:9000");
             //_webApiHost = new WebApiHost(new Startup(_unityContainer), clInitSys.WcsApi_Config.IP);
         }
 

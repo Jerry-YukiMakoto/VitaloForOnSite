@@ -83,7 +83,6 @@ namespace Mirle.ASRS.Conveyors.Signal
                 new BufferDefine() { BufferIndex = 46, BufferName = "A07-01" },
                 new BufferDefine() { BufferIndex = 47, BufferName = "A11-05" },
                 new BufferDefine() { BufferIndex = 48, BufferName = "A11-06" },
-                new BufferDefine() { BufferIndex = 49, BufferName = "BCR" },
             };
             Conveyors.Add(conveyor);
 
@@ -116,7 +115,6 @@ namespace Mirle.ASRS.Conveyors.Signal
                 new BufferDefine() { BufferIndex = 23, BufferName = "B02-11" },
                 new BufferDefine() { BufferIndex = 24, BufferName = "B02-12" },
                 new BufferDefine() { BufferIndex = 25, BufferName = "B03" },
-                new BufferDefine() { BufferIndex = 26, BufferName = "BCR" },
             };
             Conveyors.Add(conveyor);
 
@@ -231,6 +229,7 @@ namespace Mirle.ASRS.Conveyors.Signal
                     if (BCRnoticeBufferIndex.ContainsKey(bufferIndex + 1))
                     {
                         buffer.BCRnotice = new Word(_mplc, $"D{plcIndex + (bufferIndex * 10) + 3}");
+                        buffer.BufferBCRsignal.itemID = new WordBlock(_mplc, $"D{plcIndex + (bufferIndex * 10)}",5);//帶修改
                     }
                     else
                     {

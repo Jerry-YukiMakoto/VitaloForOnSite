@@ -30,6 +30,8 @@ namespace Mirle.DB.Proc
         private Fun.clsAlarmData alarmData = new Fun.clsAlarmData();
         private Fun.clsCmd_Mst_His CMD_MST_HIS = new Fun.clsCmd_Mst_His();
         private Fun.clsUnitStsLog unitStsLog = new Fun.clsUnitStsLog();
+        public static Dictionary<string, int> dicCountByCrane = new Dictionary<string, int>();
+        
 
         public List<Element_Port>[] GetLstPort()
         {
@@ -45,6 +47,9 @@ namespace Mirle.DB.Proc
             _config_WMS = config_WMS;
             _config_Sqlite = config_Sqlite;
             proc = new Fun.clsProc(_config_WMS);
+            dicCountByCrane.Add("1", 1);
+            dicCountByCrane.Add("2", 1);
+            dicCountByCrane.Add("3", 1);
         }
 
         public Fun.clsProc GetFunProcess()
@@ -114,12 +119,21 @@ namespace Mirle.DB.Proc
 
                                 clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Ready Receive StoreIn Command=> {cmdSno}");
 
-                                if (EQU_CMD.GetEquStatus(out var dataObject1, db).ResultCode == DBResult.Success)
+
+                                Equ_No = GetEquNo();
+                                int Sequ_No = Convert.ToInt32(Equ_No);
+                                for (int i = 0; i < 6; i++)//從起始的線別開始尋找是否有線別異常
                                 {
-                                    for (int i = 0; i < dataObject1.Count; i++)
+                                    if (EQU_CMD.GetEquStatus(Sequ_No,out var dataObject1, db).ResultCode == DBResult.NoDataSelect)
                                     {
-                                        Cranests[i] = dataObject1[i].EquNo;
+                                        if (Sequ_No != 6)
+                                        {
+                                            Sequ_No %= 6;
+                                        }
+                                        Equ_No=Sequ_No.ToString();
+                                        break;
                                     }
+                                    Sequ_No++;
                                 }
 
                                 IsHigh = _conveyor.GetBuffer(bufferIndex).LoadHeight;//根據荷高去選儲位位置
@@ -152,8 +166,7 @@ namespace Mirle.DB.Proc
                                         return false;
                                     }
                                 }
-
-                                path = StoreInfindpathbyEquNo(Convert.ToInt32(Equ_No));
+                                path = StoreInfindpathbyEquNo(Convert.ToInt32(Equ_No));//根據線別選入庫站
 
                                 if (db.TransactionCtrl2(TransactionTypes.Begin).ResultCode != DBResult.Success)
                                 {
@@ -322,12 +335,20 @@ namespace Mirle.DB.Proc
                                 Item_Type = dataObject3[0].Item_Type;
                                 Qty_Plt = dataObject3[0].Qty_Plt;
 
-                                if (EQU_CMD.GetEquStatus(out var dataObject1, db).ResultCode == DBResult.Success)
+                                Equ_No = GetEquNo();
+                                int Sequ_No = Convert.ToInt32(Equ_No);
+                                for (int i = 0; i < 6; i++)//從輪流放的的線別排除有異常的Crane
                                 {
-                                    for (int i = 0; i < dataObject1.Count; i++)
+                                    if (EQU_CMD.GetEquStatus(Sequ_No, out var dataObject1, db).ResultCode == DBResult.NoDataSelect)
                                     {
-                                        Cranests[i] = dataObject1[i].EquNo;
+                                        if (Sequ_No != 6)
+                                        {
+                                            Sequ_No %= 6;
+                                        }
+                                        Equ_No = Sequ_No.ToString();
+                                        break;
                                     }
+                                    Sequ_No++;
                                 }
 
                                 IsHigh = _conveyor.GetBuffer(bufferIndex).LoadHeight;//根據荷高去選儲位位置
@@ -1365,6 +1386,54 @@ namespace Mirle.DB.Proc
             return 0;
         }
         #endregion
+
+
+        public static string GetEquNo()
+        {
+            string sLine = "";  //最終線別
+            int[] iAry = new int[4];
+            int temp = 0;
+            string stemp = "";
+            //List<int> intermediate_list = new List<int>();
+            try
+            {
+                iAry[1] = dicCountByCrane["1"];
+                iAry[2] = dicCountByCrane["2"];
+                iAry[3] = dicCountByCrane["3"];
+                for (int i = 1; i < iAry.Length; i++)
+                {
+                    for (int k = i + 1; k < iAry.Length; k++)
+                    {
+                        if (iAry[i] > iAry[k])
+                        {
+                            temp = iAry[k];
+                            iAry[k] = iAry[i];
+                            iAry[i] = temp;
+                        }
+                    }
+                    //Console.WriteLine($"{Ary[i]}");
+                }
+                for (int i = 1; i < iAry.Length; i++)
+                {
+                    stemp = i.ToString();
+                    if (dicCountByCrane[stemp] == iAry[1])
+                    {
+                        sLine = stemp;
+                        dicCountByCrane[stemp]++;
+                        break;
+                    }
+                }
+                return sLine;
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return "";
+            }
+
+        }
 
 
 

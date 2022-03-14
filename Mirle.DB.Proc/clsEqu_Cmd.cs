@@ -24,33 +24,7 @@ namespace Mirle.DB.Proc
             proc = new Fun.clsProc(config_WMS);
         }
 
-        public int checkCraneNoReapeat(out DataObject<CmdMst> dataObject)
-        {
-            try
-            {
-                using (var db = clsGetDB.GetDB(_config))
-                {
-                    int iRet = clsGetDB.FunDbOpen(db);
-                    if (iRet == DBResult.Success)
-                    {
-                        return EQU_CMD.checkCraneNoReapeat(out dataObject, db).ResultCode;
-                    }
-                    else
-                    {
-                        dataObject = new DataObject<CmdMst>();
-                        return iRet;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                dataObject = new DataObject<CmdMst>();
-                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
-                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
-                return DBResult.Exception;
-            }
-        }
+       
 
         //public void FunCheckEquCmdFinish()
         //{
