@@ -229,7 +229,6 @@ namespace Mirle.ASRS.Conveyors.Signal
                     if (BCRnoticeBufferIndex.ContainsKey(bufferIndex + 1))
                     {
                         buffer.BCRnotice = new Word(_mplc, $"D{plcIndex + (bufferIndex * 10) + 3}");
-                        buffer.BufferBCRsignal.itemID = new WordBlock(_mplc, $"D{plcIndex + (bufferIndex * 10)}",5);//帶修改
                     }
                     else
                     {
@@ -252,6 +251,19 @@ namespace Mirle.ASRS.Conveyors.Signal
                     buffer.InitialNotice = new Word(_mplc, $"D{plcIndex + (bufferIndex * 10) + 9}");
 
                     #region PLC->PC增加單一特殊點位位置
+
+                    if(bufferIndex+1==43 || bufferIndex+1==48)
+                    {
+                        buffer.BCRsignal.Item_No = new WordBlock(_mplc, $"D591", 5);//料號
+                        buffer.BCRsignal.Lot_ID = new WordBlock(_mplc, $"D596", 5);//效期
+                        buffer.BCRsignal.Plt_Id = new WordBlock(_mplc, $"D601", 5);//板號
+                    }
+                    else
+                    {
+                        buffer.BCRsignal.Item_No = new WordBlock();
+                        buffer.BCRsignal.Lot_ID = new WordBlock();
+                        buffer.BCRsignal.Plt_Id = new WordBlock();
+                    }
 
                     #endregion
 
@@ -339,10 +351,16 @@ namespace Mirle.ASRS.Conveyors.Signal
                     if (bufferIndex + 1 == 25)
                     {
                         buffer.BCRnotice = new Word(_mplc, $"D{plcIndex + (bufferIndex * 10) + 3}");
+                        buffer.BCRsignal.Item_No = new WordBlock(_mplc, $"D361", 5);//料號
+                        buffer.BCRsignal.Lot_ID = new WordBlock(_mplc, $"D366", 5);//效期
+                        buffer.BCRsignal.Plt_Id = new WordBlock(_mplc, $"D371", 5);//板號
                     }
                     else
                     {
                         buffer.BCRnotice = new Word();
+                        buffer.BCRsignal.Item_No = new WordBlock();
+                        buffer.BCRsignal.Lot_ID = new WordBlock();
+                        buffer.BCRsignal.Plt_Id = new WordBlock();
                     }
                     #endregion
 

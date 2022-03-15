@@ -23,6 +23,7 @@ namespace Mirle.DB.Fun
             sql += $"AND A.Stn_No = '{stations}'";
             sql += $"AND B.Item_No = '{Item_No}'";
             sql += $"AND B.Lot_No = '{Lot_No}'";
+            sql += $"order by A.prty , A.crt_date , A.cmd_sno";
             return db.GetData(sql, out dataObject);
         }
 
@@ -74,6 +75,7 @@ namespace Mirle.DB.Fun
             sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockOut}', '{clsConstValue.CmdMode.Cycle}') ";
             sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Initial}' ";
             sql += $"AND New_Loc = '{stations}'";
+            sql += $"order by prty , crt_date , cmd_sno";
             return db.GetData(sql, out dataObject);
         }
 
@@ -191,6 +193,9 @@ namespace Mirle.DB.Fun
         {
             string sql = "UPDATE Cmd_Dtl ";
             sql += $"SET Plt_Id='{Plt_Id}' ";
+            sql += $"In_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}', ";
+            sql += $"Updated_by='WCS', ";
+            sql += $"Updated_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
             sql += $"WHERE Cmd_Sno='{cmdSno}' ";
             sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Initial}' ";
             return db.ExecuteSQL2(sql);

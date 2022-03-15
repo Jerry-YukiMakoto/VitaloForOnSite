@@ -9,7 +9,7 @@ namespace Mirle.DB.Object.Service
 {
     public class clsStoreIn
     {
-        public static void StoreIn_A1_WriteCV()
+        public static void FunOutsourceStoreIn_WriteCV()
         {
             try
             {
@@ -24,7 +24,7 @@ namespace Mirle.DB.Object.Service
             }
         }
 
-        public static void StoreIn_A2ToA4_WriteCV()//A2toA4寫入buffer
+        public static void FunProduceStoreInWriteCV()//A2toA4寫入buffer
         {
             try
             {

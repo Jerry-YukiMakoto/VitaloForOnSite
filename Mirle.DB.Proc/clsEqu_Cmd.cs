@@ -17,11 +17,10 @@ namespace Mirle.DB.Proc
         private clsDbConfig _config = new clsDbConfig();
         private clsDbConfig _config_Sqlite = new clsDbConfig();
 
-        public clsEqu_Cmd(clsDbConfig config, clsDbConfig config_WMS, clsDbConfig config_Sqlite)
+        public clsEqu_Cmd(clsDbConfig config, clsDbConfig config_Sqlite)
         {
             _config = config;
             _config_Sqlite = config_Sqlite;
-            proc = new Fun.clsProc(config_WMS);
         }
 
        

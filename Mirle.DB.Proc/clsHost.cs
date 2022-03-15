@@ -41,7 +41,7 @@ namespace Mirle.DB.Proc
             CMD_MST = new clsCmd_Mst(config);
             SNO = new clsSno(config);
             LocMst = new clsLocMst(config);
-            EQU_CMD = new clsEqu_Cmd(config, config_WMS, _config_Sqlite);
+            EQU_CMD = new clsEqu_Cmd(config, _config_Sqlite);
             ALARMDATA = new clsAlarmData(config);
             CMD_MST_HIS = new clsCmd_Mst_His(config);
             unitStsLog = new clsUnitStsLog(config);

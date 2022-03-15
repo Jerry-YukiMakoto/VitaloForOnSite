@@ -70,7 +70,7 @@
     </Compile>
     <Compile Include="Service\LoggerService.cs" />
     <Compile Include="Signal\BufferControllerSignal.cs" />
-    <Compile Include="Signal\Class1.cs" />
+    <Compile Include="Signal\BufferBCRsignal.cs" />
     <Compile Include="Signal\ConveyorDefine.cs" />
     <Compile Include="Signal\BufferSignal.cs" />
     <Compile Include="Signal\BufferStatusSignal.cs" />

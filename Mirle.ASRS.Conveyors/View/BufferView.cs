@@ -124,7 +124,6 @@ namespace Mirle.ASRS.Conveyors.View
             Refresh(lblReady, buffer.Ready.ToString());
             Refresh(lblPathNotice, buffer.PathNotice.ToString());
             Refresh(lblPresence, Presence(buffer.Presence), buffer.Presence.ToColor(Color.Orange, Color.White));
-            Refresh(lblSwitch_Ack, buffer.Switch_Ack.ToString()); 
             Refresh(lblInitialNotice, buffer.InitialNotice.ToString());
         }
 

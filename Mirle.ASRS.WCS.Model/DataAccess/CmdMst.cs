@@ -16,8 +16,6 @@ namespace Mirle.ASRS.WCS.Model.DataAccess
         public string StnNo { get; private set; }
         public string Loc { get; private set; }
         public string NewLoc { get; private set; }
-        public string LoadType { get; private set; }
-        public string TrayId { get; private set; }
         public string Trace { get; private set; }
         public string IOType { get; private set; }
         public string IO_Type { get; private set; }
@@ -39,14 +37,6 @@ namespace Mirle.ASRS.WCS.Model.DataAccess
             if (row.Table.Columns.Contains("NEWLOC"))
             {
                 NewLoc = Convert.ToString(row["NEWLOC"]);
-            }
-            if (row.Table.Columns.Contains("LOADTYPE"))
-            {
-                LoadType = Convert.ToString(row["LOADTYPE"]);
-            }
-            if (row.Table.Columns.Contains("TRAYID"))
-            {
-                TrayId = Convert.ToString(row["TRAYID"]);
             }
             if (row.Table.Columns.Contains("TRACE"))
             {

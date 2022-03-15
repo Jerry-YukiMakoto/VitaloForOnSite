@@ -67,18 +67,20 @@ namespace Mirle.DB.Proc
             string Equ_No = "";
             int path = 0;
             int IsHigh = 0;
-            string[] Cranests = new string[6];
             try
             {
                 var _conveyor = ControllerReader.GetCVControllerr().GetConveryor();
                 if (_conveyor.GetBuffer(bufferIndex).BcrNotice == 1)
                 {
-
                     using (var db = clsGetDB.GetDB(_config))
                     {
                         int iRet = clsGetDB.FunDbOpen(db);
                         if (iRet == DBResult.Success)
                         {
+                            Item_No = _conveyor.GetBuffer(bufferIndex).Item_No;
+                            Plt_Id = _conveyor.GetBuffer(bufferIndex).Plt_Id;
+                            Lot_No = _conveyor.GetBuffer(bufferIndex).Lot_ID;
+
                             if (CMD_MST.GetCmdMstByStoreInStart(sStnNo, Item_No, Lot_No, out var dataObject, db).ResultCode == DBResult.Success) //讀取CMD_MST
                             {
 
@@ -120,7 +122,7 @@ namespace Mirle.DB.Proc
                                 clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Ready Receive StoreIn Command=> {cmdSno}");
 
 
-                                Equ_No = GetEquNo();
+                                Equ_No = GetEquNo();//照順序選擇線別
                                 int Sequ_No = Convert.ToInt32(Equ_No);
                                 for (int i = 0; i < 6; i++)//從起始的線別開始尋找是否有線別異常
                                 {
@@ -238,6 +240,7 @@ namespace Mirle.DB.Proc
                             }
                             else
                             {
+                                path = 31;//退板
                                 var WritePlccheck = _conveyor.GetBuffer(bufferIndex).WritePathChabgeNotice(path).Result;
                                 bool Result = WritePlccheck;
                                 if (Result != true)//路徑編號寫入
@@ -291,38 +294,45 @@ namespace Mirle.DB.Proc
                 var _conveyor = ControllerReader.GetCVControllerr().GetConveryor();
                 if (_conveyor.GetBuffer(bufferIndex).BcrNotice == 1)
                 {
-
                     using (var db = clsGetDB.GetDB(_config))
                     {
                         int iRet = clsGetDB.FunDbOpen(db);
                         if (iRet == DBResult.Success)
                         {
-                            
+                            Item_No = _conveyor.GetBuffer(bufferIndex).Item_No;
+                            Plt_Id = _conveyor.GetBuffer(bufferIndex).Plt_Id;
+                            Lot_No = _conveyor.GetBuffer(bufferIndex).Lot_ID;
+
                             #region//根據buffer狀態更新命令
                             if (_conveyor.GetBuffer(bufferIndex).Auto != true)
                                 {
-                                    CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.NotAutoMode, db);
-                                    return false;
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                        , $"Auto Not On");
+                                return false;
                                 }
                                 if (_conveyor.GetBuffer(bufferIndex).InMode != true)
                                 {
-                                    CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.NotInMode, db);
-                                    return false;
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                    , $"Inmode Not On");
+                                return false;
                                 }
                                 if (_conveyor.GetBuffer(bufferIndex).Error == true)
                                 {
-                                    CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.BufferError, db);
-                                    return false;
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                    , $"Error ON");
+                                return false;
                                 }
                                 if (_conveyor.GetBuffer(bufferIndex).CommandId > 0)
                                 {
-                                    CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.CmdLeftOver, db);
-                                    return false;
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                     , $"CommanId exist On Buffer");
+                                return false;
                                 }
-                                if (_conveyor.GetBuffer(bufferIndex).Presence == true)
+                                if (_conveyor.GetBuffer(bufferIndex).Presence == false)
                                 {
-                                    CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.PresenceExist, db);
-                                    return false;
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                    , $" No Presence PLease Check");
+                                return false;
                                 }
                                 #endregion
 
@@ -335,7 +345,7 @@ namespace Mirle.DB.Proc
                                 Item_Type = dataObject3[0].Item_Type;
                                 Qty_Plt = dataObject3[0].Qty_Plt;
 
-                                Equ_No = GetEquNo();
+                                Equ_No = GetEquNo();//貨物照線別順序輪流放
                                 int Sequ_No = Convert.ToInt32(Equ_No);
                                 for (int i = 0; i < 6; i++)//從輪流放的的線別排除有異常的Crane
                                 {
@@ -384,7 +394,7 @@ namespace Mirle.DB.Proc
                                     }
                                 }
 
-                                cmdSno = SNO.FunGetSeqNo(clsEnum.enuSnoType.CMDSNO, db);
+                                cmdSno = SNO.FunGetSeqNo(clsEnum.enuSnoType.CMDSNO, db); //尋找最新不重複的命令號
                                 if (cmdSno == "" || cmdSno == "00000")
                                 {
                                     clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
@@ -392,7 +402,7 @@ namespace Mirle.DB.Proc
                                     return false;
                                 }
 
-                                struCmdMst stuCmdMst = new struCmdMst();
+                                struCmdMst stuCmdMst = new struCmdMst(); //生產由WCS建立命令
                                 stuCmdMst.CmdSno = cmdSno;
                                 stuCmdMst.CmdSts = "1";
                                 stuCmdMst.CmdAbnormal = "NA";
@@ -421,10 +431,10 @@ namespace Mirle.DB.Proc
                                 stuCmdDtl.Cmd_Sno = stuCmdMst.CmdSno;
                                 stuCmdDtl.Plt_Qty = Qty_Plt;
                                 stuCmdDtl.Trn_Qty = 0;
-                                stuCmdDtl.Loc = "";
+                                stuCmdDtl.Loc = New_Loc;
                                 stuCmdDtl.In_Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                                 stuCmdDtl.Item_No = Item_No;
-                                stuCmdDtl.Lot_No = "";
+                                stuCmdDtl.Lot_No = Lot_No;
                                 stuCmdDtl.Plt_Id = Plt_Id;
                                 stuCmdDtl.Company_ID = "";
                                 stuCmdDtl.Item_Desc = Item_Desc;
@@ -547,7 +557,7 @@ namespace Mirle.DB.Proc
                                 stuCmdDtl.Loc = "";
                                 stuCmdDtl.In_Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                                 stuCmdDtl.Item_No = Item_No;
-                                stuCmdDtl.Lot_No = "";
+                                stuCmdDtl.Lot_No = Lot_No;
                                 stuCmdDtl.Plt_Id = Plt_Id;
                                 stuCmdDtl.Company_ID = "";
                                 stuCmdDtl.Item_Desc = Item_Desc;
@@ -874,7 +884,7 @@ namespace Mirle.DB.Proc
                                 clsWriLog.StoreOutLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Get StoreOut Command => {cmd_Sno}, " +
                                     $"{Cmd_Mode}");
 
-                                #region//確認站口狀態
+                            #region//確認站口狀態
                             if (_conveyor.GetBuffer(bufferIndex).Auto != true)
                             {
                                 CMD_MST.UpdateCmdMstRemark(cmd_Sno, Remark.NotAutoMode, db);
@@ -895,14 +905,9 @@ namespace Mirle.DB.Proc
                                 CMD_MST.UpdateCmdMstRemark(cmd_Sno, Remark.CmdLeftOver, db);
                                 return false;
                             }
-                            if (_conveyor.GetBuffer(bufferIndex).Presence == true)
+                            if (_conveyor.GetBuffer(bufferIndex).Presence != true)
                             {
-                                CMD_MST.UpdateCmdMstRemark(cmd_Sno, Remark.PresenceExist, db);
-                                return false;
-                            }
-                            if (_conveyor.GetBuffer(bufferIndex).Ready != Ready.StoreOutReady)
-                            {
-                                CMD_MST.UpdateCmdMstRemark(cmd_Sno, Remark.NotStoreOutReady, db);
+                                CMD_MST.UpdateCmdMstRemark(cmd_Sno, Remark.PresenceNotExist, db);
                                 return false;
                             }
                             #endregion

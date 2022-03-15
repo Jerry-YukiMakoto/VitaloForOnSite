@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Mirle.ASRS.Conveyors.Signal;
 using Mirle.MPLC.DataType;
+using Mirle;
 
 namespace Mirle.ASRS.Conveyors
 {
@@ -45,9 +46,11 @@ namespace Mirle.ASRS.Conveyors
         public bool Manual => Signal.StatusSignal.Auto.IsOff() && Signal.StatusSignal.Manual.IsOn();
         public bool Presence => Signal.StatusSignal.Presence.IsOn();
         public bool Position => Signal.StatusSignal.Position.IsOn();
-        public int Switch_Ack => Signal.Switch_Ack.GetValue();
-        public int EmptyINReady => Signal.EmptyInReady.GetValue();
-        public int A2LV2 => Signal.A2LV2.GetValue();
+        public string Item_No => Signal.BCRsignal.Item_No.GetValue().ToASCII();
+        public string Lot_ID => Signal.BCRsignal.Lot_ID.GetValue().ToASCII();
+        public string Plt_Id => Signal.BCRsignal.Plt_Id.GetValue().ToASCII();
+
+
 
         public Buffer(BufferSignal signal)
         {
@@ -77,11 +80,6 @@ namespace Mirle.ASRS.Conveyors
             {
                 Signal.ControllerSignal.BcrComplete.SetValue(0);
                 OnBufferPathNoticeChange?.Invoke(this, new BufferEventArgs(Signal.BufferIndex, Signal.BufferName));
-            }
-            if (Signal.ControllerSignal.A4Emptysupply.GetValue() > 0)//待修改，需要知道什麼時候電控運送母托到A3
-            {
-                Signal.ControllerSignal.A4Emptysupply.SetValue(0);
-                OnBufferCommandReceive?.Invoke(this, new BufferEventArgs(Signal.BufferIndex, Signal.BufferName));
             }
             if (Signal.StatusSignal.InMode.IsOn() == true && Signal.ControllerSignal.Switch_Mode.GetValue() == 1
                 || Signal.StatusSignal.OutMode.IsOn() == true && Signal.ControllerSignal.Switch_Mode.GetValue() == 2)

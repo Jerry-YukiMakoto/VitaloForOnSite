@@ -9,7 +9,6 @@ using Mirle.ASRS.Conveyors;
 using Mirle.DataBase;
 using Mirle.DB.Object.Service;
 using Mirle.Def;
-using Mirle.ASRS.WCS.Service;
 using Mirle.DB.Proc;
 
 namespace Mirle.ASRS.WCS
@@ -90,8 +89,6 @@ namespace Mirle.ASRS.WCS
             {
                 if (IsConnected)
                 {
-
-
                     clsStoreOut.StoreOut_A01_01ToA01_11_WriteCV();
 
                     clsStoreOut.StoreOutt_A01_01ToA01_11_CreateEquCmd();
@@ -117,15 +114,10 @@ namespace Mirle.ASRS.WCS
             try
             {
                 if (IsConnected)
-                {
-                   
+                { 
+                    clsStoreIn.FunOutsourceStoreIn_WriteCV();
 
-
-                        clsStoreIn.StoreIn_A1_WriteCV();
-
-                    
-
-                    clsStoreIn.StoreIn_A2ToA4_WriteCV();
+                    clsStoreIn.FunProduceStoreInWriteCV();
 
                     clsStoreIn.StoreIn_CreateEquCmd();
 
