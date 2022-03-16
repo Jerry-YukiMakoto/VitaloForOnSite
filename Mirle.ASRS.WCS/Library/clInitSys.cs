@@ -17,6 +17,7 @@ namespace Mirle.ASRS.WCS.Library
         public static clsDbConfig DbConfig = new clsDbConfig();
         public static clsDbConfig DbConfig_WMS = new clsDbConfig();
         public static clsPlcConfig CV_Config = new clsPlcConfig();
+        public static clsPlcConfig CV_Config2 = new clsPlcConfig();
         public static WebApiConfig WmsApi_Config = new WebApiConfig();
         public static WebApiConfig WcsApi_Config = new WebApiConfig();
         public static ASRSINI lcsini;
@@ -41,6 +42,7 @@ namespace Mirle.ASRS.WCS.Library
                 FunApiConfig(lcsini);
                 FunDeviceConfig(lcsini);
                 FunPlcConfig(lcsini);
+                FunPlcConfig2(lcsini);
             }
             catch(Exception ex)
             {
@@ -80,7 +82,6 @@ namespace Mirle.ASRS.WCS.Library
 
         private static void FunApiConfig(ASRSINI lcsini)
         {
-            WmsApi_Config.IP = lcsini.WMS_API.IP;
             WcsApi_Config.IP = lcsini.WCS_API.IP;
         }
 
@@ -101,6 +102,15 @@ namespace Mirle.ASRS.WCS.Library
             CV_Config.UseMCProtocol = lcsini.CV.UseMCProtocol == 1 ? true : false;
         }
 
+        private static void FunPlcConfig2(ASRSINI lcsini)
+        {
+            CV_Config2.InMemorySimulator = lcsini.CV2.InMemorySimulator == 1 ? true : false;
+            CV_Config2.MPLCIP = lcsini.CV2.MPLCIP;
+            CV_Config2.MPLCNo = lcsini.CV2.MPLCNo;
+            CV_Config2.MPLCPort = lcsini.CV2.MPLCPort;
+            CV_Config2.MPLCTimeout = lcsini.CV2.MPLCTimeout;
+            CV_Config2.UseMCProtocol = lcsini.CV2.UseMCProtocol == 1 ? true : false;
+        }
 
 
         /// <summary>

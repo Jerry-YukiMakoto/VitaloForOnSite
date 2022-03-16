@@ -12,13 +12,24 @@ namespace Mirle.ASRS.Conveyors.View
     public partial class MainView : Form
     {
         private readonly Conveyor _conveyor;
+        private readonly Conveyor _conveyor2;
         private LoggerService _loggerService;
         private static int bufferCount = 10;
+        private readonly int PLCNo;
 
         public MainView(Conveyor conveyor)
         {
             InitializeComponent();
-            _conveyor = conveyor;
+            PLCNo = _conveyor.GetPLCNo();
+            if (PLCNo == 1)
+            {
+                _conveyor = conveyor;
+            }
+            if (PLCNo == 2)
+            {
+                _conveyor2 = conveyor;
+            }
+
         }
         private void MainView_Load(object sender, EventArgs e)
         {
@@ -58,7 +69,7 @@ namespace Mirle.ASRS.Conveyors.View
                         {
                             if (pnlHP.Controls[index] is BufferView bufferView) 
                             {
-                                if (_conveyor.TryGetBuffer(bufferView.BufferIndex, out var buffer)) 
+                                if (_conveyor.TryGetBuffer(bufferView.BufferIndex, out var buffer) && PLCNo==1) 
                                 {
                                     bufferView.Refresh_Buffer(buffer);
                                 }
@@ -71,7 +82,7 @@ namespace Mirle.ASRS.Conveyors.View
                         {
                             if (pnlHP.Controls[index] is BufferView bufferView)
                             {
-                                if (_conveyor.TryGetBuffer(bufferView.BufferIndex, out var buffer))
+                                if (_conveyor.TryGetBuffer(bufferView.BufferIndex, out var buffer) && PLCNo == 1)
                                 {
                                     bufferView.Refresh_Buffer(buffer);
                                 }
@@ -84,7 +95,7 @@ namespace Mirle.ASRS.Conveyors.View
                         {
                             if (pnlHP.Controls[index] is BufferView bufferView)
                             {
-                                if (_conveyor.TryGetBuffer(bufferView.BufferIndex, out var buffer))
+                                if (_conveyor2.TryGetBuffer(bufferView.BufferIndex, out var buffer) && PLCNo == 2)
                                 {
                                     bufferView.Refresh_Buffer(buffer);
                                 }

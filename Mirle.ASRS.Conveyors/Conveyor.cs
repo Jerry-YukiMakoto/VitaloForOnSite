@@ -17,6 +17,7 @@ namespace Mirle.ASRS.Conveyors
         private readonly SystemSignal _systemSignal;
         private readonly ThreadWorker _heartbeat;
         private readonly ThreadWorker _refresh;
+        private readonly int _PLCNo;
 
         private IMPLCProvider _plcHost;
         public bool IsConnected => _plcHost.IsConnected;
@@ -32,6 +33,7 @@ namespace Mirle.ASRS.Conveyors
         {
             _plcHost = plcHost;
             _signal = new SignalMapper(_plcHost,PLCNo);
+            _PLCNo = PLCNo;
 
             foreach (var buffer in _signal.BufferSignals)
             {
@@ -64,7 +66,10 @@ namespace Mirle.ASRS.Conveyors
         {
             return _buffers.TryGetValue(bufferIndex, out buffer);
         }
-
+        public int GetPLCNo()
+        {
+            return _PLCNo;
+        }
         private void Heartbeat()
         {
             if (!IsConnected) return;

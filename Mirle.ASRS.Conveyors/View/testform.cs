@@ -35,8 +35,8 @@ namespace Mirle.ASRS.WCS.Controller
 
         private IEnumerable<BlockInfo> GetBlockInfos()
         {
-            yield return new BlockInfo(new DDeviceRange("D101", "D210"), "Read", 0);
-            yield return new BlockInfo(new DDeviceRange("D3101", "D3210"), "Write", 1);
+            yield return new BlockInfo(new DDeviceRange("D101", "D600"), "Read", 0);
+            yield return new BlockInfo(new DDeviceRange("D3101", "D3590"), "Write", 1);
         }
 
         private void testsimulator(IMPLCProvider test)

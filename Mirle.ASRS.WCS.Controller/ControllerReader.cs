@@ -8,6 +8,7 @@ using Config.Net;
 using System.Windows.Forms;
 using Mirle.Def.U0NXMA30;
 using Mirle.Def;
+using Mirle.ASRS.Conveyors.View;
 
 namespace Mirle.ASRS.WCS.Controller
 {
@@ -17,7 +18,7 @@ namespace Mirle.ASRS.WCS.Controller
         private static CVController _cvController;
         private static CVController _cvController2;
         private static LoggerManager _loggerManager;
-        
+
         public static void FunGetController(clsPlcConfig CVConfig) {
             _loggerManager = new LoggerManager();
             _cvController = new CVController(CVConfig.MPLCIP, CVConfig.MPLCPort, CVConfig.InMemorySimulator, CVConfig.MPLCNo);

@@ -11,12 +11,6 @@ namespace Mirle.Def.U0NXMA30
         [Option(Alias = "Data Base")]
         DatabaseConfig Database { get; }
 
-        [Option(Alias = "WMS Data Base")]
-        DatabaseConfig Database_WMS { get; }
-
-        [Option(Alias = "WMS API")]
-        APIConfig WMS_API { get; }
-
         [Option(Alias = "WCS API")]
         APIConfig WCS_API { get; }
 
@@ -25,6 +19,9 @@ namespace Mirle.Def.U0NXMA30
 
         [Option(Alias = "CV PLC")]
         CV_PlcConfig CV { get; }
+
+        [Option(Alias = "CV PLC 2")]
+        CV_PlcConfig CV2 { get; }
 
         [Option(Alias = "StnNo")]
         StnNoConfig StnNo { get; }

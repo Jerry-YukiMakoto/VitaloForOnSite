@@ -41,12 +41,10 @@ namespace Mirle.DB.Proc
         private clsDbConfig _config = new clsDbConfig();
         private clsDbConfig _config_WMS = new clsDbConfig();
         private clsDbConfig _config_Sqlite = new clsDbConfig();
-        public clsProc(clsDbConfig config, clsDbConfig config_WMS, clsDbConfig config_Sqlite)
+        public clsProc(clsDbConfig config, clsDbConfig config_Sqlite)
         {
             _config = config;
-            _config_WMS = config_WMS;
             _config_Sqlite = config_Sqlite;
-            proc = new Fun.clsProc(_config_WMS);
             dicCountByCrane.Add("1", 1);
             dicCountByCrane.Add("2", 1);
             dicCountByCrane.Add("3", 1);
@@ -67,6 +65,12 @@ namespace Mirle.DB.Proc
             string Equ_No = "";
             int path = 0;
             int IsHigh = 0;
+            string cmdSno="";
+            int CmdMode=0;
+            int IOType;
+            string cmdPlt_Id;
+            bool cmdcheck = false;
+            string Plt_Qty="";
             try
             {
                 var _conveyor = ControllerReader.GetCVControllerr().GetConveryor();
@@ -78,15 +82,41 @@ namespace Mirle.DB.Proc
                         if (iRet == DBResult.Success)
                         {
                             Item_No = _conveyor.GetBuffer(bufferIndex).Item_No;
-                            Plt_Id = _conveyor.GetBuffer(bufferIndex).Plt_Id;
+                            string BCRPlt_Id = _conveyor.GetBuffer(bufferIndex).Plt_Id;
                             Lot_No = _conveyor.GetBuffer(bufferIndex).Lot_ID;
+                            bool Pltfish= BCRPlt_Id.Contains("-");//如果是餘板會有槓槓來與滿板分別，根據此條件尋找餘板的命令
 
-                            if (CMD_MST.GetCmdMstByStoreInStart(sStnNo, Item_No, Lot_No, out var dataObject, db).ResultCode == DBResult.Success) //讀取CMD_MST
+                            if (CMD_MST.GetCmdMstByStoreInStart(sStnNo, Item_No, Lot_No, Pltfish, BCRPlt_Id, out var dataObject1, db).ResultCode == DBResult.Success)
                             {
+                                cmdSno = dataObject1[0].Cmd_Sno;
+                                CmdMode = Convert.ToInt32(dataObject1[0].Cmd_Mode);
+                                IOType = Convert.ToInt32(dataObject1[0].IO_Type);
+                                cmdPlt_Id = dataObject1[0].Plt_Id;
+                                Plt_Qty = dataObject1[0].Plt_Qty;
+                                cmdcheck = true;
+                            }
+                            else if (CMD_MST.GetCmdMstByStoreInStart(sStnNo, Item_No, Lot_No, out var dataObject2, db).ResultCode == DBResult.Success)
+                            {
+                                cmdSno = dataObject1[0].Cmd_Sno;
+                                CmdMode = Convert.ToInt32(dataObject1[0].Cmd_Mode);
+                                IOType = Convert.ToInt32(dataObject1[0].IO_Type);
+                                cmdPlt_Id = dataObject1[0].Plt_Id;
+                                Plt_Qty = dataObject1[0].Plt_Qty;
+                                cmdcheck = true;
+                            }
+                            else//都蒐集不到資料執行退板
+                            {
+                                cmdcheck = false;
+                            }
 
-                                string cmdSno = dataObject[0].Cmd_Sno;
-                                int CmdMode = Convert.ToInt32(dataObject[0].Cmd_Mode);
-                                int IOType = Convert.ToInt32(dataObject[0].IO_Type);
+                            if (string.IsNullOrWhiteSpace(Plt_Qty)) //數量並未填入，發出異常(像餘板一定要額外輸)
+                            {
+                                cmdcheck = false;
+                            }
+
+
+                            if (cmdcheck) //都蒐集不到資料執行退板
+                            {
 
                                 clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Get StoreIn Command => {cmdSno}, " +
                                         $"{CmdMode}");
@@ -126,7 +156,7 @@ namespace Mirle.DB.Proc
                                 int Sequ_No = Convert.ToInt32(Equ_No);
                                 for (int i = 0; i < 6; i++)//從起始的線別開始尋找是否有線別異常
                                 {
-                                    if (EQU_CMD.GetEquStatus(Sequ_No,out var dataObject1, db).ResultCode == DBResult.NoDataSelect)
+                                    if (EQU_CMD.GetEquStatus(Sequ_No,out var dataObject3, db).ResultCode == DBResult.NoDataSelect)
                                     {
                                         if (Sequ_No != 6)
                                         {

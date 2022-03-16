@@ -22,6 +22,9 @@ namespace Mirle.ASRS.WCS.Model.DataAccess
         public string COUNT { get; internal set; }
         public string Stn_No { get; private set; }
         public string Equ_No { get; private set; }
+        public string Plt_Id { get; private set; }
+        public string Plt_Qty { get; private set; }
+
 
         protected override ValueObject ConvaertDataRow(DataRow row)
         {
