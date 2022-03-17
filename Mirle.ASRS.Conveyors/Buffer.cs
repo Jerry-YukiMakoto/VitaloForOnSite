@@ -81,12 +81,6 @@ namespace Mirle.ASRS.Conveyors
                 Signal.ControllerSignal.BcrComplete.SetValue(0);
                 OnBufferPathNoticeChange?.Invoke(this, new BufferEventArgs(Signal.BufferIndex, Signal.BufferName));
             }
-            if (Signal.StatusSignal.InMode.IsOn() == true && Signal.ControllerSignal.Switch_Mode.GetValue() == 1
-                || Signal.StatusSignal.OutMode.IsOn() == true && Signal.ControllerSignal.Switch_Mode.GetValue() == 2)
-            {
-                Signal.ControllerSignal.Switch_Mode.SetValue(0);
-                OnBufferCommandReceive?.Invoke(this, new BufferEventArgs(Signal.BufferIndex, Signal.BufferName));
-            }
             CheckIniatlNotice();
             CheckAlarmBit();
         }

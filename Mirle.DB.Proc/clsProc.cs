@@ -688,7 +688,7 @@ namespace Mirle.DB.Proc
                     int iRet = clsGetDB.FunDbOpen(db);
                     if (iRet == DBResult.Success)
                     {
-                        var _conveyor = ControllerReader.GetCVControllerr2().GetConveryor();
+                        var _conveyor = ControllerReader.GetCVControllerr().GetConveryor2();
                         
                         string cmdSno = (_conveyor.GetBuffer(bufferIndex).CommandId).ToString();
                         if (CMD_MST.GetCmdMstByStoreInCrane(cmdSno, out var dataObject, db).ResultCode == DBResult.Success)

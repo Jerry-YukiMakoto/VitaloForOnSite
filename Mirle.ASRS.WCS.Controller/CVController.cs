@@ -8,6 +8,7 @@ using Mirle.MPLC.DataBlocks;
 using Mirle.MPLC.DataBlocks.DeviceRange;
 using Mirle.MPLC.MCProtocol;
 using Mirle.MPLC.SharedMemory;
+using Mirle.Def;
 
 namespace Mirle.ASRS.WCS.Controller
 {
@@ -17,25 +18,35 @@ namespace Mirle.ASRS.WCS.Controller
         private readonly MainView _mainView;
         private readonly Form1 _form;
         private readonly Conveyors.Conveyor _converyor;
+        private readonly Conveyors.Conveyor _converyor2;
         private readonly bool _InMemorySimulator;
-       
 
-        public CVController(string ipAddress, int tcpPort, bool InMemorySimulator,int PLCNo)
+      
+
+        public CVController(clsPlcConfig CVConfig, clsPlcConfig CV_Config2)
         {
-            if (InMemorySimulator)
+            if (CVConfig.InMemorySimulator)
             {
                 var smWriter = new SMReadWriter();
-                var blockInfos = GetBlockInfos(PLCNo);
+                var blockInfos = GetBlockInfos(CVConfig.MPLCNo);
                 foreach (var block in blockInfos)
                 {
                     smWriter.AddDataBlock(new SMDataBlockInt32(block.DeviceRange, $@"Global\{block.SharedMemoryName}"));
                 }
-                _converyor = new Conveyors.Conveyor(smWriter,PLCNo);
-                _InMemorySimulator = InMemorySimulator;
+                _converyor = new Conveyors.Conveyor(smWriter,CVConfig.MPLCNo);
+                _InMemorySimulator = CVConfig.InMemorySimulator;
+
+                var smWriter1 = new SMReadWriter();
+                var blockInfos1 = GetBlockInfos(CV_Config2.MPLCNo);
+                foreach (var block in blockInfos1)
+                {
+                    smWriter.AddDataBlock(new SMDataBlockInt32(block.DeviceRange, $@"Global\{block.SharedMemoryName}"));
+                }
+                _converyor2 = new Conveyors.Conveyor(smWriter, CV_Config2.MPLCNo);
             }
             else
             {
-                var plcHostInfo = new PLCHostInfo("VITALON", ipAddress, tcpPort, GetBlockInfos(PLCNo));
+                var plcHostInfo = new PLCHostInfo("VITALON", CVConfig.MPLCIP, CVConfig.MPLCPort, GetBlockInfos(CVConfig.MPLCNo));
                 _plcHost = new PLCHost(plcHostInfo);
                 _plcHost.Interval = 200;
                 _plcHost.MPLCTimeout = 600;
@@ -47,7 +58,7 @@ namespace Mirle.ASRS.WCS.Controller
                 //{
                 //    smReader.AddDataBlock(new SMDataBlockInt32(block.DeviceRange, $@"Global\{block.SharedMemoryName}"));
                 //}
-                _converyor = new Conveyors.Conveyor(_plcHost,PLCNo);
+                _converyor = new Conveyors.Conveyor(_plcHost,CVConfig.MPLCNo);
                 _plcHost.Start();
             }
 
@@ -57,8 +68,49 @@ namespace Mirle.ASRS.WCS.Controller
             }
 
             _converyor.Start();
-            _mainView = new MainView(_converyor);
+            _converyor2.Start();
+            _mainView = new MainView(_converyor, _converyor2);
         }
+
+        //public CVControllertest(string ipAddress, int tcpPort, bool InMemorySimulator, int PLCNo)
+        //{
+        //    if (InMemorySimulator)
+        //    {
+        //        var smWriter = new SMReadWriter();
+        //        var blockInfos = GetBlockInfos(PLCNo);
+        //        foreach (var block in blockInfos)
+        //        {
+        //            smWriter.AddDataBlock(new SMDataBlockInt32(block.DeviceRange, $@"Global\{block.SharedMemoryName}"));
+        //        }
+        //        _converyor = new Conveyors.Conveyor(smWriter, PLCNo);
+        //        _InMemorySimulator = InMemorySimulator;
+        //    }
+        //    else
+        //    {
+        //        var plcHostInfo = new PLCHostInfo("VITALON", ipAddress, tcpPort, GetBlockInfos(PLCNo));
+        //        _plcHost = new PLCHost(plcHostInfo);
+        //        _plcHost.Interval = 200;
+        //        _plcHost.MPLCTimeout = 600;
+        //        _plcHost.EnableWriteRawData = false;
+        //        _plcHost.EnableWriteShareMemory = true;
+        //        //var smReader = new SMReadOnlyCachedReader();
+        //        //var blockInfos = GetBlockInfos();
+        //        //foreach (var block in blockInfos)
+        //        //{
+        //        //    smReader.AddDataBlock(new SMDataBlockInt32(block.DeviceRange, $@"Global\{block.SharedMemoryName}"));
+        //        //}
+        //        _converyor = new Conveyors.Conveyor(_plcHost, PLCNo);
+        //        _plcHost.Start();
+        //    }
+
+        //    foreach (var buffer in _converyor.Buffers)
+        //    {
+        //        buffer.OnIniatlNotice += Buffer_OnIniatlNotice;
+        //    }
+
+        //    _converyor.Start();
+        //    _mainView = new MainView(_converyor);
+        //}
 
         private IEnumerable<BlockInfo> GetBlockInfos(int PLCNo)
         {
@@ -86,6 +138,11 @@ namespace Mirle.ASRS.WCS.Controller
         public Conveyors.Conveyor GetConveryor()
         {
             return _converyor;
+        }
+
+        public Conveyors.Conveyor GetConveryor2()
+        {
+            return _converyor2;
         }
 
         public bool GetConnect()

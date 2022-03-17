@@ -234,7 +234,7 @@ namespace Mirle.ASRS.WCS.View
             var archive = new AutoArchive();
             archive.Start();
             clsDB_Proc.Initial(clInitSys.DbConfig); //原DataAccessController功能
-            ControllerReader.FunGetController(clInitSys.CV_Config);
+            ControllerReader.FunGetController(clInitSys.CV_Config,clInitSys.CV_Config2);
 
             _wcsManager = new WCSManager();
             _wcsManager.Start();

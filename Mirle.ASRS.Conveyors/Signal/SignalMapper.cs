@@ -308,6 +308,9 @@ namespace Mirle.ASRS.Conveyors.Signal
                 readyBufferIndex.Add(9, 8);//B01-09
                 readyBufferIndex.Add(11, 10);//B01-11
 
+                var BCRcompleteBufferIndex = new Dictionary<int, int>();
+                BCRcompleteBufferIndex.Add(25, 26);//B03
+
                 for (int bufferIndex = 0; bufferIndex < conveyor.Buffers.Count; bufferIndex++)
                 {
                     string bufferName = string.Empty;
@@ -367,6 +370,19 @@ namespace Mirle.ASRS.Conveyors.Signal
                     #region PC->PLC增加單一特殊點位位置
 
                     #endregion
+
+                    buffer.ControllerSignal.CommandId = new Word(_mplc, $"D{pcIndex + (bufferIndex * 10)}");
+                    buffer.ControllerSignal.CmdMode = new Word(_mplc, $"D{pcIndex + (bufferIndex * 10) + 1}");
+                    buffer.ControllerSignal.PathChangeNotice = new Word(_mplc, $"D{pcIndex + (bufferIndex * 10) + 4}");
+
+                    if (BCRcompleteBufferIndex.ContainsKey(bufferIndex + 1))
+                    {
+                        buffer.ControllerSignal.BcrComplete = new Word(_mplc, $"D{pcIndex + (bufferIndex * 10) + 3}");
+                    }
+                    else
+                    {
+                        buffer.ControllerSignal.BcrComplete = new Word();
+                    }
 
                     buffer.ControllerSignal.InitialNotice = new Word(_mplc, $"D{pcIndex + (bufferIndex * 10) + 9}");
 

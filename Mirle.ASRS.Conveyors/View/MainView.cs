@@ -15,21 +15,12 @@ namespace Mirle.ASRS.Conveyors.View
         private readonly Conveyor _conveyor2;
         private LoggerService _loggerService;
         private static int bufferCount = 10;
-        private readonly int PLCNo;
 
-        public MainView(Conveyor conveyor)
+        public MainView(Conveyor conveyor,Conveyor conveyor2)
         {
             InitializeComponent();
-            PLCNo = _conveyor.GetPLCNo();
-            if (PLCNo == 1)
-            {
-                _conveyor = conveyor;
-            }
-            if (PLCNo == 2)
-            {
-                _conveyor2 = conveyor;
-            }
-
+            _conveyor = conveyor;
+            _conveyor2 = conveyor2;
         }
         private void MainView_Load(object sender, EventArgs e)
         {
@@ -48,7 +39,7 @@ namespace Mirle.ASRS.Conveyors.View
             timerMainProc.Enabled = false;
             try
             {
-                if(!_conveyor.IsConnected)
+                if (!_conveyor.IsConnected)
                 {
                     for (int index = 1; index <= bufferCount; index++)
                     {
@@ -61,15 +52,15 @@ namespace Mirle.ASRS.Conveyors.View
                         }
                     }
                 }
-                else 
+                else
                 {
                     if (pnlHP.Visible)
                     {
-                        for (int index = 0; index < pnlHP.Controls.Count; index++) 
+                        for (int index = 0; index < pnlHP.Controls.Count; index++)
                         {
-                            if (pnlHP.Controls[index] is BufferView bufferView) 
+                            if (pnlHP.Controls[index] is BufferView bufferView)
                             {
-                                if (_conveyor.TryGetBuffer(bufferView.BufferIndex, out var buffer) && PLCNo==1) 
+                                if (_conveyor.TryGetBuffer(bufferView.BufferIndex, out var buffer))
                                 {
                                     bufferView.Refresh_Buffer(buffer);
                                 }
@@ -82,27 +73,27 @@ namespace Mirle.ASRS.Conveyors.View
                         {
                             if (pnlHP.Controls[index] is BufferView bufferView)
                             {
-                                if (_conveyor.TryGetBuffer(bufferView.BufferIndex, out var buffer) && PLCNo == 1)
+                                if (_conveyor.TryGetBuffer(bufferView.BufferIndex, out var buffer))
                                 {
                                     bufferView.Refresh_Buffer(buffer);
                                 }
                             }
                         }
                     }
-                    else if (pnlUpper.Visible) 
+                    else if (pnlUpper.Visible)
                     {
                         for (int index = 0; index < pnlHP.Controls.Count; index++)
                         {
                             if (pnlHP.Controls[index] is BufferView bufferView)
                             {
-                                if (_conveyor2.TryGetBuffer(bufferView.BufferIndex, out var buffer) && PLCNo == 2)
+                                if (_conveyor.TryGetBuffer(bufferView.BufferIndex, out var buffer))
                                 {
                                     bufferView.Refresh_Buffer(buffer);
                                 }
                             }
                         }
                     }
-                }                
+                }
             }
             catch (Exception ex)
             {

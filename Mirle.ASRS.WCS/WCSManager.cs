@@ -28,7 +28,7 @@ namespace Mirle.ASRS.WCS
         public WCSManager()
         {
             _conveyor = ControllerReader.GetCVControllerr().GetConveryor();
-            _conveyor = ControllerReader.GetCVControllerr2().GetConveryor();
+
             _loggerManager = ControllerReader.GetLoggerManager();
 
             _storeOutProcess.Interval = 500;
