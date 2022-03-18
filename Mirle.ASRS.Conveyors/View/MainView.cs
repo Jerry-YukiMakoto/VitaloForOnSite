@@ -13,7 +13,7 @@ namespace Mirle.ASRS.Conveyors.View
     {
         private readonly Conveyor _conveyor;
         private readonly Conveyor _conveyor2;
-        private LoggerService _loggerService;
+        //private LoggerService _loggerService;
         private static int bufferCount = 10;
 
         public MainView(Conveyor conveyor,Conveyor conveyor2)
@@ -69,9 +69,9 @@ namespace Mirle.ASRS.Conveyors.View
                     }
                     else if (pnlLower.Visible)
                     {
-                        for (int index = 0; index < pnlHP.Controls.Count; index++)
+                        for (int index = 0; index < pnlLower.Controls.Count; index++)
                         {
-                            if (pnlHP.Controls[index] is BufferView bufferView)
+                            if (pnlLower.Controls[index] is BufferView bufferView)
                             {
                                 if (_conveyor.TryGetBuffer(bufferView.BufferIndex, out var buffer))
                                 {
@@ -82,11 +82,11 @@ namespace Mirle.ASRS.Conveyors.View
                     }
                     else if (pnlUpper.Visible)
                     {
-                        for (int index = 0; index < pnlHP.Controls.Count; index++)
+                        for (int index = 0; index < pnlUpper.Controls.Count; index++)
                         {
-                            if (pnlHP.Controls[index] is BufferView bufferView)
+                            if (pnlUpper.Controls[index] is BufferView bufferView)
                             {
-                                if (_conveyor.TryGetBuffer(bufferView.BufferIndex, out var buffer))
+                                if (_conveyor2.TryGetBuffer(bufferView.BufferIndex, out var buffer))
                                 {
                                     bufferView.Refresh_Buffer(buffer);
                                 }
@@ -97,7 +97,7 @@ namespace Mirle.ASRS.Conveyors.View
             }
             catch (Exception ex)
             {
-                _loggerService.WriteExceptionLog(MethodBase.GetCurrentMethod(), $"{ex.Message}\n{ex.StackTrace}");
+                //_loggerService.WriteExceptionLog(MethodBase.GetCurrentMethod(), $"{ex.Message}\n{ex.StackTrace}");
             }
             finally
             {

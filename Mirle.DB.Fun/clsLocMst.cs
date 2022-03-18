@@ -31,10 +31,11 @@ namespace Mirle.DB.Fun
                 return DBResult.Exception;
             }
         }
-        public GetDataResult GetLocMst_EmptyLoc(string Equ_No, out DataObject<LocMst> dataObject, SqlServer db)
+        public GetDataResult GetLocMst_EmptyLoc(string Equ_No,string Item_Grp, out DataObject<LocMst> dataObject, SqlServer db)
         {
             {
                 string strSql = $"select Top 1 Loc from Loc_Mst where LOC_STS='N' and Equ_No ='{Equ_No}'";
+                strSql += $"AND Storage_Type = '{Item_Grp}'";
                 strSql += $" ORDER BY LVL_Z,BAY_Y,ROW_X desc ";
 
                 return db.GetData(strSql, out dataObject);

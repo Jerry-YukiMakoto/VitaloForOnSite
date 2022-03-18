@@ -159,7 +159,7 @@
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.IsSplitterFixed = true;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -171,9 +171,9 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.splitContainer1.Panel2.Controls.Add(this.pnlUpper);
             this.splitContainer1.Panel2.Controls.Add(this.pnlHP);
             this.splitContainer1.Panel2.Controls.Add(this.pnlLower);
-            this.splitContainer1.Panel2.Controls.Add(this.pnlUpper);
             this.splitContainer1.Size = new System.Drawing.Size(1924, 999);
             this.splitContainer1.SplitterDistance = 48;
             this.splitContainer1.SplitterWidth = 6;
@@ -187,7 +187,7 @@
             this.flowLayoutPanel1.Controls.Add(this.btnUpper);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(1922, 46);
             this.flowLayoutPanel1.TabIndex = 0;
@@ -196,7 +196,7 @@
             // 
             this.btnHP.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnHP.Location = new System.Drawing.Point(4, 4);
-            this.btnHP.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnHP.Margin = new System.Windows.Forms.Padding(4);
             this.btnHP.Name = "btnHP";
             this.btnHP.Size = new System.Drawing.Size(154, 60);
             this.btnHP.TabIndex = 0;
@@ -208,7 +208,7 @@
             // 
             this.btnLower.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnLower.Location = new System.Drawing.Point(166, 4);
-            this.btnLower.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnLower.Margin = new System.Windows.Forms.Padding(4);
             this.btnLower.Name = "btnLower";
             this.btnLower.Size = new System.Drawing.Size(170, 60);
             this.btnLower.TabIndex = 1;
@@ -220,7 +220,7 @@
             // 
             this.btnUpper.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnUpper.Location = new System.Drawing.Point(344, 4);
-            this.btnUpper.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnUpper.Margin = new System.Windows.Forms.Padding(4);
             this.btnUpper.Name = "btnUpper";
             this.btnUpper.Size = new System.Drawing.Size(176, 60);
             this.btnUpper.TabIndex = 2;
@@ -270,7 +270,7 @@
             this.pnlHP.Controls.Add(this.bufferView1);
             this.pnlHP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlHP.Location = new System.Drawing.Point(0, 0);
-            this.pnlHP.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pnlHP.Margin = new System.Windows.Forms.Padding(4);
             this.pnlHP.Name = "pnlHP";
             this.pnlHP.Size = new System.Drawing.Size(1922, 943);
             this.pnlHP.TabIndex = 3;
@@ -292,7 +292,7 @@
             // 
             this.pictureBox8.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox8.Image")));
             this.pictureBox8.Location = new System.Drawing.Point(220, 48);
-            this.pictureBox8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox8.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox8.Name = "pictureBox8";
             this.pictureBox8.Size = new System.Drawing.Size(42, 118);
             this.pictureBox8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -303,7 +303,7 @@
             // 
             this.pictureBox7.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox7.Image")));
             this.pictureBox7.Location = new System.Drawing.Point(1700, 580);
-            this.pictureBox7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox7.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox7.Name = "pictureBox7";
             this.pictureBox7.Size = new System.Drawing.Size(42, 118);
             this.pictureBox7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -314,7 +314,7 @@
             // 
             this.pictureBox6.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox6.Image")));
             this.pictureBox6.Location = new System.Drawing.Point(668, 580);
-            this.pictureBox6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox6.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox6.Name = "pictureBox6";
             this.pictureBox6.Size = new System.Drawing.Size(42, 118);
             this.pictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -373,7 +373,7 @@
             // 
             this.pictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox5.Image")));
             this.pictureBox5.Location = new System.Drawing.Point(1348, 495);
-            this.pictureBox5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox5.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox5.Name = "pictureBox5";
             this.pictureBox5.Size = new System.Drawing.Size(156, 45);
             this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -384,7 +384,7 @@
             // 
             this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
             this.pictureBox3.Location = new System.Drawing.Point(424, 495);
-            this.pictureBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox3.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(156, 45);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -395,7 +395,7 @@
             // 
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
             this.pictureBox2.Location = new System.Drawing.Point(140, 662);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(45, 140);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -406,7 +406,7 @@
             // 
             this.barcodeDataView2.BufferIndex = 48;
             this.barcodeDataView2.Location = new System.Drawing.Point(332, 666);
-            this.barcodeDataView2.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.barcodeDataView2.Margin = new System.Windows.Forms.Padding(6);
             this.barcodeDataView2.Name = "barcodeDataView2";
             this.barcodeDataView2.Size = new System.Drawing.Size(256, 140);
             this.barcodeDataView2.TabIndex = 77;
@@ -415,7 +415,7 @@
             // 
             this.barcodeDataView1.BufferIndex = 44;
             this.barcodeDataView1.Location = new System.Drawing.Point(332, 27);
-            this.barcodeDataView1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.barcodeDataView1.Margin = new System.Windows.Forms.Padding(6);
             this.barcodeDataView1.Name = "barcodeDataView1";
             this.barcodeDataView1.Size = new System.Drawing.Size(256, 140);
             this.barcodeDataView1.TabIndex = 76;
@@ -726,7 +726,7 @@
             this.pnlLower.Controls.Add(this.bufferView75);
             this.pnlLower.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlLower.Location = new System.Drawing.Point(0, 0);
-            this.pnlLower.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pnlLower.Margin = new System.Windows.Forms.Padding(4);
             this.pnlLower.Name = "pnlLower";
             this.pnlLower.Size = new System.Drawing.Size(1922, 943);
             this.pnlLower.TabIndex = 5;
@@ -735,7 +735,7 @@
             // 
             this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
             this.pictureBox4.Location = new System.Drawing.Point(1590, 502);
-            this.pictureBox4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox4.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(188, 50);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -1062,7 +1062,7 @@
             this.pnlUpper.Controls.Add(this.bufferView26);
             this.pnlUpper.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlUpper.Location = new System.Drawing.Point(0, 0);
-            this.pnlUpper.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pnlUpper.Margin = new System.Windows.Forms.Padding(4);
             this.pnlUpper.Name = "pnlUpper";
             this.pnlUpper.Size = new System.Drawing.Size(1922, 943);
             this.pnlUpper.TabIndex = 4;
@@ -1071,7 +1071,7 @@
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(1450, 568);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(150, 75);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -1082,7 +1082,7 @@
             // 
             this.barcodeDataView3.BufferIndex = 73;
             this.barcodeDataView3.Location = new System.Drawing.Point(1815, 441);
-            this.barcodeDataView3.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.barcodeDataView3.Margin = new System.Windows.Forms.Padding(6);
             this.barcodeDataView3.Name = "barcodeDataView3";
             this.barcodeDataView3.Size = new System.Drawing.Size(256, 140);
             this.barcodeDataView3.TabIndex = 77;
@@ -1122,7 +1122,7 @@
             // 
             // bufferView50
             // 
-            this.bufferView50.BufferIndex = 59;
+            this.bufferView50.BufferIndex = 11;
             this.bufferView50.Location = new System.Drawing.Point(1428, 249);
             this.bufferView50.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.bufferView50.MaximumSize = new System.Drawing.Size(120, 98);
@@ -1133,7 +1133,7 @@
             // 
             // bufferView49
             // 
-            this.bufferView49.BufferIndex = 60;
+            this.bufferView49.BufferIndex = 12;
             this.bufferView49.Location = new System.Drawing.Point(1428, 356);
             this.bufferView49.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.bufferView49.MaximumSize = new System.Drawing.Size(120, 98);
@@ -1144,7 +1144,7 @@
             // 
             // bufferView48
             // 
-            this.bufferView48.BufferIndex = 57;
+            this.bufferView48.BufferIndex = 9;
             this.bufferView48.Location = new System.Drawing.Point(1170, 249);
             this.bufferView48.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.bufferView48.MaximumSize = new System.Drawing.Size(120, 98);
@@ -1155,7 +1155,7 @@
             // 
             // bufferView47
             // 
-            this.bufferView47.BufferIndex = 58;
+            this.bufferView47.BufferIndex = 10;
             this.bufferView47.Location = new System.Drawing.Point(1170, 356);
             this.bufferView47.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.bufferView47.MaximumSize = new System.Drawing.Size(120, 98);
@@ -1166,7 +1166,7 @@
             // 
             // bufferView46
             // 
-            this.bufferView46.BufferIndex = 55;
+            this.bufferView46.BufferIndex = 7;
             this.bufferView46.Location = new System.Drawing.Point(912, 249);
             this.bufferView46.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.bufferView46.MaximumSize = new System.Drawing.Size(120, 98);
@@ -1177,7 +1177,7 @@
             // 
             // bufferView45
             // 
-            this.bufferView45.BufferIndex = 56;
+            this.bufferView45.BufferIndex = 8;
             this.bufferView45.Location = new System.Drawing.Point(912, 356);
             this.bufferView45.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.bufferView45.MaximumSize = new System.Drawing.Size(120, 98);
@@ -1188,7 +1188,7 @@
             // 
             // bufferView44
             // 
-            this.bufferView44.BufferIndex = 53;
+            this.bufferView44.BufferIndex = 5;
             this.bufferView44.Location = new System.Drawing.Point(654, 249);
             this.bufferView44.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.bufferView44.MaximumSize = new System.Drawing.Size(120, 98);
@@ -1199,7 +1199,7 @@
             // 
             // bufferView43
             // 
-            this.bufferView43.BufferIndex = 54;
+            this.bufferView43.BufferIndex = 6;
             this.bufferView43.Location = new System.Drawing.Point(654, 356);
             this.bufferView43.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.bufferView43.MaximumSize = new System.Drawing.Size(120, 98);
@@ -1210,7 +1210,7 @@
             // 
             // bufferView42
             // 
-            this.bufferView42.BufferIndex = 51;
+            this.bufferView42.BufferIndex = 3;
             this.bufferView42.Location = new System.Drawing.Point(396, 249);
             this.bufferView42.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.bufferView42.MaximumSize = new System.Drawing.Size(120, 98);
@@ -1221,7 +1221,7 @@
             // 
             // bufferView41
             // 
-            this.bufferView41.BufferIndex = 52;
+            this.bufferView41.BufferIndex = 4;
             this.bufferView41.Location = new System.Drawing.Point(396, 356);
             this.bufferView41.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.bufferView41.MaximumSize = new System.Drawing.Size(120, 98);
@@ -1331,7 +1331,7 @@
             // 
             // bufferView31
             // 
-            this.bufferView31.BufferIndex = 64;
+            this.bufferView31.BufferIndex = 16;
             this.bufferView31.Location = new System.Drawing.Point(525, 462);
             this.bufferView31.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.bufferView31.MaximumSize = new System.Drawing.Size(120, 98);
@@ -1342,7 +1342,7 @@
             // 
             // bufferView30
             // 
-            this.bufferView30.BufferIndex = 63;
+            this.bufferView30.BufferIndex = 15;
             this.bufferView30.Location = new System.Drawing.Point(396, 462);
             this.bufferView30.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.bufferView30.MaximumSize = new System.Drawing.Size(120, 98);
@@ -1353,7 +1353,7 @@
             // 
             // bufferView29
             // 
-            this.bufferView29.BufferIndex = 62;
+            this.bufferView29.BufferIndex = 14;
             this.bufferView29.Location = new System.Drawing.Point(267, 462);
             this.bufferView29.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.bufferView29.MaximumSize = new System.Drawing.Size(120, 98);
@@ -1364,7 +1364,7 @@
             // 
             // bufferView28
             // 
-            this.bufferView28.BufferIndex = 61;
+            this.bufferView28.BufferIndex = 13;
             this.bufferView28.Location = new System.Drawing.Point(138, 462);
             this.bufferView28.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.bufferView28.MaximumSize = new System.Drawing.Size(120, 98);
@@ -1375,7 +1375,7 @@
             // 
             // bufferView27
             // 
-            this.bufferView27.BufferIndex = 50;
+            this.bufferView27.BufferIndex = 2;
             this.bufferView27.Location = new System.Drawing.Point(138, 356);
             this.bufferView27.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.bufferView27.MaximumSize = new System.Drawing.Size(120, 98);
@@ -1386,7 +1386,7 @@
             // 
             // bufferView26
             // 
-            this.bufferView26.BufferIndex = 49;
+            this.bufferView26.BufferIndex = 1;
             this.bufferView26.Location = new System.Drawing.Point(138, 249);
             this.bufferView26.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.bufferView26.MaximumSize = new System.Drawing.Size(120, 98);

@@ -316,6 +316,7 @@ namespace Mirle.DB.Proc
             string Item_Desc = "";
             string Item_Unit = "";
             string Item_Type = "";
+            string Item_Grp = "";
             Double Qty_Plt = 0;
             int path = 0;
             string[] Cranests = new string[6];
@@ -374,6 +375,7 @@ namespace Mirle.DB.Proc
                                 Item_Unit = dataObject3[0].Item_Unit;
                                 Item_Type = dataObject3[0].Item_Type;
                                 Qty_Plt = dataObject3[0].Qty_Plt;
+                                Item_Grp = dataObject3[0].Item_Grp;//根據料號的群組決定儲位的放法
 
                                 Equ_No = GetEquNo();//貨物照線別順序輪流放
                                 int Sequ_No = Convert.ToInt32(Equ_No);
@@ -410,7 +412,7 @@ namespace Mirle.DB.Proc
                                 }
                                 else
                                 {
-                                    if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No, out var dataObject2, db).ResultCode == DBResult.Success)
+                                    if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No,Item_Grp, out var dataObject2, db).ResultCode == DBResult.Success)
                                     {
                                         clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
                                             , $"Find Loc success");

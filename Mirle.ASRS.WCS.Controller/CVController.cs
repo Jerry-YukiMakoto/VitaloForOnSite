@@ -15,6 +15,7 @@ namespace Mirle.ASRS.WCS.Controller
     public class CVController : IDisposable
     {
         private readonly PLCHost _plcHost;
+        private readonly PLCHost _plcHost2;
         private readonly MainView _mainView;
         private readonly Form1 _form;
         private readonly Conveyors.Conveyor _converyor;
@@ -52,6 +53,13 @@ namespace Mirle.ASRS.WCS.Controller
                 _plcHost.MPLCTimeout = 600;
                 _plcHost.EnableWriteRawData = false;
                 _plcHost.EnableWriteShareMemory = true;
+
+                var plcHostInfo2 = new PLCHostInfo("VITALON", CV_Config2.MPLCIP, CV_Config2.MPLCPort, GetBlockInfos(CV_Config2.MPLCNo));
+                _plcHost2 = new PLCHost(plcHostInfo2);
+                _plcHost2.Interval = 200;
+                _plcHost2.MPLCTimeout = 600;
+                _plcHost2.EnableWriteRawData = false;
+                _plcHost2.EnableWriteShareMemory = true;
                 //var smReader = new SMReadOnlyCachedReader();
                 //var blockInfos = GetBlockInfos();
                 //foreach (var block in blockInfos)
@@ -59,7 +67,9 @@ namespace Mirle.ASRS.WCS.Controller
                 //    smReader.AddDataBlock(new SMDataBlockInt32(block.DeviceRange, $@"Global\{block.SharedMemoryName}"));
                 //}
                 _converyor = new Conveyors.Conveyor(_plcHost,CVConfig.MPLCNo);
+                _converyor2 = new Conveyors.Conveyor(_plcHost2, CV_Config2.MPLCNo);
                 _plcHost.Start();
+                _plcHost2.Start();
             }
 
             foreach (var buffer in _converyor.Buffers)
@@ -121,8 +131,8 @@ namespace Mirle.ASRS.WCS.Controller
             }
             else if(PLCNo == 2)
             {
-                yield return new BlockInfo(new DDeviceRange("D101", "D365"), "Read", 0);
-                yield return new BlockInfo(new DDeviceRange("D3101", "D3360"), "Write", 1);
+                yield return new BlockInfo(new DDeviceRange("D101", "D365"), "Read", 2);
+                yield return new BlockInfo(new DDeviceRange("D3101", "D3360"), "Write", 3);
             }
         }
 
