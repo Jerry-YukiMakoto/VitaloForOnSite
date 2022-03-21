@@ -35,17 +35,18 @@ namespace Mirle.DB.Fun
         {
             {
                 string strSql = $"select Top 1 Loc from Loc_Mst where LOC_STS='N' and Equ_No ='{Equ_No}'";
-                strSql += $"AND Storage_Type = '{Item_Grp}'";
+                strSql += $" AND Storage_Type = '{Item_Grp}'";
                 strSql += $" ORDER BY LVL_Z,BAY_Y,ROW_X desc ";
 
                 return db.GetData(strSql, out dataObject);
             }
         }
-        public GetDataResult GetLocMst_EmptyLochigh(string Equ_No, out DataObject<LocMst> dataObject, SqlServer db)
+        public GetDataResult GetLocMst_EmptyLochigh(string Equ_No,string Item_Grp, out DataObject<LocMst> dataObject, SqlServer db)
         {   
             {
                 string strSql = $"select Top 1 Loc from Loc_Mst where LOC_STS='N' and Equ_No ='{Equ_No}' and Loc_Size='H'";
-                       strSql += $" ORDER BY LVL_Z,BAY_Y,ROW_X desc ";
+                strSql += $" AND Storage_Type = '{Item_Grp}'";
+                strSql += $" ORDER BY LVL_Z,BAY_Y,ROW_X desc ";
                 
                 return db.GetData(strSql, out dataObject);
             }
@@ -57,7 +58,7 @@ namespace Mirle.DB.Fun
             sql += $"SET Loc_sts='I', ";
             sql += $"TRN_DATE='{DateTime.Now:yyyy-MM-dd HH:mm:ss}',";
             sql += $"TRN_USER='WCS'";
-            sql += $"WHERE LOC='{Loc}' ";
+            sql += $" WHERE LOC='{Loc}' ";
             return db.ExecuteSQL2(sql);
         }
 

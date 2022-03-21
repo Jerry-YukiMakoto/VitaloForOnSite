@@ -54,6 +54,15 @@ namespace Mirle.ASRS.WCS.Controller
             this.A2LV2 = new System.Windows.Forms.CheckBox();
             this.showwritevalue = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.BCRItem_Name = new System.Windows.Forms.CheckBox();
+            this.BCRLotID = new System.Windows.Forms.CheckBox();
+            this.BCRPlt_Id = new System.Windows.Forms.CheckBox();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.textBox7 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // test
@@ -313,11 +322,100 @@ namespace Mirle.ASRS.WCS.Controller
             this.label1.TabIndex = 26;
             this.label1.Text = "命令號,模式,路徑,初始,切換模式";
             // 
+            // BCRItem_Name
+            // 
+            this.BCRItem_Name.AutoSize = true;
+            this.BCRItem_Name.Location = new System.Drawing.Point(517, 564);
+            this.BCRItem_Name.Name = "BCRItem_Name";
+            this.BCRItem_Name.Size = new System.Drawing.Size(148, 22);
+            this.BCRItem_Name.TabIndex = 27;
+            this.BCRItem_Name.Text = "BCRItem_Name";
+            this.BCRItem_Name.UseVisualStyleBackColor = true;
+            // 
+            // BCRLotID
+            // 
+            this.BCRLotID.AutoSize = true;
+            this.BCRLotID.Location = new System.Drawing.Point(660, 564);
+            this.BCRLotID.Name = "BCRLotID";
+            this.BCRLotID.Size = new System.Drawing.Size(108, 22);
+            this.BCRLotID.TabIndex = 28;
+            this.BCRLotID.Text = "BCRLotID";
+            this.BCRLotID.UseVisualStyleBackColor = true;
+            // 
+            // BCRPlt_Id
+            // 
+            this.BCRPlt_Id.AutoSize = true;
+            this.BCRPlt_Id.Location = new System.Drawing.Point(774, 564);
+            this.BCRPlt_Id.Name = "BCRPlt_Id";
+            this.BCRPlt_Id.Size = new System.Drawing.Size(108, 22);
+            this.BCRPlt_Id.TabIndex = 29;
+            this.BCRPlt_Id.Text = "BCRPlt_Id";
+            this.BCRPlt_Id.UseVisualStyleBackColor = true;
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(741, 120);
+            this.textBox3.Multiline = true;
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(164, 34);
+            this.textBox3.TabIndex = 30;
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(741, 160);
+            this.textBox4.Multiline = true;
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(164, 28);
+            this.textBox4.TabIndex = 31;
+            // 
+            // textBox5
+            // 
+            this.textBox5.Location = new System.Drawing.Point(741, 194);
+            this.textBox5.Multiline = true;
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(164, 30);
+            this.textBox5.TabIndex = 32;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("新細明體", 15F);
+            this.label2.Location = new System.Drawing.Point(736, 66);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(70, 30);
+            this.label2.TabIndex = 33;
+            this.label2.Text = "BCR";
+            // 
+            // textBox6
+            // 
+            this.textBox6.Location = new System.Drawing.Point(741, 235);
+            this.textBox6.Multiline = true;
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(164, 30);
+            this.textBox6.TabIndex = 34;
+            // 
+            // textBox7
+            // 
+            this.textBox7.Location = new System.Drawing.Point(741, 271);
+            this.textBox7.Multiline = true;
+            this.textBox7.Name = "textBox7";
+            this.textBox7.Size = new System.Drawing.Size(164, 30);
+            this.textBox7.TabIndex = 35;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(986, 679);
+            this.Controls.Add(this.textBox7);
+            this.Controls.Add(this.textBox6);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.textBox5);
+            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.BCRPlt_Id);
+            this.Controls.Add(this.BCRLotID);
+            this.Controls.Add(this.BCRItem_Name);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.showwritevalue);
             this.Controls.Add(this.A2LV2);
@@ -378,5 +476,14 @@ namespace Mirle.ASRS.WCS.Controller
         private System.Windows.Forms.CheckBox A2LV2;
         private System.Windows.Forms.TextBox showwritevalue;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox BCRItem_Name;
+        private System.Windows.Forms.CheckBox BCRLotID;
+        private System.Windows.Forms.CheckBox BCRPlt_Id;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.TextBox textBox7;
     }
 }

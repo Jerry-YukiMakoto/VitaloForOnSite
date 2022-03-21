@@ -71,6 +71,7 @@ namespace Mirle.DB.Proc
             string cmdPlt_Id;
             bool cmdcheck = false;
             string Plt_Qty="";
+            string Item_Grp = "";
             try
             {
                 var _conveyor = ControllerReader.GetCVControllerr().GetConveryor();
@@ -112,6 +113,11 @@ namespace Mirle.DB.Proc
                             if (string.IsNullOrWhiteSpace(Plt_Qty)) //數量並未填入，發出異常(像餘板一定要額外輸)
                             {
                                 cmdcheck = false;
+                            }
+
+                            if(Itm_Mst.GetItmMstDtl(Item_No, out var dataObject3,db).ResultCode==DBResult.Success)
+                            {
+                                Item_Grp = dataObject3[0].Item_Grp;//根據料號的群組決定儲位的放法
                             }
 
 
@@ -156,7 +162,7 @@ namespace Mirle.DB.Proc
                                 int Sequ_No = Convert.ToInt32(Equ_No);
                                 for (int i = 0; i < 6; i++)//從起始的線別開始尋找是否有線別異常
                                 {
-                                    if (EQU_CMD.GetEquStatus(Sequ_No,out var dataObject3, db).ResultCode == DBResult.NoDataSelect)
+                                    if (EQU_CMD.GetEquStatus(Sequ_No,out var dataObject4, db).ResultCode == DBResult.NoDataSelect)
                                     {
                                         if (Sequ_No != 6)
                                         {
@@ -172,10 +178,10 @@ namespace Mirle.DB.Proc
 
                                 if (IsHigh == 1)
                                 {
-                                    if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, out var dataObject2, db).ResultCode == DBResult.Success)
+                                    if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No,Item_Grp, out var dataObject2, db).ResultCode == DBResult.Success)
                                     {
                                         clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find High Loc succeess => {cmdSno}");
-                                        New_Loc = dataObject2[0].New_Loc;
+                                        New_Loc = dataObject2[0].Loc;
                                     }
                                     else
                                     {
@@ -186,10 +192,10 @@ namespace Mirle.DB.Proc
                                 }
                                 else
                                 {
-                                    if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No, out var dataObject2, db).ResultCode == DBResult.Success)
+                                    if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No,Item_Grp, out var dataObject2, db).ResultCode == DBResult.Success)
                                     {
                                         clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Loc succeess => {cmdSno}");
-                                        New_Loc = dataObject2[0].New_Loc;
+                                        New_Loc = dataObject2[0].Loc;
                                     }
                                     else
                                     {
@@ -317,7 +323,7 @@ namespace Mirle.DB.Proc
             string Item_Unit = "";
             string Item_Type = "";
             string Item_Grp = "";
-            Double Qty_Plt = 0;
+            string Qty_Plt ="";
             int path = 0;
             string[] Cranests = new string[6];
             try
@@ -397,11 +403,11 @@ namespace Mirle.DB.Proc
 
                                 if (IsHigh == 1)
                                 {
-                                    if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, out var dataObject2, db).ResultCode == DBResult.Success)
+                                    if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No,Item_Grp ,out var dataObject2, db).ResultCode == DBResult.Success)
                                     {
                                         clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
                                             , $"Find High Loc success");
-                                        New_Loc = dataObject2[0].New_Loc;
+                                        New_Loc = dataObject2[0].Loc;
                                     }
                                     else
                                     {
@@ -416,7 +422,7 @@ namespace Mirle.DB.Proc
                                     {
                                         clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
                                             , $"Find Loc success");
-                                        New_Loc = dataObject2[0].New_Loc;
+                                        New_Loc = dataObject2[0].Loc;
                                     }
                                     else
                                     {
@@ -461,7 +467,7 @@ namespace Mirle.DB.Proc
                                     return false;
                                 }
                                 stuCmdDtl.Cmd_Sno = stuCmdMst.CmdSno;
-                                stuCmdDtl.Plt_Qty = Qty_Plt;
+                                stuCmdDtl.Plt_Qty = Convert.ToDouble(Qty_Plt);
                                 stuCmdDtl.Trn_Qty = 0;
                                 stuCmdDtl.Loc = New_Loc;
                                 stuCmdDtl.In_Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
@@ -721,8 +727,7 @@ namespace Mirle.DB.Proc
 
                             clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Ready StoreIn=> {cmdSno}");
 
-                            string source = "";
-                            string IOType = dataObject[0].IOType;
+                            string IOType = dataObject[0].IO_Type;
                             string dest = "";
                             string Cmd_mode = dataObject[0].Cmd_Mode;
 
@@ -1169,7 +1174,7 @@ namespace Mirle.DB.Proc
                                             {
                                                 return false;
                                             }
-                                            if ((cmdMst.IOType != "3") || equCmd[0].CompleteCode == clsEnum.Cmd_Abnormal.EF.ToString())
+                                            if ((cmdMst.IO_Type != "3") || equCmd[0].CompleteCode == clsEnum.Cmd_Abnormal.EF.ToString())
                                             {
                                                 if (CMD_MST.UpdateCmdMst(equCmd[0].CmdSno, cmdsts, Trace.StoreOutCraneCmdFinish, db) != ExecuteSQLResult.Success)
                                                 {

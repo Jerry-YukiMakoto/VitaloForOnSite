@@ -6,6 +6,7 @@ using System.Linq;
 using Mirle.MPLC;
 using Mirle.MPLC.MCProtocol;
 using Mirle.ASRS.Conveyor.U2NMMA30.Service;
+using Mirle.ASRS.Converyor.View;
 
 namespace Mirle.ASRS.Conveyors.View
 {
@@ -65,7 +66,15 @@ namespace Mirle.ASRS.Conveyors.View
                                     bufferView.Refresh_Buffer(buffer);
                                 }
                             }
-                        }
+
+                            if (pnlHP.Controls[index] is BarcodeDataView barcodeDataView)
+                            {
+                                _conveyor.TryGetBuffer(43, out var bcrbuffer);
+                                barcodeDataView1.RefreshBCR(bcrbuffer.Item_No, bcrbuffer.Lot_ID, bcrbuffer.Plt_Id);
+                                _conveyor.TryGetBuffer(43, out var bcrbuffer1);
+                                barcodeDataView2.RefreshBCR(bcrbuffer1.Item_No, bcrbuffer1.Lot_ID, bcrbuffer1.Plt_Id);
+                            }
+                         }
                     }
                     else if (pnlLower.Visible)
                     {
@@ -90,6 +99,11 @@ namespace Mirle.ASRS.Conveyors.View
                                 {
                                     bufferView.Refresh_Buffer(buffer);
                                 }
+                            }
+                            if (pnlUpper.Controls[index] is BarcodeDataView barcodeDataView)
+                            {
+                                _conveyor2.TryGetBuffer(25, out var bcrbuffer3);
+                                barcodeDataView3.RefreshBCR(bcrbuffer3.Item_No, bcrbuffer3.Lot_ID, bcrbuffer3.Plt_Id);
                             }
                         }
                     }

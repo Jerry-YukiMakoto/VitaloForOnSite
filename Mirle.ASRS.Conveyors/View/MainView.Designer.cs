@@ -35,6 +35,37 @@
             this.btnHP = new System.Windows.Forms.Button();
             this.btnLower = new System.Windows.Forms.Button();
             this.btnUpper = new System.Windows.Forms.Button();
+            this.pnlUpper = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.barcodeDataView3 = new Mirle.ASRS.Converyor.View.BarcodeDataView();
+            this.bufferView77 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView76 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.label2 = new System.Windows.Forms.Label();
+            this.bufferView50 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView49 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView48 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView47 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView46 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView45 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView44 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView43 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView42 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView41 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView40 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView39 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView38 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView37 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView36 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView35 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView34 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView33 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView32 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView31 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView30 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView29 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView28 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView27 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.bufferView26 = new Mirle.ASRS.Conveyors.View.BufferView();
             this.pnlHP = new System.Windows.Forms.Panel();
             this.label6 = new System.Windows.Forms.Label();
             this.pictureBox8 = new System.Windows.Forms.PictureBox();
@@ -102,43 +133,14 @@
             this.bufferView73 = new Mirle.ASRS.Conveyors.View.BufferView();
             this.bufferView74 = new Mirle.ASRS.Conveyors.View.BufferView();
             this.bufferView75 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.pnlUpper = new System.Windows.Forms.Panel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.barcodeDataView3 = new Mirle.ASRS.Converyor.View.BarcodeDataView();
-            this.bufferView77 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView76 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.label2 = new System.Windows.Forms.Label();
-            this.bufferView50 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView49 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView48 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView47 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView46 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView45 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView44 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView43 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView42 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView41 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView40 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView39 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView38 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView37 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView36 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView35 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView34 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView33 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView32 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView31 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView30 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView29 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView28 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView27 = new Mirle.ASRS.Conveyors.View.BufferView();
-            this.bufferView26 = new Mirle.ASRS.Conveyors.View.BufferView();
             this.timerMainProc = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
+            this.pnlUpper.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.pnlHP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
@@ -148,8 +150,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.pnlLower.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
-            this.pnlUpper.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -171,9 +171,9 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.splitContainer1.Panel2.Controls.Add(this.pnlUpper);
             this.splitContainer1.Panel2.Controls.Add(this.pnlHP);
             this.splitContainer1.Panel2.Controls.Add(this.pnlLower);
+            this.splitContainer1.Panel2.Controls.Add(this.pnlUpper);
             this.splitContainer1.Size = new System.Drawing.Size(1924, 999);
             this.splitContainer1.SplitterDistance = 48;
             this.splitContainer1.SplitterWidth = 6;
@@ -227,6 +227,373 @@
             this.btnUpper.Text = "Upper";
             this.btnUpper.UseVisualStyleBackColor = true;
             this.btnUpper.Click += new System.EventHandler(this.btnUpper_Click);
+            // 
+            // pnlUpper
+            // 
+            this.pnlUpper.Controls.Add(this.pictureBox1);
+            this.pnlUpper.Controls.Add(this.barcodeDataView3);
+            this.pnlUpper.Controls.Add(this.bufferView77);
+            this.pnlUpper.Controls.Add(this.bufferView76);
+            this.pnlUpper.Controls.Add(this.label2);
+            this.pnlUpper.Controls.Add(this.bufferView50);
+            this.pnlUpper.Controls.Add(this.bufferView49);
+            this.pnlUpper.Controls.Add(this.bufferView48);
+            this.pnlUpper.Controls.Add(this.bufferView47);
+            this.pnlUpper.Controls.Add(this.bufferView46);
+            this.pnlUpper.Controls.Add(this.bufferView45);
+            this.pnlUpper.Controls.Add(this.bufferView44);
+            this.pnlUpper.Controls.Add(this.bufferView43);
+            this.pnlUpper.Controls.Add(this.bufferView42);
+            this.pnlUpper.Controls.Add(this.bufferView41);
+            this.pnlUpper.Controls.Add(this.bufferView40);
+            this.pnlUpper.Controls.Add(this.bufferView39);
+            this.pnlUpper.Controls.Add(this.bufferView38);
+            this.pnlUpper.Controls.Add(this.bufferView37);
+            this.pnlUpper.Controls.Add(this.bufferView36);
+            this.pnlUpper.Controls.Add(this.bufferView35);
+            this.pnlUpper.Controls.Add(this.bufferView34);
+            this.pnlUpper.Controls.Add(this.bufferView33);
+            this.pnlUpper.Controls.Add(this.bufferView32);
+            this.pnlUpper.Controls.Add(this.bufferView31);
+            this.pnlUpper.Controls.Add(this.bufferView30);
+            this.pnlUpper.Controls.Add(this.bufferView29);
+            this.pnlUpper.Controls.Add(this.bufferView28);
+            this.pnlUpper.Controls.Add(this.bufferView27);
+            this.pnlUpper.Controls.Add(this.bufferView26);
+            this.pnlUpper.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlUpper.Location = new System.Drawing.Point(0, 0);
+            this.pnlUpper.Margin = new System.Windows.Forms.Padding(4);
+            this.pnlUpper.Name = "pnlUpper";
+            this.pnlUpper.Size = new System.Drawing.Size(1922, 943);
+            this.pnlUpper.TabIndex = 4;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(1450, 568);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(150, 75);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 78;
+            this.pictureBox1.TabStop = false;
+            // 
+            // barcodeDataView3
+            // 
+            this.barcodeDataView3.BufferIndex = 73;
+            this.barcodeDataView3.Location = new System.Drawing.Point(1815, 441);
+            this.barcodeDataView3.Margin = new System.Windows.Forms.Padding(6);
+            this.barcodeDataView3.Name = "barcodeDataView3";
+            this.barcodeDataView3.Size = new System.Drawing.Size(256, 140);
+            this.barcodeDataView3.TabIndex = 77;
+            // 
+            // bufferView77
+            // 
+            this.bufferView77.BufferIndex = 42;
+            this.bufferView77.Location = new System.Drawing.Point(1684, 356);
+            this.bufferView77.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView77.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView77.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView77.Name = "bufferView77";
+            this.bufferView77.Size = new System.Drawing.Size(120, 98);
+            this.bufferView77.TabIndex = 74;
+            // 
+            // bufferView76
+            // 
+            this.bufferView76.BufferIndex = 46;
+            this.bufferView76.Location = new System.Drawing.Point(1686, 568);
+            this.bufferView76.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView76.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView76.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView76.Name = "bufferView76";
+            this.bufferView76.Size = new System.Drawing.Size(120, 98);
+            this.bufferView76.TabIndex = 73;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("微軟正黑體", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label2.Location = new System.Drawing.Point(24, 26);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(123, 61);
+            this.label2.TabIndex = 72;
+            this.label2.Text = "上層";
+            // 
+            // bufferView50
+            // 
+            this.bufferView50.BufferIndex = 11;
+            this.bufferView50.Location = new System.Drawing.Point(1428, 249);
+            this.bufferView50.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView50.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView50.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView50.Name = "bufferView50";
+            this.bufferView50.Size = new System.Drawing.Size(120, 98);
+            this.bufferView50.TabIndex = 46;
+            // 
+            // bufferView49
+            // 
+            this.bufferView49.BufferIndex = 12;
+            this.bufferView49.Location = new System.Drawing.Point(1428, 356);
+            this.bufferView49.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView49.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView49.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView49.Name = "bufferView49";
+            this.bufferView49.Size = new System.Drawing.Size(120, 98);
+            this.bufferView49.TabIndex = 45;
+            // 
+            // bufferView48
+            // 
+            this.bufferView48.BufferIndex = 9;
+            this.bufferView48.Location = new System.Drawing.Point(1170, 249);
+            this.bufferView48.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView48.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView48.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView48.Name = "bufferView48";
+            this.bufferView48.Size = new System.Drawing.Size(120, 98);
+            this.bufferView48.TabIndex = 44;
+            // 
+            // bufferView47
+            // 
+            this.bufferView47.BufferIndex = 10;
+            this.bufferView47.Location = new System.Drawing.Point(1170, 356);
+            this.bufferView47.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView47.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView47.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView47.Name = "bufferView47";
+            this.bufferView47.Size = new System.Drawing.Size(120, 98);
+            this.bufferView47.TabIndex = 43;
+            // 
+            // bufferView46
+            // 
+            this.bufferView46.BufferIndex = 7;
+            this.bufferView46.Location = new System.Drawing.Point(912, 249);
+            this.bufferView46.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView46.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView46.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView46.Name = "bufferView46";
+            this.bufferView46.Size = new System.Drawing.Size(120, 98);
+            this.bufferView46.TabIndex = 42;
+            // 
+            // bufferView45
+            // 
+            this.bufferView45.BufferIndex = 8;
+            this.bufferView45.Location = new System.Drawing.Point(912, 356);
+            this.bufferView45.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView45.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView45.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView45.Name = "bufferView45";
+            this.bufferView45.Size = new System.Drawing.Size(120, 98);
+            this.bufferView45.TabIndex = 41;
+            // 
+            // bufferView44
+            // 
+            this.bufferView44.BufferIndex = 5;
+            this.bufferView44.Location = new System.Drawing.Point(654, 249);
+            this.bufferView44.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView44.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView44.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView44.Name = "bufferView44";
+            this.bufferView44.Size = new System.Drawing.Size(120, 98);
+            this.bufferView44.TabIndex = 40;
+            // 
+            // bufferView43
+            // 
+            this.bufferView43.BufferIndex = 6;
+            this.bufferView43.Location = new System.Drawing.Point(654, 356);
+            this.bufferView43.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView43.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView43.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView43.Name = "bufferView43";
+            this.bufferView43.Size = new System.Drawing.Size(120, 98);
+            this.bufferView43.TabIndex = 39;
+            // 
+            // bufferView42
+            // 
+            this.bufferView42.BufferIndex = 3;
+            this.bufferView42.Location = new System.Drawing.Point(396, 249);
+            this.bufferView42.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView42.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView42.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView42.Name = "bufferView42";
+            this.bufferView42.Size = new System.Drawing.Size(120, 98);
+            this.bufferView42.TabIndex = 38;
+            // 
+            // bufferView41
+            // 
+            this.bufferView41.BufferIndex = 4;
+            this.bufferView41.Location = new System.Drawing.Point(396, 356);
+            this.bufferView41.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView41.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView41.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView41.Name = "bufferView41";
+            this.bufferView41.Size = new System.Drawing.Size(120, 98);
+            this.bufferView41.TabIndex = 37;
+            // 
+            // bufferView40
+            // 
+            this.bufferView40.BufferIndex = 73;
+            this.bufferView40.Location = new System.Drawing.Point(1686, 462);
+            this.bufferView40.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView40.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView40.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView40.Name = "bufferView40";
+            this.bufferView40.Size = new System.Drawing.Size(120, 98);
+            this.bufferView40.TabIndex = 36;
+            // 
+            // bufferView39
+            // 
+            this.bufferView39.BufferIndex = 72;
+            this.bufferView39.Location = new System.Drawing.Point(1557, 462);
+            this.bufferView39.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView39.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView39.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView39.Name = "bufferView39";
+            this.bufferView39.Size = new System.Drawing.Size(120, 98);
+            this.bufferView39.TabIndex = 35;
+            // 
+            // bufferView38
+            // 
+            this.bufferView38.BufferIndex = 71;
+            this.bufferView38.Location = new System.Drawing.Point(1428, 462);
+            this.bufferView38.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView38.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView38.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView38.Name = "bufferView38";
+            this.bufferView38.Size = new System.Drawing.Size(120, 98);
+            this.bufferView38.TabIndex = 34;
+            // 
+            // bufferView37
+            // 
+            this.bufferView37.BufferIndex = 70;
+            this.bufferView37.Location = new System.Drawing.Point(1299, 462);
+            this.bufferView37.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView37.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView37.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView37.Name = "bufferView37";
+            this.bufferView37.Size = new System.Drawing.Size(120, 98);
+            this.bufferView37.TabIndex = 33;
+            // 
+            // bufferView36
+            // 
+            this.bufferView36.BufferIndex = 69;
+            this.bufferView36.Location = new System.Drawing.Point(1170, 462);
+            this.bufferView36.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView36.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView36.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView36.Name = "bufferView36";
+            this.bufferView36.Size = new System.Drawing.Size(120, 98);
+            this.bufferView36.TabIndex = 32;
+            // 
+            // bufferView35
+            // 
+            this.bufferView35.BufferIndex = 68;
+            this.bufferView35.Location = new System.Drawing.Point(1041, 462);
+            this.bufferView35.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView35.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView35.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView35.Name = "bufferView35";
+            this.bufferView35.Size = new System.Drawing.Size(120, 98);
+            this.bufferView35.TabIndex = 31;
+            // 
+            // bufferView34
+            // 
+            this.bufferView34.BufferIndex = 67;
+            this.bufferView34.Location = new System.Drawing.Point(912, 462);
+            this.bufferView34.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView34.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView34.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView34.Name = "bufferView34";
+            this.bufferView34.Size = new System.Drawing.Size(120, 98);
+            this.bufferView34.TabIndex = 30;
+            // 
+            // bufferView33
+            // 
+            this.bufferView33.BufferIndex = 66;
+            this.bufferView33.Location = new System.Drawing.Point(783, 462);
+            this.bufferView33.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView33.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView33.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView33.Name = "bufferView33";
+            this.bufferView33.Size = new System.Drawing.Size(120, 98);
+            this.bufferView33.TabIndex = 29;
+            // 
+            // bufferView32
+            // 
+            this.bufferView32.BufferIndex = 65;
+            this.bufferView32.Location = new System.Drawing.Point(654, 462);
+            this.bufferView32.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView32.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView32.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView32.Name = "bufferView32";
+            this.bufferView32.Size = new System.Drawing.Size(120, 98);
+            this.bufferView32.TabIndex = 28;
+            // 
+            // bufferView31
+            // 
+            this.bufferView31.BufferIndex = 16;
+            this.bufferView31.Location = new System.Drawing.Point(525, 462);
+            this.bufferView31.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView31.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView31.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView31.Name = "bufferView31";
+            this.bufferView31.Size = new System.Drawing.Size(120, 98);
+            this.bufferView31.TabIndex = 27;
+            // 
+            // bufferView30
+            // 
+            this.bufferView30.BufferIndex = 15;
+            this.bufferView30.Location = new System.Drawing.Point(396, 462);
+            this.bufferView30.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView30.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView30.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView30.Name = "bufferView30";
+            this.bufferView30.Size = new System.Drawing.Size(120, 98);
+            this.bufferView30.TabIndex = 26;
+            // 
+            // bufferView29
+            // 
+            this.bufferView29.BufferIndex = 14;
+            this.bufferView29.Location = new System.Drawing.Point(267, 462);
+            this.bufferView29.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView29.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView29.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView29.Name = "bufferView29";
+            this.bufferView29.Size = new System.Drawing.Size(120, 98);
+            this.bufferView29.TabIndex = 25;
+            // 
+            // bufferView28
+            // 
+            this.bufferView28.BufferIndex = 13;
+            this.bufferView28.Location = new System.Drawing.Point(138, 462);
+            this.bufferView28.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView28.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView28.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView28.Name = "bufferView28";
+            this.bufferView28.Size = new System.Drawing.Size(120, 98);
+            this.bufferView28.TabIndex = 24;
+            // 
+            // bufferView27
+            // 
+            this.bufferView27.BufferIndex = 2;
+            this.bufferView27.Location = new System.Drawing.Point(138, 356);
+            this.bufferView27.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView27.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView27.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView27.Name = "bufferView27";
+            this.bufferView27.Size = new System.Drawing.Size(120, 98);
+            this.bufferView27.TabIndex = 23;
+            // 
+            // bufferView26
+            // 
+            this.bufferView26.BufferIndex = 1;
+            this.bufferView26.Location = new System.Drawing.Point(138, 249);
+            this.bufferView26.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.bufferView26.MaximumSize = new System.Drawing.Size(120, 98);
+            this.bufferView26.MinimumSize = new System.Drawing.Size(120, 98);
+            this.bufferView26.Name = "bufferView26";
+            this.bufferView26.Size = new System.Drawing.Size(120, 98);
+            this.bufferView26.TabIndex = 22;
             // 
             // pnlHP
             // 
@@ -413,7 +780,7 @@
             // 
             // barcodeDataView1
             // 
-            this.barcodeDataView1.BufferIndex = 44;
+            this.barcodeDataView1.BufferIndex = 43;
             this.barcodeDataView1.Location = new System.Drawing.Point(332, 27);
             this.barcodeDataView1.Margin = new System.Windows.Forms.Padding(6);
             this.barcodeDataView1.Name = "barcodeDataView1";
@@ -1028,373 +1395,6 @@
             this.bufferView75.Size = new System.Drawing.Size(120, 98);
             this.bufferView75.TabIndex = 74;
             // 
-            // pnlUpper
-            // 
-            this.pnlUpper.Controls.Add(this.pictureBox1);
-            this.pnlUpper.Controls.Add(this.barcodeDataView3);
-            this.pnlUpper.Controls.Add(this.bufferView77);
-            this.pnlUpper.Controls.Add(this.bufferView76);
-            this.pnlUpper.Controls.Add(this.label2);
-            this.pnlUpper.Controls.Add(this.bufferView50);
-            this.pnlUpper.Controls.Add(this.bufferView49);
-            this.pnlUpper.Controls.Add(this.bufferView48);
-            this.pnlUpper.Controls.Add(this.bufferView47);
-            this.pnlUpper.Controls.Add(this.bufferView46);
-            this.pnlUpper.Controls.Add(this.bufferView45);
-            this.pnlUpper.Controls.Add(this.bufferView44);
-            this.pnlUpper.Controls.Add(this.bufferView43);
-            this.pnlUpper.Controls.Add(this.bufferView42);
-            this.pnlUpper.Controls.Add(this.bufferView41);
-            this.pnlUpper.Controls.Add(this.bufferView40);
-            this.pnlUpper.Controls.Add(this.bufferView39);
-            this.pnlUpper.Controls.Add(this.bufferView38);
-            this.pnlUpper.Controls.Add(this.bufferView37);
-            this.pnlUpper.Controls.Add(this.bufferView36);
-            this.pnlUpper.Controls.Add(this.bufferView35);
-            this.pnlUpper.Controls.Add(this.bufferView34);
-            this.pnlUpper.Controls.Add(this.bufferView33);
-            this.pnlUpper.Controls.Add(this.bufferView32);
-            this.pnlUpper.Controls.Add(this.bufferView31);
-            this.pnlUpper.Controls.Add(this.bufferView30);
-            this.pnlUpper.Controls.Add(this.bufferView29);
-            this.pnlUpper.Controls.Add(this.bufferView28);
-            this.pnlUpper.Controls.Add(this.bufferView27);
-            this.pnlUpper.Controls.Add(this.bufferView26);
-            this.pnlUpper.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlUpper.Location = new System.Drawing.Point(0, 0);
-            this.pnlUpper.Margin = new System.Windows.Forms.Padding(4);
-            this.pnlUpper.Name = "pnlUpper";
-            this.pnlUpper.Size = new System.Drawing.Size(1922, 943);
-            this.pnlUpper.TabIndex = 4;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(1450, 568);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(150, 75);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 78;
-            this.pictureBox1.TabStop = false;
-            // 
-            // barcodeDataView3
-            // 
-            this.barcodeDataView3.BufferIndex = 73;
-            this.barcodeDataView3.Location = new System.Drawing.Point(1815, 441);
-            this.barcodeDataView3.Margin = new System.Windows.Forms.Padding(6);
-            this.barcodeDataView3.Name = "barcodeDataView3";
-            this.barcodeDataView3.Size = new System.Drawing.Size(256, 140);
-            this.barcodeDataView3.TabIndex = 77;
-            // 
-            // bufferView77
-            // 
-            this.bufferView77.BufferIndex = 42;
-            this.bufferView77.Location = new System.Drawing.Point(1684, 356);
-            this.bufferView77.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView77.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView77.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView77.Name = "bufferView77";
-            this.bufferView77.Size = new System.Drawing.Size(120, 98);
-            this.bufferView77.TabIndex = 74;
-            // 
-            // bufferView76
-            // 
-            this.bufferView76.BufferIndex = 46;
-            this.bufferView76.Location = new System.Drawing.Point(1686, 568);
-            this.bufferView76.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView76.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView76.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView76.Name = "bufferView76";
-            this.bufferView76.Size = new System.Drawing.Size(120, 98);
-            this.bufferView76.TabIndex = 73;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("微軟正黑體", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.label2.Location = new System.Drawing.Point(24, 26);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(123, 61);
-            this.label2.TabIndex = 72;
-            this.label2.Text = "上層";
-            // 
-            // bufferView50
-            // 
-            this.bufferView50.BufferIndex = 11;
-            this.bufferView50.Location = new System.Drawing.Point(1428, 249);
-            this.bufferView50.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView50.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView50.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView50.Name = "bufferView50";
-            this.bufferView50.Size = new System.Drawing.Size(120, 98);
-            this.bufferView50.TabIndex = 46;
-            // 
-            // bufferView49
-            // 
-            this.bufferView49.BufferIndex = 12;
-            this.bufferView49.Location = new System.Drawing.Point(1428, 356);
-            this.bufferView49.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView49.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView49.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView49.Name = "bufferView49";
-            this.bufferView49.Size = new System.Drawing.Size(120, 98);
-            this.bufferView49.TabIndex = 45;
-            // 
-            // bufferView48
-            // 
-            this.bufferView48.BufferIndex = 9;
-            this.bufferView48.Location = new System.Drawing.Point(1170, 249);
-            this.bufferView48.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView48.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView48.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView48.Name = "bufferView48";
-            this.bufferView48.Size = new System.Drawing.Size(120, 98);
-            this.bufferView48.TabIndex = 44;
-            // 
-            // bufferView47
-            // 
-            this.bufferView47.BufferIndex = 10;
-            this.bufferView47.Location = new System.Drawing.Point(1170, 356);
-            this.bufferView47.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView47.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView47.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView47.Name = "bufferView47";
-            this.bufferView47.Size = new System.Drawing.Size(120, 98);
-            this.bufferView47.TabIndex = 43;
-            // 
-            // bufferView46
-            // 
-            this.bufferView46.BufferIndex = 7;
-            this.bufferView46.Location = new System.Drawing.Point(912, 249);
-            this.bufferView46.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView46.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView46.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView46.Name = "bufferView46";
-            this.bufferView46.Size = new System.Drawing.Size(120, 98);
-            this.bufferView46.TabIndex = 42;
-            // 
-            // bufferView45
-            // 
-            this.bufferView45.BufferIndex = 8;
-            this.bufferView45.Location = new System.Drawing.Point(912, 356);
-            this.bufferView45.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView45.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView45.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView45.Name = "bufferView45";
-            this.bufferView45.Size = new System.Drawing.Size(120, 98);
-            this.bufferView45.TabIndex = 41;
-            // 
-            // bufferView44
-            // 
-            this.bufferView44.BufferIndex = 5;
-            this.bufferView44.Location = new System.Drawing.Point(654, 249);
-            this.bufferView44.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView44.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView44.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView44.Name = "bufferView44";
-            this.bufferView44.Size = new System.Drawing.Size(120, 98);
-            this.bufferView44.TabIndex = 40;
-            // 
-            // bufferView43
-            // 
-            this.bufferView43.BufferIndex = 6;
-            this.bufferView43.Location = new System.Drawing.Point(654, 356);
-            this.bufferView43.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView43.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView43.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView43.Name = "bufferView43";
-            this.bufferView43.Size = new System.Drawing.Size(120, 98);
-            this.bufferView43.TabIndex = 39;
-            // 
-            // bufferView42
-            // 
-            this.bufferView42.BufferIndex = 3;
-            this.bufferView42.Location = new System.Drawing.Point(396, 249);
-            this.bufferView42.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView42.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView42.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView42.Name = "bufferView42";
-            this.bufferView42.Size = new System.Drawing.Size(120, 98);
-            this.bufferView42.TabIndex = 38;
-            // 
-            // bufferView41
-            // 
-            this.bufferView41.BufferIndex = 4;
-            this.bufferView41.Location = new System.Drawing.Point(396, 356);
-            this.bufferView41.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView41.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView41.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView41.Name = "bufferView41";
-            this.bufferView41.Size = new System.Drawing.Size(120, 98);
-            this.bufferView41.TabIndex = 37;
-            // 
-            // bufferView40
-            // 
-            this.bufferView40.BufferIndex = 73;
-            this.bufferView40.Location = new System.Drawing.Point(1686, 462);
-            this.bufferView40.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView40.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView40.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView40.Name = "bufferView40";
-            this.bufferView40.Size = new System.Drawing.Size(120, 98);
-            this.bufferView40.TabIndex = 36;
-            // 
-            // bufferView39
-            // 
-            this.bufferView39.BufferIndex = 72;
-            this.bufferView39.Location = new System.Drawing.Point(1557, 462);
-            this.bufferView39.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView39.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView39.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView39.Name = "bufferView39";
-            this.bufferView39.Size = new System.Drawing.Size(120, 98);
-            this.bufferView39.TabIndex = 35;
-            // 
-            // bufferView38
-            // 
-            this.bufferView38.BufferIndex = 71;
-            this.bufferView38.Location = new System.Drawing.Point(1428, 462);
-            this.bufferView38.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView38.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView38.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView38.Name = "bufferView38";
-            this.bufferView38.Size = new System.Drawing.Size(120, 98);
-            this.bufferView38.TabIndex = 34;
-            // 
-            // bufferView37
-            // 
-            this.bufferView37.BufferIndex = 70;
-            this.bufferView37.Location = new System.Drawing.Point(1299, 462);
-            this.bufferView37.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView37.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView37.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView37.Name = "bufferView37";
-            this.bufferView37.Size = new System.Drawing.Size(120, 98);
-            this.bufferView37.TabIndex = 33;
-            // 
-            // bufferView36
-            // 
-            this.bufferView36.BufferIndex = 69;
-            this.bufferView36.Location = new System.Drawing.Point(1170, 462);
-            this.bufferView36.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView36.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView36.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView36.Name = "bufferView36";
-            this.bufferView36.Size = new System.Drawing.Size(120, 98);
-            this.bufferView36.TabIndex = 32;
-            // 
-            // bufferView35
-            // 
-            this.bufferView35.BufferIndex = 68;
-            this.bufferView35.Location = new System.Drawing.Point(1041, 462);
-            this.bufferView35.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView35.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView35.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView35.Name = "bufferView35";
-            this.bufferView35.Size = new System.Drawing.Size(120, 98);
-            this.bufferView35.TabIndex = 31;
-            // 
-            // bufferView34
-            // 
-            this.bufferView34.BufferIndex = 67;
-            this.bufferView34.Location = new System.Drawing.Point(912, 462);
-            this.bufferView34.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView34.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView34.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView34.Name = "bufferView34";
-            this.bufferView34.Size = new System.Drawing.Size(120, 98);
-            this.bufferView34.TabIndex = 30;
-            // 
-            // bufferView33
-            // 
-            this.bufferView33.BufferIndex = 66;
-            this.bufferView33.Location = new System.Drawing.Point(783, 462);
-            this.bufferView33.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView33.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView33.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView33.Name = "bufferView33";
-            this.bufferView33.Size = new System.Drawing.Size(120, 98);
-            this.bufferView33.TabIndex = 29;
-            // 
-            // bufferView32
-            // 
-            this.bufferView32.BufferIndex = 65;
-            this.bufferView32.Location = new System.Drawing.Point(654, 462);
-            this.bufferView32.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView32.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView32.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView32.Name = "bufferView32";
-            this.bufferView32.Size = new System.Drawing.Size(120, 98);
-            this.bufferView32.TabIndex = 28;
-            // 
-            // bufferView31
-            // 
-            this.bufferView31.BufferIndex = 16;
-            this.bufferView31.Location = new System.Drawing.Point(525, 462);
-            this.bufferView31.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView31.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView31.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView31.Name = "bufferView31";
-            this.bufferView31.Size = new System.Drawing.Size(120, 98);
-            this.bufferView31.TabIndex = 27;
-            // 
-            // bufferView30
-            // 
-            this.bufferView30.BufferIndex = 15;
-            this.bufferView30.Location = new System.Drawing.Point(396, 462);
-            this.bufferView30.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView30.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView30.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView30.Name = "bufferView30";
-            this.bufferView30.Size = new System.Drawing.Size(120, 98);
-            this.bufferView30.TabIndex = 26;
-            // 
-            // bufferView29
-            // 
-            this.bufferView29.BufferIndex = 14;
-            this.bufferView29.Location = new System.Drawing.Point(267, 462);
-            this.bufferView29.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView29.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView29.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView29.Name = "bufferView29";
-            this.bufferView29.Size = new System.Drawing.Size(120, 98);
-            this.bufferView29.TabIndex = 25;
-            // 
-            // bufferView28
-            // 
-            this.bufferView28.BufferIndex = 13;
-            this.bufferView28.Location = new System.Drawing.Point(138, 462);
-            this.bufferView28.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView28.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView28.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView28.Name = "bufferView28";
-            this.bufferView28.Size = new System.Drawing.Size(120, 98);
-            this.bufferView28.TabIndex = 24;
-            // 
-            // bufferView27
-            // 
-            this.bufferView27.BufferIndex = 2;
-            this.bufferView27.Location = new System.Drawing.Point(138, 356);
-            this.bufferView27.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView27.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView27.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView27.Name = "bufferView27";
-            this.bufferView27.Size = new System.Drawing.Size(120, 98);
-            this.bufferView27.TabIndex = 23;
-            // 
-            // bufferView26
-            // 
-            this.bufferView26.BufferIndex = 1;
-            this.bufferView26.Location = new System.Drawing.Point(138, 249);
-            this.bufferView26.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.bufferView26.MaximumSize = new System.Drawing.Size(120, 98);
-            this.bufferView26.MinimumSize = new System.Drawing.Size(120, 98);
-            this.bufferView26.Name = "bufferView26";
-            this.bufferView26.Size = new System.Drawing.Size(120, 98);
-            this.bufferView26.TabIndex = 22;
-            // 
             // timerMainProc
             // 
             this.timerMainProc.Interval = 500;
@@ -1415,6 +1415,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
+            this.pnlUpper.ResumeLayout(false);
+            this.pnlUpper.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.pnlHP.ResumeLayout(false);
             this.pnlHP.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
@@ -1426,9 +1429,6 @@
             this.pnlLower.ResumeLayout(false);
             this.pnlLower.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
-            this.pnlUpper.ResumeLayout(false);
-            this.pnlUpper.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }

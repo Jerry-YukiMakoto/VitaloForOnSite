@@ -46,9 +46,26 @@ namespace Mirle.ASRS.Conveyors
         public bool Manual => Signal.StatusSignal.Auto.IsOff() && Signal.StatusSignal.Manual.IsOn();
         public bool Presence => Signal.StatusSignal.Presence.IsOn();
         public bool Position => Signal.StatusSignal.Position.IsOn();
-        public string Item_No => Signal.BCRsignal.Item_No.GetValue().ToASCII();
-        public string Lot_ID => Signal.BCRsignal.Lot_ID.GetValue().ToASCII();
-        public string Plt_Id => Signal.BCRsignal.Plt_Id.GetValue().ToASCII();
+        public string Item_No => Signal.BCRsignal.Item_No1.GetValue().ToString()
+            + Signal.BCRsignal.Item_No2.GetValue().ToString()
+            + Signal.BCRsignal.Item_No3.GetValue().ToString()
+            + Signal.BCRsignal.Item_No4.GetValue().ToString()
+            + Signal.BCRsignal.Item_No5.GetValue().ToString()
+            + Signal.BCRsignal.Item_No6.GetValue().ToString()
+            + Signal.BCRsignal.Item_No7.GetValue().ToString()
+            + Signal.BCRsignal.Item_No8.GetValue().ToString()
+            + Signal.BCRsignal.Item_No9.GetValue().ToString()
+            + Signal.BCRsignal.Item_No10.GetValue().ToString();
+        public string Lot_ID => Signal.BCRsignal.Lot_ID1.GetValue().ToString()
+            + Signal.BCRsignal.Lot_ID2.GetValue().ToString()
+            + Signal.BCRsignal.Lot_ID3.GetValue().ToString()
+            + Signal.BCRsignal.Lot_ID4.GetValue().ToString()
+            + Signal.BCRsignal.Lot_ID5.GetValue().ToString();
+        public string Plt_Id => Signal.BCRsignal.Plt_Id1.GetValue().ToString()
+            + Signal.BCRsignal.Plt_Id2.GetValue().ToString()
+            + Signal.BCRsignal.Plt_Id3.GetValue().ToString()
+            + Signal.BCRsignal.Plt_Id4.GetValue().ToString()
+            + Signal.BCRsignal.Plt_Id5.GetValue().ToString();
 
 
 

@@ -17,7 +17,7 @@ namespace Mirle.ASRS.Converyor.View
         {
             InitializeComponent();
         }
-        public void Refresh(string bcr1, string bcr2, string bcr3) 
+        public void RefreshBCR(string bcr1, string bcr2, string bcr3) 
         {
             Refresh(tbBcr1, bcr1);
             Refresh(tbBcr2, bcr2);

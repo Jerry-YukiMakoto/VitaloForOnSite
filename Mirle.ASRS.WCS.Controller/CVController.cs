@@ -126,12 +126,12 @@ namespace Mirle.ASRS.WCS.Controller
         {
             if (PLCNo == 1)
             {
-                yield return new BlockInfo(new DDeviceRange("D101", "D600"), "Read", 0);
+                yield return new BlockInfo(new DDeviceRange("D101", "D630"), "Read", 0);
                 yield return new BlockInfo(new DDeviceRange("D3101", "D3590"), "Write", 1);
             }
             else if(PLCNo == 2)
             {
-                yield return new BlockInfo(new DDeviceRange("D101", "D365"), "Read", 2);
+                yield return new BlockInfo(new DDeviceRange("D101", "D380"), "Read", 2);
                 yield return new BlockInfo(new DDeviceRange("D3101", "D3360"), "Write", 3);
             }
         }

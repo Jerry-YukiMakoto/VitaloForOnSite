@@ -14,7 +14,7 @@ namespace Mirle.DB.Fun
         public GetDataResult GetItmMstDtl(string Item_No , out DataObject<ItmMst> dataObject, SqlServer db)
         {
             string sql = "SELECT * FROM Itm_Mst  ";
-            sql += $"WHERE Item_No IN ('{clsConstValue.CmdMode.StockIn}') ";
+            sql += $"WHERE Item_No IN ('{Item_No}') ";
             return db.GetData(sql, out dataObject);
         }
 

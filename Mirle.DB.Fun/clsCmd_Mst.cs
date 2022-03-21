@@ -31,9 +31,9 @@ namespace Mirle.DB.Fun
             string sql = "SELECT * FROM Cmd_Mst as A full join Cmd_Dtl as B On A.Cmd_Sno=B.Cmd_Sno ";
             sql += $"WHERE A.Cmd_Mode IN ('{clsConstValue.CmdMode.StockIn}') ";
             sql += $"AND A.Cmd_Sts='{clsConstValue.CmdSts.strCmd_Initial}' ";
-            sql += $"AND A.Stn_No = '{stations}'";
-            sql += $"AND B.Item_No = '{Item_No}'";
-            sql += $"AND B.Lot_No = '{Lot_No}'";
+            sql += $"AND A.Stn_No = '{stations}' ";
+            sql += $"AND B.Item_No = '{Item_No}' ";
+            sql += $"AND B.Lot_No = '{Lot_No}' ";
             sql += $"AND A.Plt_Id = '{BCRplt}'";
             sql += $"order by A.prty , A.crt_date , A.cmd_sno";
             return db.GetData(sql, out dataObject);
@@ -86,7 +86,7 @@ namespace Mirle.DB.Fun
             string sql = "SELECT * FROM Cmd_Mst ";
             sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockOut}', '{clsConstValue.CmdMode.Cycle}') ";
             sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Initial}' ";
-            sql += $"AND New_Loc = '{stations}'";
+            sql += $"AND New_Loc = '{stations}' ";
             sql += $"order by prty , crt_date , cmd_sno";
             return db.GetData(sql, out dataObject);
         }

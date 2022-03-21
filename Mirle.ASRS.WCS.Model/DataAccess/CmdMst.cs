@@ -13,11 +13,9 @@ namespace Mirle.ASRS.WCS.Model.DataAccess
     {
         public string Cmd_Sno { get; private set; }
         public string Cmd_Mode { get; private set; }
-        public string StnNo { get; private set; }
         public string Loc { get; private set; }
         public string NewLoc { get; private set; }
         public string Trace { get; private set; }
-        public string IOType { get; private set; }
         public string IO_Type { get; private set; }
         public string COUNT { get; internal set; }
         public string Stn_No { get; private set; }
@@ -28,10 +26,17 @@ namespace Mirle.ASRS.WCS.Model.DataAccess
 
         protected override ValueObject ConvaertDataRow(DataRow row)
         {
-
-            if (row.Table.Columns.Contains("STNNO"))
+            if (row.Table.Columns.Contains("Cmd_Sno"))
             {
-                StnNo = Convert.ToString(row["STNNO"]);
+                Cmd_Sno = Convert.ToString(row["Cmd_Sno"]);
+            }
+            if (row.Table.Columns.Contains("Cmd_Mode"))
+            {
+                Cmd_Mode = Convert.ToString(row["Cmd_Mode"]);
+            }
+            if (row.Table.Columns.Contains("STN_NO"))
+            {
+                Stn_No = Convert.ToString(row["STN_NO"]);
             }
             if (row.Table.Columns.Contains("LOC"))
             {
@@ -45,13 +50,25 @@ namespace Mirle.ASRS.WCS.Model.DataAccess
             {
                 Trace = Convert.ToString(row["TRACE"]);
             }
-            if (row.Table.Columns.Contains("IOType"))
+            if (row.Table.Columns.Contains("IO_Type"))
             {
-                IOType = Convert.ToString(row["IOType"]);
+                IO_Type = Convert.ToString(row["IO_Type"]);
             }
             if (row.Table.Columns.Contains("COUNT"))
             {
                 COUNT = Convert.ToString(row["COUNT"]);
+            }
+            if (row.Table.Columns.Contains("Equ_No"))
+            {
+                Equ_No = Convert.ToString(row["Equ_No"]);
+            }
+            if (row.Table.Columns.Contains("Plt_Qty"))
+            {
+                Plt_Qty = Convert.ToString(row["Plt_Qty"]);
+            }
+            if (row.Table.Columns.Contains("Plt_Id"))
+            {
+                Plt_Id = Convert.ToString(row["Plt_Id"]);
             }
             return this;
         }
