@@ -71,7 +71,7 @@ namespace Mirle.ASRS.Conveyors.View
                             {
                                 _conveyor.TryGetBuffer(43, out var bcrbuffer);
                                 barcodeDataView1.RefreshBCR(bcrbuffer.Item_No, bcrbuffer.Lot_ID, bcrbuffer.Plt_Id);
-                                _conveyor.TryGetBuffer(43, out var bcrbuffer1);
+                                _conveyor.TryGetBuffer(48, out var bcrbuffer1);
                                 barcodeDataView2.RefreshBCR(bcrbuffer1.Item_No, bcrbuffer1.Lot_ID, bcrbuffer1.Plt_Id);
                             }
                          }
@@ -106,6 +106,10 @@ namespace Mirle.ASRS.Conveyors.View
                                 barcodeDataView3.RefreshBCR(bcrbuffer3.Item_No, bcrbuffer3.Lot_ID, bcrbuffer3.Plt_Id);
                             }
                         }
+                        _conveyor.TryGetBuffer(42, out var buffer2);
+                        bufferView77.Refresh_Buffer(buffer2);
+                        _conveyor.TryGetBuffer(48, out var buffer4);
+                        bufferView76.Refresh_Buffer(buffer4);
                     }
                 }
             }

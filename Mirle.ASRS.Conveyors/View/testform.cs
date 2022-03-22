@@ -148,6 +148,35 @@ namespace Mirle.ASRS.WCS.Controller
                 _test.WriteWord("D624", text6);
                 _test.WriteWord("D625", text7);
             }
+            if (BCRItem_Name.Checked)
+            {
+                _test.WriteWord("D361", text3);
+                _test.WriteWord("D362", text4);
+                _test.WriteWord("D363", text5);
+                _test.WriteWord("D364", text6);
+                _test.WriteWord("D365", text7);
+                _test.WriteWord("D366", text3);
+                _test.WriteWord("D367", text4);
+                _test.WriteWord("D368", text5);
+                _test.WriteWord("D369", text6);
+                _test.WriteWord("D370", text7);
+            }
+            if (BCRPlt_Id.Checked)
+            {
+                _test.WriteWord("D371", text3);
+                _test.WriteWord("D372", text4);
+                _test.WriteWord("D373", text5);
+                _test.WriteWord("D374", text6);
+                _test.WriteWord("D375", text7);
+            }
+            if (BCRLotID.Checked)
+            {
+                _test.WriteWord("D376", text3);
+                _test.WriteWord("D377", text4);
+                _test.WriteWord("D378", text5);
+                _test.WriteWord("D379", text6);
+                _test.WriteWord("D380", text7);
+            }
             if (mode.Checked)
             {
                 _test.WriteWord("D" + (101 + text1 * 10 + 1), text2);
@@ -212,9 +241,13 @@ namespace Mirle.ASRS.WCS.Controller
             {
                 _test.SetBitOff("D" + (101 + text1 * 10 + 2.7));
             }
-           
+            if (BCRNotice.Checked)
+            {
+                _test.WriteWord("D" + (101 + text1 * 10 + 3), text2);
+            }
 
-            showwritevalue.Text = _test.ReadWord("D601").ToString();
+
+            showwritevalue.Text = $",{_test.ReadWord("D" + (3101 + text1 * 10))}";
             showwritevalue.Text += $",{_test.ReadWord("D" + (3101 + text1 * 10+1))}";
             showwritevalue.Text += $",{_test.ReadWord("D" + (3101 + text1 * 10+4))}";
             showwritevalue.Text += $",{_test.ReadWord("D" + (3101 + text1 * 10 + 9))}";

@@ -359,7 +359,7 @@ namespace Mirle.DB.Proc
                                     , $"Error ON");
                                 return false;
                                 }
-                                if (_conveyor.GetBuffer(bufferIndex).CommandId > 0)
+                                if (_conveyor.GetBuffer(bufferIndex).CommandId > 0 || _conveyor.GetBuffer(bufferIndex).PCCommandId > 0)
                                 {
                                 clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
                                      , $"CommanId exist On Buffer");
@@ -381,7 +381,7 @@ namespace Mirle.DB.Proc
                                 Item_Unit = dataObject3[0].Item_Unit;
                                 Item_Type = dataObject3[0].Item_Type;
                                 Qty_Plt = dataObject3[0].Qty_Plt;
-                                Item_Grp = dataObject3[0].Item_Grp;//根據料號的群組決定儲位的放法
+                                Item_Grp = dataObject3[0].Item_Grp;//根據料號的群組決定儲位的放法 U/D
 
                                 Equ_No = GetEquNo();//貨物照線別順序輪流放
                                 int Sequ_No = Convert.ToInt32(Equ_No);
@@ -698,7 +698,7 @@ namespace Mirle.DB.Proc
                     {
                         var _conveyor = ControllerReader.GetCVControllerr().GetConveryor2();
                         
-                        string cmdSno = (_conveyor.GetBuffer(bufferIndex).CommandId).ToString();
+                        string cmdSno = (_conveyor.GetBuffer(bufferIndex).CommandId).ToString().PadLeft(5, '0');
                         if (CMD_MST.GetCmdMstByStoreInCrane(cmdSno, out var dataObject, db).ResultCode == DBResult.Success)
                         {
 

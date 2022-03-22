@@ -42,9 +42,9 @@ namespace Mirle.ASRS.WCS.Model.DataAccess
             {
                 Loc = Convert.ToString(row["LOC"]);
             }
-            if (row.Table.Columns.Contains("NEWLOC"))
+            if (row.Table.Columns.Contains("NEW_LOC"))
             {
-                NewLoc = Convert.ToString(row["NEWLOC"]);
+                NewLoc = Convert.ToString(row["NEW_LOC"]);
             }
             if (row.Table.Columns.Contains("TRACE"))
             {

@@ -251,7 +251,7 @@ namespace Mirle.DB.Fun
         public ExecuteSQLResult FunInsCmdMst(struCmdMst stuCmdMst, SqlServer db)
         {
                 string sSQL = "INSERT INTO Cmd_Mst (Cmd_Sno, Cmd_Sts, Prty, Cmd_Abnormal, Trace, Stn_No, Cmd_Mode, IO_Type, WH_ID,Equ_No, Loc, New_Loc,";
-                sSQL += "CrtDate, Trn_User,Host_Name, Plt_Id) values(";
+                sSQL += "Crt_Date, Trn_User,Host_Name, Plt_Id) values(";
                 sSQL += "'" + stuCmdMst.CmdSno + "', ";
                 sSQL += "'" + stuCmdMst.CmdSts + "', ";
                 sSQL += "'" + stuCmdMst.Prty + "', ";
@@ -273,8 +273,8 @@ namespace Mirle.DB.Fun
 
         public ExecuteSQLResult FunInsCmdDtl(struCmdDtl stuCmdDtl, SqlServer db)
         {
-            string sSQL = "INSERT INTO Cmd_Dtl (Cmd_Sno, Cmd_Sts, Prty, Cmd_Abnormal, Trace, Stn_No, Cmd_Mode, IO_Type, WH_ID,Equ_No, Loc, New_Loc,";
-            sSQL += "Mix_Qty,Avail,CrtDate, Trn_User,Host_Name, Plt_Id) values(";
+            string sSQL = "INSERT INTO Cmd_Dtl (Cmd_Txno, Cmd_Sno, Plt_Qty, Trn_Qty, Loc , In_Date, Item_No, Lot_No, Plt_Id , Company_ID, Item_Desc, Uom,";
+            sSQL += "Created_by,Created_Date) values(";
             sSQL += "'" + stuCmdDtl.Cmd_Txno + "', ";
             sSQL += "'" + stuCmdDtl.Cmd_Sno + "', ";
             sSQL += "'" + stuCmdDtl.Plt_Qty + "', ";

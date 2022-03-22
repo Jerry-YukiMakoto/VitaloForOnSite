@@ -33,6 +33,7 @@ namespace Mirle.ASRS.Conveyors
         public string BufferName => Signal.BufferName;
 
         public int CommandId => Signal.CommandId.GetValue();
+        public int PCCommandId => Signal.ControllerSignal.CommandId.GetValue();
         public int PathNotice => Signal.PathChangeNotice.GetValue();
         public int CmdMode => Signal.CmdMode.GetValue();
         public int Ready => Signal.Ready.GetValue();

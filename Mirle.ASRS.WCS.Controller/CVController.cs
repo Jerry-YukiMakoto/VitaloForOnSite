@@ -17,7 +17,6 @@ namespace Mirle.ASRS.WCS.Controller
         private readonly PLCHost _plcHost;
         private readonly PLCHost _plcHost2;
         private readonly MainView _mainView;
-        private readonly Form1 _form;
         private readonly Conveyors.Conveyor _converyor;
         private readonly Conveyors.Conveyor _converyor2;
         private readonly bool _InMemorySimulator;

@@ -51,7 +51,7 @@ namespace Mirle.ASRS.WCS.Controller
             this.outmodeoff = new System.Windows.Forms.CheckBox();
             this.InmodeOFF = new System.Windows.Forms.CheckBox();
             this.errorOff = new System.Windows.Forms.CheckBox();
-            this.A2LV2 = new System.Windows.Forms.CheckBox();
+            this.BCRNotice = new System.Windows.Forms.CheckBox();
             this.showwritevalue = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.BCRItem_Name = new System.Windows.Forms.CheckBox();
@@ -294,15 +294,15 @@ namespace Mirle.ASRS.WCS.Controller
             this.errorOff.Text = "errorOFF";
             this.errorOff.UseVisualStyleBackColor = true;
             // 
-            // A2LV2
+            // BCRNotice
             // 
-            this.A2LV2.AutoSize = true;
-            this.A2LV2.Location = new System.Drawing.Point(517, 511);
-            this.A2LV2.Name = "A2LV2";
-            this.A2LV2.Size = new System.Drawing.Size(84, 22);
-            this.A2LV2.TabIndex = 24;
-            this.A2LV2.Text = "A2LV2";
-            this.A2LV2.UseVisualStyleBackColor = true;
+            this.BCRNotice.AutoSize = true;
+            this.BCRNotice.Location = new System.Drawing.Point(517, 511);
+            this.BCRNotice.Name = "BCRNotice";
+            this.BCRNotice.Size = new System.Drawing.Size(109, 22);
+            this.BCRNotice.TabIndex = 24;
+            this.BCRNotice.Text = "BCRnotice";
+            this.BCRNotice.UseVisualStyleBackColor = true;
             // 
             // showwritevalue
             // 
@@ -418,7 +418,7 @@ namespace Mirle.ASRS.WCS.Controller
             this.Controls.Add(this.BCRItem_Name);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.showwritevalue);
-            this.Controls.Add(this.A2LV2);
+            this.Controls.Add(this.BCRNotice);
             this.Controls.Add(this.errorOff);
             this.Controls.Add(this.InmodeOFF);
             this.Controls.Add(this.outmodeoff);
@@ -473,7 +473,7 @@ namespace Mirle.ASRS.WCS.Controller
         private System.Windows.Forms.CheckBox outmodeoff;
         private System.Windows.Forms.CheckBox InmodeOFF;
         private System.Windows.Forms.CheckBox errorOff;
-        private System.Windows.Forms.CheckBox A2LV2;
+        private System.Windows.Forms.CheckBox BCRNotice;
         private System.Windows.Forms.TextBox showwritevalue;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox BCRItem_Name;

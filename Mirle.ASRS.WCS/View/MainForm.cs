@@ -22,7 +22,6 @@ namespace Mirle.ASRS.WCS.View
         
 
         private DB.ClearCmd.Proc.clsHost clearCmd;
-        private UnityContainer _unityContainer;
         private static WCSManager _wcsManager;
         private static System.Timers.Timer timRead = new System.Timers.Timer();
 
