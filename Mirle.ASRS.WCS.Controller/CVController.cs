@@ -46,14 +46,14 @@ namespace Mirle.ASRS.WCS.Controller
             }
             else
             {
-                var plcHostInfo = new PLCHostInfo("VITALON", CVConfig.MPLCIP, CVConfig.MPLCPort, GetBlockInfos(CVConfig.MPLCNo));
+                var plcHostInfo = new PLCHostInfo("VITALON1", CVConfig.MPLCIP, CVConfig.MPLCPort, GetBlockInfos(CVConfig.MPLCNo));
                 _plcHost = new PLCHost(plcHostInfo);
                 _plcHost.Interval = 200;
                 _plcHost.MPLCTimeout = 600;
                 _plcHost.EnableWriteRawData = false;
                 _plcHost.EnableWriteShareMemory = true;
 
-                var plcHostInfo2 = new PLCHostInfo("VITALON", CV_Config2.MPLCIP, CV_Config2.MPLCPort, GetBlockInfos(CV_Config2.MPLCNo));
+                var plcHostInfo2 = new PLCHostInfo("VITALON2", CV_Config2.MPLCIP, CV_Config2.MPLCPort, GetBlockInfos(CV_Config2.MPLCNo));
                 _plcHost2 = new PLCHost(plcHostInfo2);
                 _plcHost2.Interval = 200;
                 _plcHost2.MPLCTimeout = 600;
@@ -130,8 +130,8 @@ namespace Mirle.ASRS.WCS.Controller
             }
             else if(PLCNo == 2)
             {
-                yield return new BlockInfo(new DDeviceRange("D101", "D380"), "Read", 2);
-                yield return new BlockInfo(new DDeviceRange("D3101", "D3360"), "Write", 3);
+                yield return new BlockInfo(new DDeviceRange("D101", "D380"), "Read2", 2);
+                yield return new BlockInfo(new DDeviceRange("D3101", "D3360"), "Write2", 3);
             }
         }
 

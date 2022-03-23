@@ -45,6 +45,10 @@ namespace Mirle.Def
             /// 執行中
             /// </summary>
             public const string strCmd_Running = "1";
+            /// <summary>
+            /// 命令完成
+            /// </summary>
+            public const string strCmd_Complete = "9";
         }
 
         public class CmdMode

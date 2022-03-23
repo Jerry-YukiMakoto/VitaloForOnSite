@@ -301,54 +301,54 @@ namespace Mirle.ASRS.Conveyors.Signal
                         buffer.BCRsignal.Plt_Id5 = new Word();
                     }
 
-                    //if (bufferIndex + 1 == 48)
-                    //{
-                    //    buffer.BCRsignal.Item_No1 = new Word(_mplc, $"D611");//料號
-                    //    buffer.BCRsignal.Item_No2 = new Word(_mplc, $"D612");
-                    //    buffer.BCRsignal.Item_No3 = new Word(_mplc, $"D613");
-                    //    buffer.BCRsignal.Item_No4 = new Word(_mplc, $"D614");
-                    //    buffer.BCRsignal.Item_No5 = new Word(_mplc, $"D615");
-                    //    buffer.BCRsignal.Item_No6 = new Word(_mplc, $"D616");
-                    //    buffer.BCRsignal.Item_No7 = new Word(_mplc, $"D617");
-                    //    buffer.BCRsignal.Item_No8 = new Word(_mplc, $"D618");
-                    //    buffer.BCRsignal.Item_No9 = new Word(_mplc, $"D619");
-                    //    buffer.BCRsignal.Item_No10 = new Word(_mplc, $"D620");
+                    if (bufferIndex + 1 == 48)
+                    {
+                        buffer.BCRsignal.Item_No1 = new Word(_mplc, $"D611");//料號
+                        buffer.BCRsignal.Item_No2 = new Word(_mplc, $"D612");
+                        buffer.BCRsignal.Item_No3 = new Word(_mplc, $"D613");
+                        buffer.BCRsignal.Item_No4 = new Word(_mplc, $"D614");
+                        buffer.BCRsignal.Item_No5 = new Word(_mplc, $"D615");
+                        buffer.BCRsignal.Item_No6 = new Word(_mplc, $"D616");
+                        buffer.BCRsignal.Item_No7 = new Word(_mplc, $"D617");
+                        buffer.BCRsignal.Item_No8 = new Word(_mplc, $"D618");
+                        buffer.BCRsignal.Item_No9 = new Word(_mplc, $"D619");
+                        buffer.BCRsignal.Item_No10 = new Word(_mplc, $"D620");
 
-                    //    buffer.BCRsignal.Lot_ID1 = new Word(_mplc, $"D621");//效期
-                    //    buffer.BCRsignal.Lot_ID2 = new Word(_mplc, $"D622");
-                    //    buffer.BCRsignal.Lot_ID3 = new Word(_mplc, $"D623");
-                    //    buffer.BCRsignal.Lot_ID4 = new Word(_mplc, $"D624");
-                    //    buffer.BCRsignal.Lot_ID5 = new Word(_mplc, $"D625");
+                        buffer.BCRsignal.Lot_ID1 = new Word(_mplc, $"D621");//效期
+                        buffer.BCRsignal.Lot_ID2 = new Word(_mplc, $"D622");
+                        buffer.BCRsignal.Lot_ID3 = new Word(_mplc, $"D623");
+                        buffer.BCRsignal.Lot_ID4 = new Word(_mplc, $"D624");
+                        buffer.BCRsignal.Lot_ID5 = new Word(_mplc, $"D625");
 
-                    //    buffer.BCRsignal.Plt_Id1 = new Word(_mplc, $"D626");//效期
-                    //    buffer.BCRsignal.Plt_Id2 = new Word(_mplc, $"D627");
-                    //    buffer.BCRsignal.Plt_Id3 = new Word(_mplc, $"D628");
-                    //    buffer.BCRsignal.Plt_Id4 = new Word(_mplc, $"D629");
-                    //    buffer.BCRsignal.Plt_Id5 = new Word(_mplc, $"D630");
-                    //}
-                    //else
-                    //{
-                    //    buffer.BCRsignal.Item_No1 = new Word();//料號
-                    //    buffer.BCRsignal.Item_No2 = new Word();
-                    //    buffer.BCRsignal.Item_No3 = new Word();
-                    //    buffer.BCRsignal.Item_No4 = new Word();
-                    //    buffer.BCRsignal.Item_No5 = new Word();
-                    //    buffer.BCRsignal.Item_No6 = new Word();
-                    //    buffer.BCRsignal.Item_No7 = new Word();
-                    //    buffer.BCRsignal.Item_No8 = new Word();
-                    //    buffer.BCRsignal.Item_No9 = new Word();
-                    //    buffer.BCRsignal.Item_No10 = new Word();
-                    //    buffer.BCRsignal.Lot_ID1 = new Word();//效期
-                    //    buffer.BCRsignal.Lot_ID2 = new Word();
-                    //    buffer.BCRsignal.Lot_ID3 = new Word();
-                    //    buffer.BCRsignal.Lot_ID4 = new Word();
-                    //    buffer.BCRsignal.Lot_ID5 = new Word();
-                    //    buffer.BCRsignal.Plt_Id1 = new Word();//版號
-                    //    buffer.BCRsignal.Plt_Id2 = new Word();
-                    //    buffer.BCRsignal.Plt_Id3 = new Word();
-                    //    buffer.BCRsignal.Plt_Id4 = new Word();
-                    //    buffer.BCRsignal.Plt_Id5 = new Word();
-                    //}
+                        buffer.BCRsignal.Plt_Id1 = new Word(_mplc, $"D626");//效期
+                        buffer.BCRsignal.Plt_Id2 = new Word(_mplc, $"D627");
+                        buffer.BCRsignal.Plt_Id3 = new Word(_mplc, $"D628");
+                        buffer.BCRsignal.Plt_Id4 = new Word(_mplc, $"D629");
+                        buffer.BCRsignal.Plt_Id5 = new Word(_mplc, $"D630");
+                    }
+                    else if(bufferIndex + 1 != 43)
+                    {
+                        buffer.BCRsignal.Item_No1 = new Word();//料號
+                        buffer.BCRsignal.Item_No2 = new Word();
+                        buffer.BCRsignal.Item_No3 = new Word();
+                        buffer.BCRsignal.Item_No4 = new Word();
+                        buffer.BCRsignal.Item_No5 = new Word();
+                        buffer.BCRsignal.Item_No6 = new Word();
+                        buffer.BCRsignal.Item_No7 = new Word();
+                        buffer.BCRsignal.Item_No8 = new Word();
+                        buffer.BCRsignal.Item_No9 = new Word();
+                        buffer.BCRsignal.Item_No10 = new Word();
+                        buffer.BCRsignal.Lot_ID1 = new Word();//效期
+                        buffer.BCRsignal.Lot_ID2 = new Word();
+                        buffer.BCRsignal.Lot_ID3 = new Word();
+                        buffer.BCRsignal.Lot_ID4 = new Word();
+                        buffer.BCRsignal.Lot_ID5 = new Word();
+                        buffer.BCRsignal.Plt_Id1 = new Word();//版號
+                        buffer.BCRsignal.Plt_Id2 = new Word();
+                        buffer.BCRsignal.Plt_Id3 = new Word();
+                        buffer.BCRsignal.Plt_Id4 = new Word();
+                        buffer.BCRsignal.Plt_Id5 = new Word();
+                    }
                     #endregion
 
                     buffer.ControllerSignal.CommandId = new Word(_mplc, $"D{pcIndex + (bufferIndex * 10)}");

@@ -154,6 +154,22 @@ namespace Mirle.ASRS.WCS.View
             }
         }
 
+        private frmEquCmdMaintance equcmdMaintance;
+        private void btnEquMaintain_Click(object sender, EventArgs e)
+        {
+            if (equcmdMaintance == null)
+            {
+                equcmdMaintance = new frmEquCmdMaintance();
+                equcmdMaintance.TopMost = true;
+                equcmdMaintance.FormClosed += new FormClosedEventHandler(funEquMaintain_FormClosed);
+                equcmdMaintance.Show();
+            }
+            else
+            {
+                equcmdMaintance.BringToFront();
+            }
+        }
+
         private Form test;
         private void test_Click(object sender, EventArgs e)
         {
@@ -173,6 +189,12 @@ namespace Mirle.ASRS.WCS.View
         {
             if (cmdMaintance != null)
                 cmdMaintance = null;
+        }
+
+        private void funEquMaintain_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (equcmdMaintance != null)
+                equcmdMaintance = null;
         }
 
         private void funtest_FormClosed(object sender, FormClosedEventArgs e)

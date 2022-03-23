@@ -13,8 +13,8 @@ namespace Mirle.DB.ClearCmd.Proc
         private clsDelHisEquCmd_Proc delHisEquCmd_Proc = new clsDelHisEquCmd_Proc();
         public clsHost()
         {
-            moveCmdInHistory_Proc.subStart();
-            delCmdMst_His_Proc.subStart();
+            //moveCmdInHistory_Proc.subStart();
+            //delCmdMst_His_Proc.subStart();
             delHisEquCmd_Proc.subStart();
         }
     }

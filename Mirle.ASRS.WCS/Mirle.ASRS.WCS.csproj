@@ -127,6 +127,12 @@
     <Compile Include="Library\clInitSys.cs" />
     <Compile Include="Library\clsTool.cs" />
     <Compile Include="Library\clsWriLog.cs" />
+    <Compile Include="View\frmEquCmdMaintance.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\frmEquCmdMaintance.Designer.cs">
+      <DependentUpon>frmEquCmdMaintance.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -148,6 +154,9 @@
       <DependentUpon>CraneSpeedMaintainView.cs</DependentUpon>
     </Compile>
     <Compile Include="WCSManager.cs" />
+    <EmbeddedResource Include="View\frmEquCmdMaintance.resx">
+      <DependentUpon>frmEquCmdMaintance.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\frmCmdMaintance.resx">
       <DependentUpon>frmCmdMaintance.cs</DependentUpon>
     </EmbeddedResource>

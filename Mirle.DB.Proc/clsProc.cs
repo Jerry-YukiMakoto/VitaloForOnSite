@@ -83,11 +83,11 @@ namespace Mirle.DB.Proc
                         if (iRet == DBResult.Success)
                         {
                             Item_No = _conveyor.GetBuffer(bufferIndex).Item_No;
-                            string BCRPlt_Id = _conveyor.GetBuffer(bufferIndex).Plt_Id;
+                            Plt_Id = _conveyor.GetBuffer(bufferIndex).Plt_Id;
                             Lot_No = _conveyor.GetBuffer(bufferIndex).Lot_ID;
-                            bool Pltfish= BCRPlt_Id.Contains("-");//如果是餘板會有槓槓來與滿板分別，根據此條件尋找餘板的命令
+                            bool Pltfish= Plt_Id.Contains("-");//如果是餘板會有槓槓來與滿板分別，根據此條件尋找餘板的命令
 
-                            if (CMD_MST.GetCmdMstByStoreInStart(sStnNo, Item_No, Lot_No, Pltfish, BCRPlt_Id, out var dataObject1, db).ResultCode == DBResult.Success)
+                            if (CMD_MST.GetCmdMstByStoreInStart(sStnNo, Item_No, Lot_No, Pltfish, Plt_Id, out var dataObject1, db).ResultCode == DBResult.Success)
                             {
                                 cmdSno = dataObject1[0].Cmd_Sno;
                                 CmdMode = Convert.ToInt32(dataObject1[0].Cmd_Mode);
@@ -118,12 +118,14 @@ namespace Mirle.DB.Proc
                             if(Itm_Mst.GetItmMstDtl(Item_No, out var dataObject3,db).ResultCode==DBResult.Success)
                             {
                                 Item_Grp = dataObject3[0].Item_Grp;//根據料號的群組決定儲位的放法
+                            }else
+                            {
+                                cmdcheck=false;
                             }
 
 
                             if (cmdcheck) //都蒐集不到資料執行退板
                             {
-
                                 clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Get StoreIn Command => {cmdSno}, " +
                                         $"{CmdMode}");
 
@@ -222,7 +224,7 @@ namespace Mirle.DB.Proc
                                     db.TransactionCtrl2(TransactionTypes.Rollback);
                                     return false;
                                 }
-                                if (CMD_MST.UpdateCmdDtlTransferring(cmdSno, Plt_Id, db).ResultCode == DBResult.Success)
+                                if (CMD_MST.UpdateCmdDtlTransferring(cmdSno,New_Loc, Plt_Id, db).ResultCode == DBResult.Success)
                                 {
                                     clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Upadte cmd_dtl succeess => {cmdSno}");
                                 }
@@ -445,7 +447,7 @@ namespace Mirle.DB.Proc
                                 stuCmdMst.CmdSts = "1";
                                 stuCmdMst.CmdAbnormal = "NA";
                                 stuCmdMst.Prty = "5";
-                                stuCmdMst.StnNo = sStnNo;
+                                stuCmdMst.StnNo = "104";
                                 stuCmdMst.CmdMode = "1";
                                 stuCmdMst.IoType = "1";
                                 stuCmdMst.WhId = "ASRS";
@@ -942,9 +944,9 @@ namespace Mirle.DB.Proc
                                 CMD_MST.UpdateCmdMstRemark(cmd_Sno, Remark.CmdLeftOver, db);
                                 return false;
                             }
-                            if (_conveyor.GetBuffer(bufferIndex).Presence != true)
+                            if (_conveyor.GetBuffer(bufferIndex).Presence == true)
                             {
-                                CMD_MST.UpdateCmdMstRemark(cmd_Sno, Remark.PresenceNotExist, db);
+                                CMD_MST.UpdateCmdMstRemark(cmd_Sno, Remark.PresenceExist, db);
                                 return false;
                             }
                             #endregion
@@ -981,11 +983,11 @@ namespace Mirle.DB.Proc
 
                                 #region 根據站號選擇路徑編號
                                 int path =99;
-                                if (Stn_No == "A11_04")
+                                if (Stn_No == StnNo.A11_04)
                                 {
                                     path = PathNotice.OutPath1_toA11_04;
                                 }
-                                else if(Stn_No == "A11_02")
+                                else if(Stn_No == StnNo.A11_02)
                                 {
                                     path = PathNotice.OutPath2_toA11_02;
                                 }
@@ -1037,7 +1039,7 @@ namespace Mirle.DB.Proc
                     if (iRet == DBResult.Success)
                     {
                         var _conveyor = ControllerReader.GetCVControllerr().GetConveryor();
-                        string cmdSno = _conveyor.GetBuffer(bufferIndex).CommandId.ToString();
+                        string cmdSno = _conveyor.GetBuffer(bufferIndex).CommandId.ToString().PadLeft(5, '0');
 
                         if (CMD_MST.GetCmdMstByStoreOutCrane(cmdSno, out var dataObject, db).ResultCode == DBResult.Success)
                         {

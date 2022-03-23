@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GridData\EquCmd.cs" />
     <Compile Include="GridData\CmdMst.cs" />
     <Compile Include="Service\clsStoreOutReportFinish.cs" />
     <Compile Include="Service\clsDB_Proc.cs" />

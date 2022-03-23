@@ -101,7 +101,7 @@ namespace Mirle.DB.Fun
         {
             try
             {
-                var _conveyor = ControllerReader.GetCVControllerr().GetConveryor();
+                var _conveyor = ControllerReader.GetCVControllerr().GetConveryor2();
                 if (source.Length != 7)
                 {
                     clsWriLog.StoreOutLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Check Source Fail, Please Check => {cmdSno}, " +
@@ -404,6 +404,30 @@ namespace Mirle.DB.Fun
                 var cmet = System.Reflection.MethodBase.GetCurrentMethod();
                 clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
                 return false;
+            }
+        }
+
+        public int FunGetEquCmd_Grid(ref DataTable dtTmp, SqlServer db)
+        {
+            try
+            {
+                string strEM = "";
+                string strSql = $"select * from EquCmd" +
+                    $" where CmdSts < '{clsConstValue.CmdSts.strCmd_Complete}' ";
+                strSql += " ORDER BY EquNo, RCVDT";
+                int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                if (iRet != DBResult.Success && iRet != DBResult.NoDataSelect)
+                {
+                    clsWriLog.Log.FunWriTraceLog_CV($"{strSql} => {strEM}");
+                }
+
+                return iRet;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return DBResult.Exception;
             }
         }
     }
