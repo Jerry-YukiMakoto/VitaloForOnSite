@@ -356,9 +356,9 @@ namespace Mirle.DB.Fun
 
         public GetDataResult GetEquStatus(int equNo,out DataObject<EquCmd> dataObject, SqlServer db)
         {
-            string sql = "SELECT * FROM EquModeLog ";
-            sql += $"WHERE  EquMode <>'C' ";
-            sql += $" AND EndDT IN ('',' ') ";
+            string sql = "select a.EquNo, b.alarmdesc, a.STRDT from alarmlog as a left join alarmdef as b ";
+            sql += $"on a.alarmcode=b.alarmcode ";
+            sql += $" where a.CLRDT in ('',' ') ";
             return db.GetData(sql, out dataObject);
         }
 

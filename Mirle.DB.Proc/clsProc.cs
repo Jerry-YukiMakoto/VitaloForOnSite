@@ -48,6 +48,9 @@ namespace Mirle.DB.Proc
             dicCountByCrane.Add("1", 1);
             dicCountByCrane.Add("2", 1);
             dicCountByCrane.Add("3", 1);
+            dicCountByCrane.Add("4", 1);
+            dicCountByCrane.Add("5", 1);
+            dicCountByCrane.Add("6", 1);
         }
 
         public Fun.clsProc GetFunProcess()
@@ -108,11 +111,13 @@ namespace Mirle.DB.Proc
                             else//都蒐集不到資料執行退板
                             {
                                 cmdcheck = false;
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Can't Find Cmd Please Check ");
                             }
 
                             if (string.IsNullOrWhiteSpace(Plt_Qty)) //數量並未填入，發出異常(像餘板一定要額外輸)
                             {
                                 cmdcheck = false;
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Can't Find Plt_Qty Please Check ");
                             }
 
                             if(Itm_Mst.GetItmMstDtl(Item_No, out var dataObject3,db).ResultCode==DBResult.Success)
@@ -121,6 +126,7 @@ namespace Mirle.DB.Proc
                             }else
                             {
                                 cmdcheck=false;
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Can't find Itm_Grp Pease Check ");
                             }
 
 
@@ -150,9 +156,9 @@ namespace Mirle.DB.Proc
                                     CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.CmdLeftOver, db);
                                     return false;
                                 }
-                                if (_conveyor.GetBuffer(bufferIndex).Presence == true)
+                                if (_conveyor.GetBuffer(bufferIndex).Presence != true)
                                 {
-                                    CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.PresenceExist, db);
+                                    CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.PresenceNotExist, db);
                                     return false;
                                 }
                                 #endregion
@@ -1435,7 +1441,7 @@ namespace Mirle.DB.Proc
         public static string GetEquNo()
         {
             string sLine = "";  //最終線別
-            int[] iAry = new int[4];
+            int[] iAry = new int[7];
             int temp = 0;
             string stemp = "";
             //List<int> intermediate_list = new List<int>();
@@ -1444,6 +1450,9 @@ namespace Mirle.DB.Proc
                 iAry[1] = dicCountByCrane["1"];
                 iAry[2] = dicCountByCrane["2"];
                 iAry[3] = dicCountByCrane["3"];
+                iAry[4] = dicCountByCrane["4"];
+                iAry[5] = dicCountByCrane["5"];
+                iAry[6] = dicCountByCrane["6"];
                 for (int i = 1; i < iAry.Length; i++)
                 {
                     for (int k = i + 1; k < iAry.Length; k++)

@@ -43,10 +43,11 @@
             this.spcMainView = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanelSideBtn = new System.Windows.Forms.TableLayoutPanel();
             this.testbutton = new System.Windows.Forms.Button();
+            this.btnEquMaintain = new System.Windows.Forms.Button();
             this.btnCmdMaintain = new System.Windows.Forms.Button();
             this.GridCmd = new System.Windows.Forms.DataGridView();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.btnEquMaintain = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -99,6 +100,7 @@
             this.tlpMainSts.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.1643F));
             this.tlpMainSts.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 57.50709F));
             this.tlpMainSts.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.1643F));
+            this.tlpMainSts.Controls.Add(this.label1, 2, 0);
             this.tlpMainSts.Controls.Add(this.lblTimer, 0, 0);
             this.tlpMainSts.Controls.Add(this.picMirle, 0, 0);
             this.tlpMainSts.Controls.Add(this.tableLayoutPanelConn, 3, 0);
@@ -216,7 +218,7 @@
             // 
             this.spcView.Panel2.Controls.Add(this.GridCmd);
             this.spcView.Size = new System.Drawing.Size(2066, 1004);
-            this.spcView.SplitterDistance = 835;
+            this.spcView.SplitterDistance = 833;
             this.spcView.SplitterWidth = 6;
             this.spcView.TabIndex = 0;
             // 
@@ -239,8 +241,8 @@
             // 
             this.spcMainView.Panel2.BackColor = System.Drawing.SystemColors.Control;
             this.spcMainView.Panel2.Controls.Add(this.tableLayoutPanelSideBtn);
-            this.spcMainView.Size = new System.Drawing.Size(2066, 835);
-            this.spcMainView.SplitterDistance = 1886;
+            this.spcMainView.Size = new System.Drawing.Size(2066, 833);
+            this.spcMainView.SplitterDistance = 1884;
             this.spcMainView.SplitterWidth = 6;
             this.spcMainView.TabIndex = 0;
             // 
@@ -263,7 +265,7 @@
             this.tableLayoutPanelSideBtn.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28572F));
             this.tableLayoutPanelSideBtn.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28572F));
             this.tableLayoutPanelSideBtn.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28572F));
-            this.tableLayoutPanelSideBtn.Size = new System.Drawing.Size(172, 833);
+            this.tableLayoutPanelSideBtn.Size = new System.Drawing.Size(174, 831);
             this.tableLayoutPanelSideBtn.TabIndex = 0;
             // 
             // testbutton
@@ -274,11 +276,25 @@
             this.testbutton.Location = new System.Drawing.Point(4, 420);
             this.testbutton.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.testbutton.Name = "testbutton";
-            this.testbutton.Size = new System.Drawing.Size(164, 126);
+            this.testbutton.Size = new System.Drawing.Size(166, 126);
             this.testbutton.TabIndex = 7;
             this.testbutton.Text = "test";
             this.testbutton.UseVisualStyleBackColor = true;
             this.testbutton.Click += new System.EventHandler(this.test_Click);
+            // 
+            // btnEquMaintain
+            // 
+            this.btnEquMaintain.AutoSize = true;
+            this.btnEquMaintain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnEquMaintain.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEquMaintain.Location = new System.Drawing.Point(4, 144);
+            this.btnEquMaintain.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnEquMaintain.Name = "btnEquMaintain";
+            this.btnEquMaintain.Size = new System.Drawing.Size(166, 126);
+            this.btnEquMaintain.TabIndex = 6;
+            this.btnEquMaintain.Text = "設備命令查詢";
+            this.btnEquMaintain.UseVisualStyleBackColor = true;
+            this.btnEquMaintain.Click += new System.EventHandler(this.btnEquMaintain_Click);
             // 
             // btnCmdMaintain
             // 
@@ -288,7 +304,7 @@
             this.btnCmdMaintain.Location = new System.Drawing.Point(4, 6);
             this.btnCmdMaintain.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnCmdMaintain.Name = "btnCmdMaintain";
-            this.btnCmdMaintain.Size = new System.Drawing.Size(164, 126);
+            this.btnCmdMaintain.Size = new System.Drawing.Size(166, 126);
             this.btnCmdMaintain.TabIndex = 4;
             this.btnCmdMaintain.Text = "系統命令查詢";
             this.btnCmdMaintain.UseVisualStyleBackColor = true;
@@ -303,7 +319,7 @@
             this.GridCmd.Name = "GridCmd";
             this.GridCmd.RowHeadersWidth = 62;
             this.GridCmd.RowTemplate.Height = 24;
-            this.GridCmd.Size = new System.Drawing.Size(2066, 163);
+            this.GridCmd.Size = new System.Drawing.Size(2066, 165);
             this.GridCmd.TabIndex = 0;
             // 
             // tabControl1
@@ -314,19 +330,16 @@
             this.tabControl1.Size = new System.Drawing.Size(200, 100);
             this.tabControl1.TabIndex = 0;
             // 
-            // btnEquMaintain
+            // label1
             // 
-            this.btnEquMaintain.AutoSize = true;
-            this.btnEquMaintain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnEquMaintain.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEquMaintain.Location = new System.Drawing.Point(4, 144);
-            this.btnEquMaintain.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btnEquMaintain.Name = "btnEquMaintain";
-            this.btnEquMaintain.Size = new System.Drawing.Size(164, 126);
-            this.btnEquMaintain.TabIndex = 6;
-            this.btnEquMaintain.Text = "設備命令查詢";
-            this.btnEquMaintain.UseVisualStyleBackColor = true;
-            this.btnEquMaintain.Click += new System.EventHandler(this.btnEquMaintain_Click);
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("新細明體", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label1.Location = new System.Drawing.Point(587, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(282, 60);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Crane異常";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // MainForm
             // 
@@ -346,6 +359,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.tlpMainSts.ResumeLayout(false);
+            this.tlpMainSts.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picMirle)).EndInit();
             this.tableLayoutPanelConn.ResumeLayout(false);
             this.tableLayoutPanelConn.PerformLayout();
@@ -381,6 +395,7 @@
         private System.Windows.Forms.Label lblPLCConn;
         private System.Windows.Forms.CheckBox chkOnline;
         private System.Windows.Forms.Button btnEquMaintain;
+        private System.Windows.Forms.Label label1;
     }
 }
 
