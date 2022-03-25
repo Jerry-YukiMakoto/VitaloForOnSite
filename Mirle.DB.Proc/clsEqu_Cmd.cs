@@ -250,5 +250,63 @@ namespace Mirle.DB.Proc
                 return DBResult.Exception;
             }
         }
+
+        public int FunGetEquStsMode(int equNo ,out DataObject<EquCmd> dataObject)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        return EQU_CMD.GetEquStatusMode(equNo,out dataObject,db).ResultCode;
+                    }
+                    else
+                    {
+                        dataObject = new DataObject<EquCmd>();
+                        return iRet;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                dataObject = new DataObject<EquCmd>();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return DBResult.Exception;
+            }
+
+        }
+
+        public int FunGetEquSts(int equNo, out DataObject<EquCmd> dataObject)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        return EQU_CMD.GetEquStatus(equNo, out dataObject, db).ResultCode;
+                    }
+                    else
+                    {
+                        dataObject = new DataObject<EquCmd>();
+                        return iRet;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                dataObject = new DataObject<EquCmd>();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return DBResult.Exception;
+            }
+
+        }
     }
 }

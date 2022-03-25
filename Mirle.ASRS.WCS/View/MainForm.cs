@@ -213,6 +213,7 @@ namespace Mirle.ASRS.WCS.View
             try
             {
                 SubShowCmdtoGrid(ref GridCmd);
+                EqustsShow();
             }
             catch (Exception ex)
             {
@@ -347,6 +348,74 @@ namespace Mirle.ASRS.WCS.View
                     spcMainView.Panel1.Controls.Add(subForm);
                     subForm.Show();
                 }
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                Library.clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+            }
+        }
+
+        private void EqustsShow()
+        {
+            try
+            {
+                string[] sCrnMode = new string[7];
+
+                if (listBox1.InvokeRequired)
+                {
+                    listBox1.Invoke(new Action((EqustsShow)));
+                }
+
+                for(int i = 1;i<=6;i++)
+                {
+                    if (clsDB_Proc.GetDB_Object().GetEqu_Cmd().FunGetEquStsMode(i, out var dataObject) == DBResult.Success)
+                    {
+                        sCrnMode[i] = dataObject[0].EquSts;
+                    }
+                    else
+                    {
+                        sCrnMode[i] = "X";
+                    }
+                }
+
+                for (int i=1;i<=6;i++)
+                {
+                    if(clsDB_Proc.GetDB_Object().GetEqu_Cmd().FunGetEquSts(i, out var dataObject2)==DBResult.Success);
+
+                    if(sCrnMode[i]=="E")
+                    {
+                        string errorcode= (i).ToString().PadLeft(2, '0') + ":" + dataObject2[0].AlarmDesc;
+                        if(!listBox1.Items.Contains(errorcode))
+                        {
+                            listBox1.Items.Add(errorcode);
+                        }
+                    }
+                    else
+                    {
+                        if(listBox1.Items.Count>0)//異常解除通知
+                        {
+                            string sErrorCode = string.Empty;
+                            bool bFlag = false;
+                            for (int iRow = 0; iRow <= listBox1.Items.Count; iRow++)
+                            {
+                                if (listBox1.Items[iRow].ToString().Substring(0, 2) == (i + 1).ToString().PadLeft(2, '0'))
+                                {
+                                    bFlag = true;
+                                    sErrorCode = listBox1.Items[iRow].ToString();
+                                    break;
+                                }
+                            }
+                            if(bFlag==true)
+                            {
+                                listBox1.Items.Remove(sErrorCode);
+                            }
+                        }
+                    }
+
+                }
+                
             }
             catch (Exception ex)
             {

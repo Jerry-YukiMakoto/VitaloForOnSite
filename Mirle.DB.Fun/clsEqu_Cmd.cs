@@ -359,6 +359,15 @@ namespace Mirle.DB.Fun
             string sql = "select a.EquNo, b.alarmdesc, a.STRDT from alarmlog as a left join alarmdef as b ";
             sql += $"on a.alarmcode=b.alarmcode ";
             sql += $" where a.CLRDT in ('',' ') ";
+            sql += $"AND a.equNo ='{equNo}' ";
+            return db.GetData(sql, out dataObject);
+        }
+
+        public GetDataResult GetEquStatusMode(int equNo, out DataObject<EquCmd> dataObject, SqlServer db)
+        {
+            string sql = "SELECT * FROM EquStsLog ";
+            sql += $"where equNo ='{equNo}' ";
+            sql += $"and EndDT IN ('',' ') ";
             return db.GetData(sql, out dataObject);
         }
 
