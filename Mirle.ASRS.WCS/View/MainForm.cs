@@ -400,7 +400,7 @@ namespace Mirle.ASRS.WCS.View
                             bool bFlag = false;
                             for (int iRow = 0; iRow <= listBox1.Items.Count; iRow++)
                             {
-                                if (listBox1.Items[iRow].ToString().Substring(0, 2) == (i + 1).ToString().PadLeft(2, '0'))
+                                if (listBox1.Items[iRow].ToString().Substring(0, 2) == (i).ToString().PadLeft(2, '0'))
                                 {
                                     bFlag = true;
                                     sErrorCode = listBox1.Items[iRow].ToString();
