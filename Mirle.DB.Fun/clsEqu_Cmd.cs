@@ -112,6 +112,7 @@ namespace Mirle.DB.Fun
                     return false;
                 }
 
+                source=EquStoreOutSource(source);
 
                 if (CheckExecutionEquCmd(bufferIndex, bufferName, craneNo, cmdSno, EquCmdMode.OutMode, source, destination, db) == false)
                 {
@@ -172,6 +173,9 @@ namespace Mirle.DB.Fun
                     return false;
                 }
 
+                destination = EquStoreInDestination(destination);
+                source = EquStoreOutSource(source);
+
                 if (CheckExecutionEquCmd(CmdType, IoType, craneNo, cmdSno, EquCmdMode.LocToLoc, source, destination, db) == false)
                 {
                     if (InsertEquCmd(craneNo, cmdSno, ((int)EquCmdMode.LocToLoc).ToString(), source, destination, priority, db) == ExecuteSQLResult.Success)
@@ -221,6 +225,8 @@ namespace Mirle.DB.Fun
 
                     return false;
                 }
+
+                destination=EquStoreInDestination(destination);
 
                 if (CheckExecutionEquCmd(bufferIndex, bufferName, craneNo, cmdSno, EquCmdMode.InMode, source, destination, db) == false)
                 {
@@ -438,6 +444,40 @@ namespace Mirle.DB.Fun
                 clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
                 return DBResult.Exception;
             }
+        }
+
+        public string EquStoreInDestination(string destination)
+        {
+            string Equdestination = "";
+             int intRow = (int.Parse(destination.Substring(0, 2))) % 2;
+
+            switch (intRow)
+            {
+                case 0:
+                    Equdestination = "01" + destination.Substring(2, 5);
+                    break;
+                case 1:
+                    Equdestination = "02" + destination.Substring(2, 5);
+                    break;
+            }
+            return Equdestination;
+        }
+
+        public string EquStoreOutSource(string Source)
+        {
+            string Equdestination = "";
+            int intRow = (int.Parse(Source.Substring(0, 2))) % 2;
+
+            switch (intRow)
+            {
+                case 0:
+                    Equdestination = "01" + Source.Substring(2, 5);
+                    break;
+                case 1:
+                    Equdestination = "02" + Source.Substring(2, 5);
+                    break;
+            }
+            return Equdestination;
         }
     }
 }

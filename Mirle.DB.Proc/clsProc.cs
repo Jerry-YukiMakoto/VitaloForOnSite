@@ -1090,7 +1090,7 @@ namespace Mirle.DB.Proc
                                 db.TransactionCtrl2(TransactionTypes.Rollback);
                                 return false;
                             }
-                            if (EQU_CMD.InsertStoreOutEquCmd(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, Equ_No, cmdSno, source, "000001" , 5, db) == false)
+                            if (EQU_CMD.InsertStoreOutEquCmd(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, Equ_No, cmdSno, source, "0000001" , 5, db) == false)
                             {
                                 clsWriLog.StoreOutLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Create Crane StoreOut Command, Insert EquCmd Fail => {cmdSno}");
                                 db.TransactionCtrl2(TransactionTypes.Rollback);
