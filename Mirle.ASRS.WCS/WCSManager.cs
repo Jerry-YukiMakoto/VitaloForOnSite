@@ -119,9 +119,11 @@ namespace Mirle.ASRS.WCS
 
                     clsStoreIn.FunProduceStoreInWriteCV();
 
+                    clsStoreIn.FunStoreInBCRCheck();
+
                     clsStoreIn.StoreIn_CreateEquCmd();
 
-                    clsStoreIn.StoreIn_EquCmdFinish();//OK
+                    clsStoreIn.StoreIn_EquCmdFinish();
                 }
             }
             catch (Exception ex)

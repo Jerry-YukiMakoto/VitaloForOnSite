@@ -11,6 +11,6 @@
         public const string A11_06 = "101";
         public const string A11_02 = "102";
         public const string A11_04 = "103";
-        public const string A08 = "A08";
+        public const string A08 = "104";
     }
 }

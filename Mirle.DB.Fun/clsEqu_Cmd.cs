@@ -454,10 +454,10 @@ namespace Mirle.DB.Fun
             switch (intRow)
             {
                 case 0:
-                    Equdestination = "01" + destination.Substring(2, 5);
+                    Equdestination = "02" + destination.Substring(2, 5);
                     break;
                 case 1:
-                    Equdestination = "02" + destination.Substring(2, 5);
+                    Equdestination = "01" + destination.Substring(2, 5);
                     break;
             }
             return Equdestination;
@@ -471,10 +471,10 @@ namespace Mirle.DB.Fun
             switch (intRow)
             {
                 case 0:
-                    Equdestination = "01" + Source.Substring(2, 5);
+                    Equdestination = "02" + Source.Substring(2, 5);
                     break;
                 case 1:
-                    Equdestination = "02" + Source.Substring(2, 5);
+                    Equdestination = "01" + Source.Substring(2, 5);
                     break;
             }
             return Equdestination;

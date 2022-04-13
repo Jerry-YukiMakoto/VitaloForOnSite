@@ -40,6 +40,22 @@ namespace Mirle.DB.Object.Service
             }
         }
 
+        public static void FunStoreInBCRCheck()//2樓BCR檢查
+        {
+            try
+            {
+                int bufferIndex = 25;
+                clsDB_Proc.GetDB_Object().GetProcess().FunStoreIn_BcrCheck(bufferIndex);
+
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+            }
+        }
+
 
 
         public static void StoreIn_CreateEquCmd()

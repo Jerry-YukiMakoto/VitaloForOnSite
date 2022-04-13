@@ -30,11 +30,23 @@ namespace Mirle.DB.Fun
         {
             string sql = "SELECT * FROM Cmd_Mst as A full join Cmd_Dtl as B On A.Cmd_Sno=B.Cmd_Sno ";
             sql += $"WHERE A.Cmd_Mode IN ('{clsConstValue.CmdMode.StockIn}') ";
-            sql += $"AND A.Cmd_Sts='{clsConstValue.CmdSts.strCmd_Initial}' ";
-            sql += $"AND A.Stn_No = '{stations}' ";
+            sql += $"AND A.Cmd_Sts IN ('{clsConstValue.CmdSts.strCmd_Initial}') ";
             sql += $"AND B.Item_No = '{Item_No}' ";
             sql += $"AND B.Lot_No = '{Lot_No}' ";
             sql += $"AND A.Plt_Id = '{BCRplt}'";
+            sql += $"order by A.prty , A.crt_date , A.cmd_sno";
+            return db.GetData(sql, out dataObject);
+        }
+
+        public GetDataResult GetCmdMstByCycleStart(string stations, string Item_No, string Lot_No, bool pltfish, string BCRplt, out DataObject<CmdMst> dataObject, SqlServer db)//委外入庫口(盤點)
+        {
+            string sql = "SELECT * FROM Cmd_Mst as A full join Cmd_Dtl as B On A.Cmd_Sno=B.Cmd_Sno ";
+            sql += $"WHERE A.Cmd_Mode IN ('{clsConstValue.CmdMode.Cycle}') ";
+            sql += $"AND A.Cmd_Sts IN ('{clsConstValue.CmdSts.strCmd_Running}') ";
+            sql += $"AND B.Item_No = '{Item_No}' ";
+            sql += $"AND B.Lot_No = '{Lot_No}' ";
+            sql += $"AND A.Plt_Id = '{BCRplt}'";
+            sql += $"AND A.IO_Type IN ('{IOtype.Cycle}') ";
             sql += $"order by A.prty , A.crt_date , A.cmd_sno";
             return db.GetData(sql, out dataObject);
         }
@@ -44,8 +56,15 @@ namespace Mirle.DB.Fun
             string sql = "SELECT * FROM Cmd_Mst ";
             sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockIn}', '{clsConstValue.CmdMode.Cycle}') ";
             sql += $"AND Cmd_Sno='{cmdsno}' ";
-            sql += $"AND TRACE IN ('{Trace.StoreInWriteCmdToCV}','{Trace.StoreOutCraneCmdFinish}') "; 
+            sql += $"AND TRACE IN ('{Trace.StoreInWriteCmdToCV}') "; 
             sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
+            return db.GetData(sql, out dataObject);
+        }
+
+        public GetDataResult GetCmdMstAndDtlCheck(string cmdsno, out DataObject<CmdMst> dataObject, SqlServer db) //檢查BCR資料用途
+        {
+            string sql = "SELECT * FROM Cmd_Mst as A full join Cmd_Dtl as B On A.Cmd_Sno=B.Cmd_Sno ";
+            sql += $"WHERE A.Cmd_Sno='{cmdsno}' ";
             return db.GetData(sql, out dataObject);
         }
 
@@ -101,7 +120,7 @@ namespace Mirle.DB.Fun
             return db.GetData(sql, out dataObject);
         }
 
-        public GetDataResult GetCmdMstByStoreOutFinish(IEnumerable<string> stations, out DataObject<CmdMst> dataObject, SqlServer db)//盤點出庫不要在這裡被更新到
+        public GetDataResult GetCmdMstByStoreOutFinish(IEnumerable<string> stations, out DataObject<CmdMst> dataObject, SqlServer db)
         {
             string sql = "SELECT * FROM Cmd_Mst ";
             sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockOut}','{clsConstValue.CmdMode.Cycle}') ";

@@ -22,6 +22,8 @@ namespace Mirle.ASRS.WCS.Model.DataAccess
         public string Equ_No { get; private set; }
         public string Plt_Id { get; private set; }
         public string Plt_Qty { get; private set; }
+        public string Item_No { get; private set; }
+        public string Lot_No { get; private set; }
 
 
         protected override ValueObject ConvaertDataRow(DataRow row)
@@ -69,6 +71,14 @@ namespace Mirle.ASRS.WCS.Model.DataAccess
             if (row.Table.Columns.Contains("Plt_Id"))
             {
                 Plt_Id = Convert.ToString(row["Plt_Id"]);
+            }
+            if (row.Table.Columns.Contains("Item_No"))
+            {
+                Item_No = Convert.ToString(row["Item_No"]);
+            }
+            if (row.Table.Columns.Contains("Lot_No"))
+            {
+                Lot_No = Convert.ToString(row["Lot_No"]);
             }
             return this;
         }
