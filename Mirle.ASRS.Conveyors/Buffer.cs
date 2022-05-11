@@ -36,10 +36,12 @@ namespace Mirle.ASRS.Conveyors
         public int PCCommandId => Signal.ControllerSignal.CommandId.GetValue();
         public int PathNotice => Signal.PathChangeNotice.GetValue();
         public int CmdMode => Signal.CmdMode.GetValue();
+        public int PC_CmdMode => Signal.ControllerSignal.CmdMode.GetValue();
         public int Ready => Signal.Ready.GetValue();
         public int BcrNotice => Signal.BCRnotice.GetValue();
         public int LoadHeight => Signal.LoadHeight.GetValue();
         public int InitialNotice => Signal.InitialNotice.GetValue();
+        public int PC_InitialNotice => Signal.ControllerSignal.InitialNotice.GetValue();
         public bool InMode => Signal.StatusSignal.InMode.IsOn() && Signal.StatusSignal.OutMode.IsOff();
         public bool OutMode => Signal.StatusSignal.InMode.IsOff() && Signal.StatusSignal.OutMode.IsOn();
         public bool Error => Signal.StatusSignal.Error.IsOn();

@@ -420,9 +420,9 @@ namespace Mirle.DB.Proc
                             {
                                 Item_Desc = dataObject3[0].Item_Desc;
                                 Item_Unit = dataObject3[0].Item_Unit;
-                                Item_Type = dataObject3[0].Item_Type;
+                                Item_Type = dataObject3[0].Item_Type;//根據料號的群組決定儲位的放法 U高價位/D低價位
                                 Qty_Plt = dataObject3[0].Qty_Plt;
-                                Item_Grp = dataObject3[0].Item_Grp;//根據料號的群組決定儲位的放法 U高價位/D低價位
+                                Item_Grp = dataObject3[0].Item_Grp;
 
                                 Equ_No = GetEquNo();//貨物照線別順序輪流放
                                 int Sequ_No = Convert.ToInt32(Equ_No);
@@ -444,7 +444,7 @@ namespace Mirle.DB.Proc
 
                                 if (IsHigh == 1)
                                 {
-                                    if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No,Item_Grp ,out var dataObject2, db).ResultCode == DBResult.Success)
+                                    if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No,Item_Type ,out var dataObject2, db).ResultCode == DBResult.Success)
                                     {
                                         clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
                                             , $"Find High Loc success");
@@ -459,7 +459,7 @@ namespace Mirle.DB.Proc
                                 }
                                 else
                                 {
-                                    if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No,Item_Grp, out var dataObject2, db).ResultCode == DBResult.Success)
+                                    if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No,Item_Type, out var dataObject2, db).ResultCode == DBResult.Success)
                                     {
                                         clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
                                             , $"Find Loc success");

@@ -91,7 +91,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "icon", "icon", "{B8FD38F5-B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject1", "UnitTestProject1\UnitTestProject1.csproj", "{C0E20E08-92E3-4746-8F64-3C436D0A3CB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPLCViewer", "..\MPLCViewer\MPLCViewer.csproj", "{D5EE9CA4-EB44-44D5-8F5E-0DD4FA871856}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPLCViewer", "MPLCViewer\MPLCViewer.csproj", "{D5EE9CA4-EB44-44D5-8F5E-0DD4FA871856}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

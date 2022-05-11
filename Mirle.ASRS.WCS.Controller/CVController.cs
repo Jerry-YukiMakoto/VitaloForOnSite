@@ -50,15 +50,15 @@ namespace Mirle.ASRS.WCS.Controller
                 _plcHost = new PLCHost(plcHostInfo);
                 _plcHost.Interval = 200;
                 _plcHost.MPLCTimeout = 600;
-                _plcHost.EnableWriteRawData = false;
-                _plcHost.EnableWriteShareMemory = true;
+                _plcHost.EnableWriteRawData = true;
+                _plcHost.EnableWriteShareMemory = false;
 
                 var plcHostInfo2 = new PLCHostInfo("VITALON2", CV_Config2.MPLCIP, CV_Config2.MPLCPort, GetBlockInfos(CV_Config2.MPLCNo));
                 _plcHost2 = new PLCHost(plcHostInfo2);
                 _plcHost2.Interval = 200;
                 _plcHost2.MPLCTimeout = 600;
-                _plcHost2.EnableWriteRawData = false;
-                _plcHost2.EnableWriteShareMemory = true;
+                _plcHost2.EnableWriteRawData = true;
+                _plcHost2.EnableWriteShareMemory = false;
                 //var smReader = new SMReadOnlyCachedReader();
                 //var blockInfos = GetBlockInfos();
                 //foreach (var block in blockInfos)
