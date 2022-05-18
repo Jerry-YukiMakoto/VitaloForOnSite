@@ -6,13 +6,13 @@ using System;
 
 namespace Mirle.DB.Object.Service
 {
-    public class clsStoreOutReportFinish
+    public class clsErrorReportstart
     {
-        public static void StoreOutReportFinish()
+        public static void ErrorReport()
         {
             try
             {
-                
+                clsDB_Proc.GetDB_Object().GeterrorReport().ErrorInsertReport();
             }
             catch (Exception ex)
             {

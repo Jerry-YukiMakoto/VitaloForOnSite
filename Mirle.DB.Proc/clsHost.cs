@@ -15,6 +15,8 @@ namespace Mirle.DB.Proc
         private readonly clsCmd_Mst_His CMD_MST_HIS;
         private readonly clsUnitStsLog unitStsLog;
         private readonly clsUnitModeDef unitModeDef;
+        private readonly clsCVC_Alarm CVC_Alarm;
+        private readonly clsErrorReport errorReport;
         private static object _Lock = new object();
         private static bool _IsConn = false;
         public static bool IsConn
@@ -46,11 +48,23 @@ namespace Mirle.DB.Proc
             CMD_MST_HIS = new clsCmd_Mst_His(config);
             unitStsLog = new clsUnitStsLog(config);
             unitModeDef = new clsUnitModeDef(config);
+            CVC_Alarm = new clsCVC_Alarm(config);
+            errorReport = new clsErrorReport(config);
         }
 
         public clsProc GetProcess()
         {
             return Process;
+        }
+
+        public clsErrorReport GeterrorReport()
+        {
+            return errorReport;
+        }
+
+        public clsCVC_Alarm GetCVC_Alarm()
+        {
+            return CVC_Alarm;
         }
 
         public clsCmd_Mst GetCmd_Mst()

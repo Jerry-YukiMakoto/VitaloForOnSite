@@ -18,7 +18,7 @@ namespace Mirle.ASRS.WCS
         private readonly Conveyors.Conveyor _conveyor;
         private readonly LoggerManager _loggerManager;
 
-        private readonly Timer _KanBanstoreOutrepotfinish = new Timer();
+        private readonly Timer _ErrorReport = new Timer();
 
         private readonly Timer _storeInProcess = new Timer();
         private readonly Timer _storeOutProcess = new Timer();
@@ -35,13 +35,13 @@ namespace Mirle.ASRS.WCS
             _storeInProcess.Interval = 500;
             _otherProcess.Interval = 500;
 
-            _KanBanstoreOutrepotfinish.Interval = 500;
+            _ErrorReport.Interval = 500;
 
             _storeOutProcess.Elapsed += StoreOutProcess;
             _storeInProcess.Elapsed += StoreInProcess;
             _otherProcess.Elapsed += OtherProcess;
             
-            _KanBanstoreOutrepotfinish.Elapsed += KanBanstoreOutrepotfinish;
+            ErrorReport();
 
         }
 
@@ -50,23 +50,25 @@ namespace Mirle.ASRS.WCS
             _otherProcess.Start();
             _storeOutProcess.Start();
             _storeInProcess.Start();
-            
+            ErrorReport();
+
         }
         public void Stop()
         {
             _storeOutProcess.Stop();
             _storeInProcess.Stop();
             _otherProcess.Stop();
+          
         }
 
-        private void KanBanstoreOutrepotfinish(object sender, ElapsedEventArgs e)
+        private void ErrorReport()
         {
-            _KanBanstoreOutrepotfinish.Stop();
+           
             try
             {
                 if (IsConnected)
                 {
-                    clsStoreOutReportFinish.StoreOutReportFinish();
+                    clsErrorReportstart.ErrorReport();
                 }
             }
             catch (Exception ex)
@@ -75,10 +77,7 @@ namespace Mirle.ASRS.WCS
                 var log = new StoreOutLogTrace(999, cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
                 _loggerManager.WriteLogTrace(log);
             }
-            finally
-            {
-                _KanBanstoreOutrepotfinish.Start();
-            }
+            
         }
 
 
@@ -180,6 +179,7 @@ namespace Mirle.ASRS.WCS
                     _storeInProcess.Dispose();
                     _storeOutProcess.Dispose();
                     _otherProcess.Dispose();
+                  
                 }
 
                 disposedValue = true;

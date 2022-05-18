@@ -9,6 +9,7 @@ using Mirle.MPLC.DataBlocks.DeviceRange;
 using Mirle.MPLC.MCProtocol;
 using Mirle.MPLC.SharedMemory;
 using Mirle.Def;
+using Mirle.DataBase;
 
 namespace Mirle.ASRS.WCS.Controller
 {
@@ -20,8 +21,9 @@ namespace Mirle.ASRS.WCS.Controller
         private readonly Conveyors.Conveyor _converyor;
         private readonly Conveyors.Conveyor _converyor2;
         private readonly bool _InMemorySimulator;
+        private Dictionary<string, string> _CVCalarm = new Dictionary<string, string>();
 
-      
+
 
         public CVController(clsPlcConfig CVConfig, clsPlcConfig CV_Config2)
         {
@@ -141,8 +143,6 @@ namespace Mirle.ASRS.WCS.Controller
         private void Buffer_OnIniatlNotice(object sender, BufferEventArgs e)
         {
         }
-
-      
 
         public Conveyors.Conveyor GetConveryor()
         {

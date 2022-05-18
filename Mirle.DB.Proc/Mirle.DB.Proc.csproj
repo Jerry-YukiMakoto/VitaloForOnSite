@@ -49,6 +49,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="clsWriAlarmLog.cs" />
+    <Compile Include="clsErrorReport.cs" />
+    <Compile Include="clsCVC_Alarm.cs" />
     <Compile Include="clsAlarmData.cs" />
     <Compile Include="clsCmd_Mst.cs" />
     <Compile Include="clsCmd_Mst_His.cs" />
