@@ -22,8 +22,6 @@ namespace Mirle.DB.Proc
         private clsDbConfig _config = new clsDbConfig();
         public static Dictionary<string, int> EmptyFlag = new Dictionary<string, int>();
         public static Dictionary<string, int> DisplayFlag = new Dictionary<string, int>();
-        public event AlarmEventHandler OnAlarmTrigger;
-        public event AlarmEventHandler OnAlarmClear;
         private Dictionary<string, string> _CVCalarm = new Dictionary<string, string>();
 
         public clsErrorReport(clsDbConfig config)
