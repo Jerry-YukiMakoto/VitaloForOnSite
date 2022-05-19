@@ -13,6 +13,8 @@ using Mirle.ASRS.WCS.Controller;
 using Mirle.CENS.U0NXMA30;
 using Mirle.Def;
 using Mirle.DataBase;
+using Mirle.ASRS.Conveyors.View;
+using Mirle.ASRS.AWCS.View;
 
 namespace Mirle.ASRS.WCS.View
 {
@@ -24,6 +26,7 @@ namespace Mirle.ASRS.WCS.View
         private DB.ClearCmd.Proc.clsHost clearCmd;
         private static WCSManager _wcsManager;
         private static System.Timers.Timer timRead = new System.Timers.Timer();
+        private AlarmView _alarmView;
 
         public MainForm()
         {
@@ -31,6 +34,9 @@ namespace Mirle.ASRS.WCS.View
             timRead.Elapsed += new System.Timers.ElapsedEventHandler(timRead_Elapsed);
             timRead.Enabled = false; 
             timRead.Interval = 500;
+            _alarmView = new AlarmView();
+            _alarmView.Show();
+            _alarmView.Visible = false;
         }
 
         #region Event
@@ -42,7 +48,6 @@ namespace Mirle.ASRS.WCS.View
             FunInit();
             FunEventInit();
             GridInit();
-
             Library.clsWriLog.Log.FunWriTraceLog_CV("WCS程式已開啟");
             timRead.Start();
             timer1.Start();
@@ -178,6 +183,7 @@ namespace Mirle.ASRS.WCS.View
                 test = new Form1();
                 test.FormClosed += new FormClosedEventHandler(funtest_FormClosed);
                 test.Show();
+                
             }
             else
             {
@@ -214,6 +220,7 @@ namespace Mirle.ASRS.WCS.View
             {
                 SubShowCmdtoGrid(ref GridCmd);
                 EqustsShow();
+                AlarmDataShow();
             }
             catch (Exception ex)
             {
@@ -255,13 +262,16 @@ namespace Mirle.ASRS.WCS.View
         {
             var archive = new AutoArchive();
             archive.Start();
-            clsDB_Proc.Initial(clInitSys.DbConfig); //原DataAccessController功能
-            ControllerReader.FunGetController(clInitSys.CV_Config,clInitSys.CV_Config2);
+            clsDB_Proc.Initial(clInitSys.DbConfig,clInitSys.OnlyMonitor); //原DataAccessController功能
+            ControllerReader.FunGetController(clInitSys.CV_Config,clInitSys.CV_Config2,clInitSys.OnlyMonitor);
 
             _wcsManager = new WCSManager();
-            _wcsManager.Start();
+            if (clInitSys.OnlyMonitor == false)//是否是監控模式
+            {
+                _wcsManager.Start();
+            }
             clearCmd = new DB.ClearCmd.Proc.clsHost();
-            ChangeSubForm(ControllerReader.GetCVControllerr().GetMainView());
+            ChangeSubForm(ControllerReader.GetCVControllerr().GetMainView()); 
         }
 
         #region Grid顯示
@@ -398,7 +408,7 @@ namespace Mirle.ASRS.WCS.View
                         {
                             string sErrorCode = string.Empty;
                             bool bFlag = false;
-                            for (int iRow = 0; iRow <= listBox1.Items.Count; iRow++)
+                            for (int iRow = 0; iRow < listBox1.Items.Count; iRow++)
                             {
                                 if (listBox1.Items[iRow].ToString().Substring(0, 2) == (i).ToString().PadLeft(2, '0'))
                                 {
@@ -423,6 +433,46 @@ namespace Mirle.ASRS.WCS.View
                 var cmet = System.Reflection.MethodBase.GetCurrentMethod();
                 Library.clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
             }
+        }
+
+        delegate void degAlarmDataShow();
+
+        private void AlarmDataShow()
+        {
+            try
+            {
+                degAlarmDataShow obj;
+                if (_alarmView.InvokeRequired)
+                {
+                    _alarmView.Invoke(new Action((AlarmDataShow)));
+                    obj = new degAlarmDataShow(AlarmDataShow);
+                    Invoke(obj);
+                }
+                else
+                {
+                    if (clsDB_Proc.GetDB_Object().GeterrorReport().isAlarm())
+                    {
+                        _alarmView.Visible = true;
+                        _alarmView.UpdateListData(clsDB_Proc.GetDB_Object().GeterrorReport().GetAlarmData());
+                    }
+                    else
+                    {
+                        _alarmView.Visible = false;
+                        _alarmView.ClearListData();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                Library.clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+            }
+        }
+
+        public AlarmView GetAlarmView()
+        {
+            return _alarmView;
         }
     }
 }

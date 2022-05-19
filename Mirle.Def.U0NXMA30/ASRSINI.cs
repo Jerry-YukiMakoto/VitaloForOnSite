@@ -58,6 +58,7 @@ namespace Mirle.Def.U0NXMA30
     {
         string CraneID { get; }
         string Speed { get; }
+        bool OnlyMonitor { get; }
     }
 
 

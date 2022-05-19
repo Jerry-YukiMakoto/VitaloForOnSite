@@ -23,7 +23,8 @@ namespace Mirle.ASRS.WCS.Library
         public static ASRSINI lcsini;
         public static string[] gsCraneID = new string[4];
         public static int L2L_MaxCount = 5;
-        
+        public static bool OnlyMonitor;
+
 
         //API
         [DllImport("kernel32.dll")]
@@ -39,7 +40,6 @@ namespace Mirle.ASRS.WCS.Library
                     .Build();
 
                 FunDbConfig(lcsini);
-                FunApiConfig(lcsini);
                 FunDeviceConfig(lcsini);
                 FunPlcConfig(lcsini);
                 FunPlcConfig2(lcsini);
@@ -80,16 +80,17 @@ namespace Mirle.ASRS.WCS.Library
        
         
 
-        private static void FunApiConfig(ASRSINI lcsini)
-        {
-            WcsApi_Config.IP = lcsini.WCS_API.IP;
-        }
+        //private static void FunApiConfig(ASRSINI lcsini)
+        //{
+        //    WcsApi_Config.IP = lcsini.WCS_API.IP;
+        //}
 
         private static void FunDeviceConfig(ASRSINI lcsini)
         {
             string[] adCrane = lcsini.Device.CraneID.Split(',');
             gsCraneID = new string[adCrane.Length];
             gsCraneID = adCrane;
+            OnlyMonitor = lcsini.Device.OnlyMonitor;
         }
 
         private static void FunPlcConfig(ASRSINI lcsini)

@@ -109,6 +109,8 @@
   <ItemGroup>
     <Compile Include="ControllerReader.cs" />
     <Compile Include="CVController.cs" />
+    <Compile Include="DBReadOnlyReader.cs" />
+    <Compile Include="DBReadWriter.cs" />
     <Compile Include="LoggerManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

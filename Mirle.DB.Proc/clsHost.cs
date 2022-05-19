@@ -36,7 +36,7 @@ namespace Mirle.DB.Proc
             DBType = DBTypes.SQLite
         };
 
-        public clsHost(clsDbConfig config, string DB_Name_Sqlite)
+        public clsHost(clsDbConfig config, string DB_Name_Sqlite,bool OnlyMonitor)
         {
             _config_Sqlite.DbName = DB_Name_Sqlite;
             Process = new clsProc(config, _config_Sqlite);
@@ -49,7 +49,7 @@ namespace Mirle.DB.Proc
             unitStsLog = new clsUnitStsLog(config);
             unitModeDef = new clsUnitModeDef(config);
             CVC_Alarm = new clsCVC_Alarm(config);
-            errorReport = new clsErrorReport(config);
+            errorReport = new clsErrorReport(config,OnlyMonitor);
         }
 
         public clsProc GetProcess()

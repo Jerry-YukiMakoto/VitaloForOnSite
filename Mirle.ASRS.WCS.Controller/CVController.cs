@@ -25,7 +25,7 @@ namespace Mirle.ASRS.WCS.Controller
 
 
 
-        public CVController(clsPlcConfig CVConfig, clsPlcConfig CV_Config2)
+        public CVController(clsPlcConfig CVConfig, clsPlcConfig CV_Config2,bool OnlyMonitor)
         {
             if (CVConfig.InMemorySimulator)
             {
@@ -45,6 +45,14 @@ namespace Mirle.ASRS.WCS.Controller
                     smWriter.AddDataBlock(new SMDataBlockInt32(block.DeviceRange, $@"Global\{block.SharedMemoryName}"));
                 }
                 _converyor2 = new Conveyors.Conveyor(smWriter, CV_Config2.MPLCNo);
+            }
+            else if(OnlyMonitor)
+            {
+                //SMReadOnlyReader dBReadOnlyReader = new SMReadOnlyReader();
+                //foreach (var blockInfos in GetBlockInfos2(CVConfig.MPLCNo))
+                //{
+                //    dBReadOnlyReader.AddDataBlock
+                //}
             }
             else
             {
@@ -137,6 +145,20 @@ namespace Mirle.ASRS.WCS.Controller
             }
         }
 
+        private IEnumerable<FileDataBlock> GetBlockInfos2(int PLCNo)
+        {
+            if (PLCNo == 1)
+            {
+                yield return new FileDataBlock(new DDeviceRange("D101", "D630"), 0);
+                yield return new FileDataBlock(new DDeviceRange("D3101", "D3590"), 1);
+            }
+            else if (PLCNo == 2)
+            {
+                yield return new FileDataBlock(new DDeviceRange("D101", "D380"), 2);
+                yield return new FileDataBlock(new DDeviceRange("D3101", "D3360"), 3);
+            }
+        }
+
 
 
 
@@ -170,6 +192,8 @@ namespace Mirle.ASRS.WCS.Controller
         {
             return _mainView;
         }
+
+
 
         private bool disposedValue;
 

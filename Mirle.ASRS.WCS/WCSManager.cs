@@ -10,6 +10,7 @@ using Mirle.DataBase;
 using Mirle.DB.Object.Service;
 using Mirle.Def;
 using Mirle.DB.Proc;
+using Mirle.ASRS.AWCS.View;
 
 namespace Mirle.ASRS.WCS
 {
@@ -42,16 +43,13 @@ namespace Mirle.ASRS.WCS
             _otherProcess.Elapsed += OtherProcess;
             
             ErrorReport();
-
         }
 
         public void Start()
         {
-            _otherProcess.Start();
-            _storeOutProcess.Start();
-            _storeInProcess.Start();
-            ErrorReport();
-
+                _otherProcess.Start();
+                _storeOutProcess.Start();
+                _storeInProcess.Start(); 
         }
         public void Stop()
         {
