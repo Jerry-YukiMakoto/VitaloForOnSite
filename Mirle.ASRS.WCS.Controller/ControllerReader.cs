@@ -19,10 +19,10 @@ namespace Mirle.ASRS.WCS.Controller
         private static LoggerManager _loggerManager;
         
 
-        public static void FunGetController(clsPlcConfig CVConfig,clsPlcConfig CV_Config2,bool OnlyMonitor) 
+        public static void FunGetController(clsPlcConfig CVConfig,clsPlcConfig CV_Config2,bool OnlyMonitor,clsDbConfig dbConfig) 
         {
             _loggerManager = new LoggerManager();
-            _cvController = new CVController(CVConfig,CV_Config2,OnlyMonitor);
+            _cvController = new CVController(CVConfig,CV_Config2,OnlyMonitor,dbConfig);
         }
 
         #region Get_Manager

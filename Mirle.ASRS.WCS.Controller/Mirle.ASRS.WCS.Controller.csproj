@@ -123,6 +123,10 @@
       <Project>{95116d24-80f9-4bde-94ca-7f3567c76cdf}</Project>
       <Name>Mirle.ASRS.WCS.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mirle.DB.WMS.Proc\Mirle.DB.WMS.Proc.csproj">
+      <Project>{553BD8CF-F4C1-4B39-97AB-42CC2F7C8187}</Project>
+      <Name>Mirle.DB.WMS.Proc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mirle.Def.U0NXMA30\Mirle.Def.U0NXMA30.csproj">
       <Project>{e6f732fe-3905-49a7-b2cf-b4fa79c2dc5d}</Project>
       <Name>Mirle.Def.U0NXMA30</Name>

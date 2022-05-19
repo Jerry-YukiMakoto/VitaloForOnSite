@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Mirle.DataBase;
+using Mirle.DB.WMS.Proc;
+using Mirle.Def;
 using Mirle.MPLC.DataBlocks;
 using Mirle.MPLC.FileData;
 
@@ -22,25 +24,21 @@ namespace Mirle.MPLC.DataBase
 
             protected override ValueObject ConvaertDataRow(DataRow row)
             {
-                throw new NotImplementedException();
+                if (row.Table.Columns.Contains("SerialNo"))
+                {
+                    SerialNo = Convert.ToString(row["SerialNo"]);
+                }
+                if (row.Table.Columns.Contains("EquPlcData"))
+                {
+                    PlcData = Convert.ToString(row["EquPlcData"]);
+                }
+                return this;
             }
-
-            //protected internal override ValueObject ConvaertDataRow(DataRow row)
-            //{
-            //    if (row.Table.Columns.Contains("SerialNo"))
-            //    {
-            //        SerialNo = Convert.ToString(row["SerialNo"]);
-            //    }
-            //    if (row.Table.Columns.Contains("EquPlcData"))
-            //    {
-            //        PlcData = Convert.ToString(row["EquPlcData"]);
-            //    }
-            //    return this;
-            //}
         }
 
         private readonly List<FileDataBlock> _dataBlocks = new List<FileDataBlock>();
         private readonly ThreadWorker _cacheWorker;
+        private clsDbConfig _config = new clsDbConfig();
 
         private DBOptions _options = new DBOptions();
 
@@ -52,9 +50,9 @@ namespace Mirle.MPLC.DataBase
             set => _cacheWorker.Interval = value;
         }
 
-        public DBReadWriter(DBOptions dbOptions)
+        public DBReadWriter(clsDbConfig dbConfig)
         {
-            _options = dbOptions;
+            _config = dbConfig;
             _cacheWorker = new ThreadWorker(CacheProc, 200);
         }
 
@@ -62,47 +60,32 @@ namespace Mirle.MPLC.DataBase
         {
             try
             {
-                DB GetDB()
+                using (var db = clsGetDB.GetDB(_config))
                 {
-                    if (_options.DBType == DBTypes.OracleClient)
+                    string sql = "SELECT * FROM EQUPLCDATA ";
+                    sql += "WHERE EQUNO='CV' ";
+                    sql += "ORDER BY SERIALNO";
+                    if (db.GetData<EquPlcData>(sql, out DataObject<EquPlcData> dataObject) == GetDataResult.Success)
                     {
-                        var db = new OracleClient(_options);
-                        db.Connect();
-                        return db;
+                        string strTmp = string.Empty;
+                        for (int i = 0; i < dataObject.Count; i++)
+                        {
+                            strTmp += dataObject[i].PlcData;
+                        }
+                        var rawA = new RawRecord(strTmp);
+                        foreach (var block in _dataBlocks)
+                        {
+                            try
+                            {
+                                byte[] newByteArray = rawA.GetBlockByIndex(block.ColumnIndex);
+                                block.SetRawData(newByteArray);
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.WriteLine($"{ex.Message}-{ex.StackTrace}");
+                            }
+                        }
                     }
-                    else
-                    {
-                        var db = new SqlServer(_options);
-                        db.Connect();
-                        return db;
-                    }
-                }
-                using (var db = GetDB())
-                {
-                    //string sql = "SELECT * FROM EQUPLCDATA ";
-                    //sql += "WHERE EQUNO='CV' ";
-                    //sql += "ORDER BY SERIALNO";
-                    //if (db.GetData<EquPlcData>(sql, out var dataObject) == GetDataResult.Success)
-                    //{
-                    //    string strTmp = string.Empty;
-                    //    for (int i = 0; i < dataObject.Count; i++)
-                    //    {
-                    //        strTmp += dataObject[i].PlcData;
-                    //    }
-                    //    var rawA = new RawRecord(strTmp);
-                    //    foreach (var block in _dataBlocks)
-                    //    {
-                    //        try
-                    //        {
-                    //            byte[] newByteArray = rawA.GetBlockByIndex(block.ColumnIndex);
-                    //            block.SetRawData(newByteArray);
-                    //        }
-                    //        catch (Exception ex)
-                    //        {
-                    //            Debug.WriteLine($"{ex.Message}-{ex.StackTrace}");
-                    //        }
-                    //    }
-                    //}
                 }
             }
             catch (Exception ex)

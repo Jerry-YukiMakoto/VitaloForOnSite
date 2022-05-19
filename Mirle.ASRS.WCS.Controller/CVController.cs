@@ -10,6 +10,7 @@ using Mirle.MPLC.MCProtocol;
 using Mirle.MPLC.SharedMemory;
 using Mirle.Def;
 using Mirle.DataBase;
+using Mirle.MPLC.DataBase;
 
 namespace Mirle.ASRS.WCS.Controller
 {
@@ -21,11 +22,12 @@ namespace Mirle.ASRS.WCS.Controller
         private readonly Conveyors.Conveyor _converyor;
         private readonly Conveyors.Conveyor _converyor2;
         private readonly bool _InMemorySimulator;
+        private readonly bool _OnlyMonitor;
         private Dictionary<string, string> _CVCalarm = new Dictionary<string, string>();
 
 
 
-        public CVController(clsPlcConfig CVConfig, clsPlcConfig CV_Config2,bool OnlyMonitor)
+        public CVController(clsPlcConfig CVConfig, clsPlcConfig CV_Config2,bool OnlyMonitor, clsDbConfig dbConfig)
         {
             if (CVConfig.InMemorySimulator)
             {
@@ -48,11 +50,22 @@ namespace Mirle.ASRS.WCS.Controller
             }
             else if(OnlyMonitor)
             {
-                //SMReadOnlyReader dBReadOnlyReader = new SMReadOnlyReader();
-                //foreach (var blockInfos in GetBlockInfos2(CVConfig.MPLCNo))
-                //{
-                //    dBReadOnlyReader.AddDataBlock
-                //}
+                _OnlyMonitor = true;
+                DBReadOnlyReader dBReadOnlyReader = new DBReadOnlyReader(dbConfig);
+                foreach (var blockInfos in GetBlockInfos2(CVConfig.MPLCNo))
+                {
+                    dBReadOnlyReader.AddDataBlock(blockInfos);
+                }
+                _converyor = new Conveyors.Conveyor(dBReadOnlyReader, CVConfig.MPLCNo);
+                _converyor.Start();
+
+                DBReadOnlyReader dBReadOnlyReader2 = new DBReadOnlyReader(dbConfig);
+                foreach (var blockInfos in GetBlockInfos2(CV_Config2.MPLCNo))
+                {
+                    dBReadOnlyReader2.AddDataBlock(blockInfos);
+                }
+                _converyor2 = new Conveyors.Conveyor(dBReadOnlyReader2, CV_Config2.MPLCNo);
+                _converyor2.Start();
             }
             else
             {
@@ -62,6 +75,8 @@ namespace Mirle.ASRS.WCS.Controller
                 _plcHost.MPLCTimeout = 600;
                 _plcHost.EnableWriteRawData = true;
                 _plcHost.EnableWriteShareMemory = false;
+                _plcHost.SetWriteRawDataToDB(dbConfig);
+                _plcHost.PLCHostNo = 1;
 
                 var plcHostInfo2 = new PLCHostInfo("VITALON2", CV_Config2.MPLCIP, CV_Config2.MPLCPort, GetBlockInfos(CV_Config2.MPLCNo));
                 _plcHost2 = new PLCHost(plcHostInfo2);
@@ -69,6 +84,8 @@ namespace Mirle.ASRS.WCS.Controller
                 _plcHost2.MPLCTimeout = 600;
                 _plcHost2.EnableWriteRawData = true;
                 _plcHost2.EnableWriteShareMemory = false;
+                _plcHost2.SetWriteRawDataToDB(dbConfig);
+                _plcHost2.PLCHostNo = 2;
                 //var smReader = new SMReadOnlyCachedReader();
                 //var blockInfos = GetBlockInfos();
                 //foreach (var block in blockInfos)
@@ -179,6 +196,10 @@ namespace Mirle.ASRS.WCS.Controller
         public bool GetConnect()
         {
             if (_InMemorySimulator)
+            {
+                return true;
+            }
+            else if(_OnlyMonitor)
             {
                 return true;
             }

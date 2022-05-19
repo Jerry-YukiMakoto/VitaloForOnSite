@@ -5,7 +5,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-
+using Mirle.DataBase;
+using Mirle.DB.WMS.Proc;
+using Mirle.Def;
 using Mirle.MPLC.DataBlocks;
 using Mirle.MPLC.DataType;
 
@@ -18,7 +20,7 @@ namespace Mirle.MPLC.MCProtocol
             public DateTime Datatime { get; set; }
             public string Rawdata { get; set; }
         }
-
+        private clsDbConfig _config = new clsDbConfig();
         public bool IsConnected => _mplc != null && _mplc.IsConnected;
         public PLCHostInfo HostInfo { get; }
         public bool EnableWriteShareMemory
@@ -45,6 +47,10 @@ namespace Mirle.MPLC.MCProtocol
             }
         }
         public bool EnableWriteRawData { get; set; } = false;
+
+        public int PLCHostNo { get; set; } = 0;
+
+        private bool _enableWriteRawDataToDB = false;
         public bool EnableAutoReconnect { get; set; } = true;
         public string LogBaseDirectory { get; set; } = $@"{AppDomain.CurrentDomain.BaseDirectory}LOG";
         public int Interval
@@ -126,6 +132,11 @@ namespace Mirle.MPLC.MCProtocol
                     ExportPLCData();
                 }
 
+                if (_enableWriteRawDataToDB)
+                {
+                    ExportPLCDataToDB();
+                }
+
                 if (_mplc.IsConnected == false)
                 {
                     TraceLog(_mplc.TestConnectionByPing());
@@ -137,6 +148,130 @@ namespace Mirle.MPLC.MCProtocol
                 Task.Delay(1000).Wait();
             }
         }
+        private void ExportPLCDataToDB()
+        {
+            var sb = new StringBuilder();
+            foreach (var block in _cachedBlocks)
+            {
+                sb.Append(BitConverter.ToString(block.GetRawData()).Replace("-", ""));
+                sb.Append('|');
+            }
+
+            try
+            {
+
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    if (PLCHostNo == 1) 
+                    { 
+                    string strTemp = sb.ToString();
+                    int count = (strTemp.Length + 2000) / 2000;
+                        for (int i = 0; i < count; i++)
+                        {
+                            int startIndex = 2000 * i;
+                            if (sb.Length - (startIndex + 2000) > 0)
+                            {
+                                string sql = "UPDATE EQUPLCDATA ";
+                                sql += $"SET EQUPLCDATA='{sb.ToString(startIndex, 2000)}', ";
+                                sql += $"TrnDT='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
+                                sql += $"WHERE SERIALNO='{i}' ";
+                                sql += $"AND EQUNO='CV' ";
+                                sql += $"AND EquType='2' ";
+
+                                if (db.ExecuteSQL2(sql) != ExecuteSQLResult.Success)
+                                {
+                                    sql = $"INSERT INTO EQUPLCDATA VALUES (";
+                                    sql += $"'CV',";
+                                    sql += $"'{i}',";
+                                    sql += $"'{2}',";
+                                    sql += $"'{sb.ToString(startIndex, 2000)}',";
+                                    sql += $"'{DateTime.Now:yyyy-MM-dd HH:mm:ss}'";
+                                    sql += $")";
+                                    db.ExecuteSQL2(sql);
+                                }
+                            }
+                            else
+                            {
+                                string sql = "UPDATE EQUPLCDATA ";
+                                sql += $"SET EQUPLCDATA='{sb.ToString(startIndex, sb.Length - startIndex)}', ";
+                                sql += $"TrnDT='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
+                                sql += $"WHERE SERIALNO='{i}' ";
+                                sql += $"AND EQUNO='CV' ";
+                                sql += $"AND EquType='2' ";
+
+                                if (db.ExecuteSQL2(sql) != ExecuteSQLResult.Success)
+                                {
+                                    sql = $"INSERT INTO EQUPLCDATA VALUES (";
+                                    sql += $"'CV',";
+                                    sql += $"'{i}',";
+                                    sql += $"'{2}',";
+                                    sql += $"'{sb.ToString(startIndex, sb.Length - startIndex)}',";
+                                    sql += $"'{DateTime.Now:yyyy-MM-dd HH:mm:ss}'";
+                                    sql += $")";
+                                    db.ExecuteSQL2(sql);
+                                }
+                            }
+                        }
+                    }
+                    else if(PLCHostNo == 2)
+                    {
+                        string strTemp = sb.ToString();
+                        int count = (strTemp.Length + 2000) / 2000;
+                        for (int i = 0; i < count; i++)
+                        {
+                            int startIndex = 2000 * i;
+                            if (sb.Length - (startIndex + 2000) > 0)
+                            {
+                                string sql = "UPDATE EQUPLCDATA ";
+                                sql += $"SET EQUPLCDATA='{sb.ToString(startIndex, 2000)}', ";
+                                sql += $"TrnDT='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
+                                sql += $"WHERE SERIALNO='{i}' ";
+                                sql += $"AND EQUNO='CV' ";
+                                sql += $"AND EquType='3' ";
+
+                                if (db.ExecuteSQL2(sql) != ExecuteSQLResult.Success)
+                                {
+                                    sql = $"INSERT INTO EQUPLCDATA VALUES (";
+                                    sql += $"'CV',";
+                                    sql += $"'{i}',";
+                                    sql += $"'{3}',";
+                                    sql += $"'{sb.ToString(startIndex, 2000)}',";
+                                    sql += $"'{DateTime.Now:yyyy-MM-dd HH:mm:ss}'";
+                                    sql += $")";
+                                    db.ExecuteSQL2(sql);
+                                }
+                            }
+                            else
+                            {
+                                string sql = "UPDATE EQUPLCDATA ";
+                                sql += $"SET EQUPLCDATA='{sb.ToString(startIndex, sb.Length - startIndex)}', ";
+                                sql += $"TrnDT='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
+                                sql += $"WHERE SERIALNO='{i}' ";
+                                sql += $"AND EQUNO='CV' ";
+                                sql += $"AND EquType='3' ";
+
+                                if (db.ExecuteSQL2(sql) != ExecuteSQLResult.Success)
+                                {
+                                    sql = $"INSERT INTO EQUPLCDATA VALUES (";
+                                    sql += $"'CV',";
+                                    sql += $"'{i}',";
+                                    sql += $"'{3}',";
+                                    sql += $"'{sb.ToString(startIndex, sb.Length - startIndex)}',";
+                                    sql += $"'{DateTime.Now:yyyy-MM-dd HH:mm:ss}'";
+                                    sql += $")";
+                                    db.ExecuteSQL2(sql);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"{ex}");
+            }
+        }
+
         private void ReadPLCDataFormPLC()
         {
             if (_mplc.IsConnected)
@@ -301,6 +436,12 @@ namespace Mirle.MPLC.MCProtocol
         public void Start()
         {
             _heartbeat.Start();
+        }
+
+        public void SetWriteRawDataToDB(clsDbConfig dbConfig)
+        {
+            _enableWriteRawDataToDB = true;
+            _config = dbConfig;
         }
 
         #region IDisposable Support

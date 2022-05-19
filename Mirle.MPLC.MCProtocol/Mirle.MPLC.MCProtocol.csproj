@@ -73,6 +73,16 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mirle.DB.WMS.Proc\Mirle.DB.WMS.Proc.csproj">
+      <Project>{553BD8CF-F4C1-4B39-97AB-42CC2F7C8187}</Project>
+      <Name>Mirle.DB.WMS.Proc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mirle.Def\Mirle.Def.csproj">
+      <Project>{906DA4EE-6B8D-40C7-BD49-A410FEB1D2C8}</Project>
+      <Name>Mirle.Def</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.115.5\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.115.5\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

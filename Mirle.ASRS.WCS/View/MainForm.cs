@@ -263,7 +263,7 @@ namespace Mirle.ASRS.WCS.View
             var archive = new AutoArchive();
             archive.Start();
             clsDB_Proc.Initial(clInitSys.DbConfig,clInitSys.OnlyMonitor); //原DataAccessController功能
-            ControllerReader.FunGetController(clInitSys.CV_Config,clInitSys.CV_Config2,clInitSys.OnlyMonitor);
+            ControllerReader.FunGetController(clInitSys.CV_Config,clInitSys.CV_Config2,clInitSys.OnlyMonitor, clInitSys.DbConfig);
 
             _wcsManager = new WCSManager();
             if (clInitSys.OnlyMonitor == false)//是否是監控模式
