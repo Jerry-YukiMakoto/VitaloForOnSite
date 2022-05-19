@@ -25,7 +25,8 @@ namespace test
         private void Form1_Load(object sender, EventArgs e)
         {
             clInitSys.FunLoadIniSys();
-            clsDB_Proc.Initial(clInitSys.DbConfig, clInitSys.DbConfig_WMS);
+            //clsDB_Proc.Initial(clInitSys.DbConfig, clInitSys.DbConfig_WMS);
+            clsDB_Proc.Initial(clInitSys.DbConfig);
             //_webApiHost = new WebApiHost(new Startup(_unityContainer), clInitSys.WcsApi_Config.IP);
         }
 
