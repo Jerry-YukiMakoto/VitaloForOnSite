@@ -35,7 +35,7 @@ namespace Mirle.DB.Fun
 
                 string sql = $"SELECT * FROM ALARMCVCLOG ";
                 sql += $"WHERE ALARMCVCCODE='{alarmCvcCode}' ";
-                sql += $"AND CLRDT IS NULL ";
+                sql += $"AND CLRDT in (NULL,'')  ";
                 return db.GetData(sql, out dataObject);
         }
 

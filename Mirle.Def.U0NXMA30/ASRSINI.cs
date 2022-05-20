@@ -11,9 +11,6 @@ namespace Mirle.Def.U0NXMA30
         [Option(Alias = "Data Base")]
         DatabaseConfig Database { get; }
 
-        [Option(Alias = "WCS API")]
-        APIConfig WCS_API { get; }
-
         [Option(Alias = "Device")]
         DeviceConfig Device { get; }
 
@@ -86,10 +83,8 @@ namespace Mirle.Def.U0NXMA30
 
     public interface StnNoConfig
     {
-        string A1 { get; }
-        string A5 { get; }
-        string A7 { get; }
-        string A9 { get; }
+        string Floor1 { get; }
+        string Floor2 { get; }
         string WaterLevel { get; }
     }
 }

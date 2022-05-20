@@ -49,9 +49,9 @@
       <Project>{20d2f96e-f248-4e52-9f5a-f1cf028f8e98}</Project>
       <Name>Mirle.ASRS.Conveyors</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mirle.Def.U0NXMA30\Mirle.Def.U0NXMA30.csproj">
+    <ProjectReference Include="..\Mirle.Def.U0NXMA30\Mirle.Def.T1JUMAK0.csproj">
       <Project>{e6f732fe-3905-49a7-b2cf-b4fa79c2dc5d}</Project>
-      <Name>Mirle.Def.U0NXMA30</Name>
+      <Name>Mirle.Def.T1JUMAK0</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mirle.Def\Mirle.Def.csproj">
       <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>

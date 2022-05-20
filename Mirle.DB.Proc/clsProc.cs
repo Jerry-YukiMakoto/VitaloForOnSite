@@ -359,7 +359,6 @@ namespace Mirle.DB.Proc
             string Equ_No = "";
             int IsHigh = 0;
             string cmdSno="";
-            int CmdMode=0;
             string Item_Desc = "";
             string Item_Unit = "";
             string Item_Type = "";
@@ -416,7 +415,7 @@ namespace Mirle.DB.Proc
 
                             clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Ready Receive StoreIn Command=> {cmdSno}");
 
-                            if (Itm_Mst.GetItmMstDtl(Item_No, out var dataObject3, db).ResultCode == DBResult.Success || Plt_Id=="" || Lot_No=="")//當搜尋不到料號資料(和效期或版號是空值時)，執行退版動作
+                            if (Itm_Mst.GetItmMstDtl(Item_No, out var dataObject3, db).ResultCode == DBResult.Success && Plt_Id!="" && Lot_No!="")//當搜尋不到料號資料(和效期或版號是空值時)，執行退版動作
                             {
                                 Item_Desc = dataObject3[0].Item_Desc;
                                 Item_Unit = dataObject3[0].Item_Unit;
@@ -889,7 +888,7 @@ namespace Mirle.DB.Proc
                                 db.TransactionCtrl2(TransactionTypes.Rollback);
                                 return false;
                             }
-                            if (EQU_CMD.InsertStoreInEquCmd(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, 1, cmdSno, "0000002", dest, 5, db) == false)
+                            if (EQU_CMD.InsertStoreInEquCmd(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, 1, cmdSno, CranePortNo.Floor2, dest, 5, db) == false)
                             {
                                 clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Create Crane StoreIn Command, Insert EquCmd Fail => {cmdSno}");
 
@@ -1218,7 +1217,7 @@ namespace Mirle.DB.Proc
                                 db.TransactionCtrl2(TransactionTypes.Rollback);
                                 return false;
                             }
-                            if (EQU_CMD.InsertStoreOutEquCmd(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, Equ_No, cmdSno, source, "0000001" , 5, db) == false)
+                            if (EQU_CMD.InsertStoreOutEquCmd(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, Equ_No, cmdSno, source, CranePortNo.Floor1 , 5, db) == false)
                             {
                                 clsWriLog.StoreOutLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Create Crane StoreOut Command, Insert EquCmd Fail => {cmdSno}");
                                 db.TransactionCtrl2(TransactionTypes.Rollback);
@@ -1567,6 +1566,56 @@ namespace Mirle.DB.Proc
 
 
         public static string GetEquNo()
+        {
+            string sLine = "";  //最終線別
+            int[] iAry = new int[7];
+            int temp = 0;
+            string stemp = "";
+            //List<int> intermediate_list = new List<int>();
+            try
+            {
+                iAry[1] = dicCountByCrane["1"];
+                iAry[2] = dicCountByCrane["2"];
+                iAry[3] = dicCountByCrane["3"];
+                iAry[4] = dicCountByCrane["4"];
+                iAry[5] = dicCountByCrane["5"];
+                iAry[6] = dicCountByCrane["6"];
+                for (int i = 1; i < iAry.Length; i++)
+                {
+                    for (int k = i + 1; k < iAry.Length; k++)
+                    {
+                        if (iAry[i] > iAry[k])
+                        {
+                            temp = iAry[k];
+                            iAry[k] = iAry[i];
+                            iAry[i] = temp;
+                        }
+                    }
+                    //Console.WriteLine($"{Ary[i]}");
+                }
+                for (int i = 1; i < iAry.Length; i++)
+                {
+                    stemp = i.ToString();
+                    if (dicCountByCrane[stemp] == iAry[1])
+                    {
+                        sLine = stemp;
+                        dicCountByCrane[stemp]++;
+                        break;
+                    }
+                }
+                return sLine;
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return "";
+            }
+
+        }
+
+        public static string GetEquNoForProduction()
         {
             string sLine = "";  //最終線別
             int[] iAry = new int[7];

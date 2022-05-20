@@ -232,17 +232,17 @@
       <Project>{60c72719-d780-4bc8-9198-fc21c9754918}</Project>
       <Name>Mirle.DB.Proc</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mirle.Def.U0NXMA30\Mirle.Def.U0NXMA30.csproj">
+    <ProjectReference Include="..\Mirle.Def.U0NXMA30\Mirle.Def.T1JUMAK0.csproj">
       <Project>{e6f732fe-3905-49a7-b2cf-b4fa79c2dc5d}</Project>
-      <Name>Mirle.Def.U0NXMA30</Name>
+      <Name>Mirle.Def.T1JUMAK0</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mirle.Def\Mirle.Def.csproj">
       <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
       <Name>Mirle.Def</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mirle.Grid.U0NXMA30\Mirle.Grid.U0NXMA30.csproj">
+    <ProjectReference Include="..\Mirle.Grid.U0NXMA30\Mirle.Grid.T1JUMAK0.csproj">
       <Project>{39a4c47b-c53b-4057-9dc5-93b8907639e8}</Project>
-      <Name>Mirle.Grid.U0NXMA30</Name>
+      <Name>Mirle.Grid.T1JUMAK0</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mirle.Grid\Mirle.Grid.csproj">
       <Project>{8ab5fac9-7cc2-4eec-b583-39778e66ce1f}</Project>

@@ -48,10 +48,11 @@ namespace Mirle.ASRS.WCS.Controller
                 }
                 _converyor2 = new Conveyors.Conveyor(smWriter, CV_Config2.MPLCNo);
             }
-            else if(OnlyMonitor)
+            else if(OnlyMonitor)//監控模式
             {
                 _OnlyMonitor = true;
                 DBReadOnlyReader dBReadOnlyReader = new DBReadOnlyReader(dbConfig);
+                dBReadOnlyReader.PLCHostNo = CVConfig.MPLCNo;
                 foreach (var blockInfos in GetBlockInfos2(CVConfig.MPLCNo))
                 {
                     dBReadOnlyReader.AddDataBlock(blockInfos);
@@ -60,6 +61,7 @@ namespace Mirle.ASRS.WCS.Controller
                 _converyor.Start();
 
                 DBReadOnlyReader dBReadOnlyReader2 = new DBReadOnlyReader(dbConfig);
+                dBReadOnlyReader2.PLCHostNo = CV_Config2.MPLCNo;
                 foreach (var blockInfos in GetBlockInfos2(CV_Config2.MPLCNo))
                 {
                     dBReadOnlyReader2.AddDataBlock(blockInfos);

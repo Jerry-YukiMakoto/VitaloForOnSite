@@ -16,7 +16,6 @@ namespace Mirle.ASRS.WCS
 {
     public class WCSManager
     {
-        private readonly Conveyors.Conveyor _conveyor;
         private readonly LoggerManager _loggerManager;
 
         private readonly Timer _ErrorReport = new Timer();
@@ -28,7 +27,6 @@ namespace Mirle.ASRS.WCS
 
         public WCSManager()
         {
-            _conveyor = ControllerReader.GetCVControllerr().GetConveryor();
 
             _loggerManager = ControllerReader.GetLoggerManager();
 

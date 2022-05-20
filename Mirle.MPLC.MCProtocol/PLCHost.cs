@@ -134,7 +134,7 @@ namespace Mirle.MPLC.MCProtocol
 
                 if (_enableWriteRawDataToDB)
                 {
-                    ExportPLCDataToDB();
+                    ExportPLCDataToDB();//將PLC的Data寫入資料表中，提供監控模式PLC資料
                 }
 
                 if (_mplc.IsConnected == false)
@@ -162,8 +162,7 @@ namespace Mirle.MPLC.MCProtocol
 
                 using (var db = clsGetDB.GetDB(_config))
                 {
-                    if (PLCHostNo == 1) 
-                    { 
+
                     string strTemp = sb.ToString();
                     int count = (strTemp.Length + 2000) / 2000;
                         for (int i = 0; i < count; i++)
@@ -176,14 +175,14 @@ namespace Mirle.MPLC.MCProtocol
                                 sql += $"TrnDT='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
                                 sql += $"WHERE SERIALNO='{i}' ";
                                 sql += $"AND EQUNO='CV' ";
-                                sql += $"AND EquType='2' ";
+                                sql += $"AND EquType='{PLCHostNo+1}' ";//設備編號(加1原因為Crane編號為1)
 
                                 if (db.ExecuteSQL2(sql) != ExecuteSQLResult.Success)
                                 {
                                     sql = $"INSERT INTO EQUPLCDATA VALUES (";
                                     sql += $"'CV',";
                                     sql += $"'{i}',";
-                                    sql += $"'{2}',";
+                                    sql += $"'{PLCHostNo + 1}',";
                                     sql += $"'{sb.ToString(startIndex, 2000)}',";
                                     sql += $"'{DateTime.Now:yyyy-MM-dd HH:mm:ss}'";
                                     sql += $")";
@@ -197,14 +196,14 @@ namespace Mirle.MPLC.MCProtocol
                                 sql += $"TrnDT='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
                                 sql += $"WHERE SERIALNO='{i}' ";
                                 sql += $"AND EQUNO='CV' ";
-                                sql += $"AND EquType='2' ";
+                                sql += $"AND EquType='{PLCHostNo + 1}' ";
 
                                 if (db.ExecuteSQL2(sql) != ExecuteSQLResult.Success)
                                 {
                                     sql = $"INSERT INTO EQUPLCDATA VALUES (";
                                     sql += $"'CV',";
                                     sql += $"'{i}',";
-                                    sql += $"'{2}',";
+                                    sql += $"'{PLCHostNo + 1}',";
                                     sql += $"'{sb.ToString(startIndex, sb.Length - startIndex)}',";
                                     sql += $"'{DateTime.Now:yyyy-MM-dd HH:mm:ss}'";
                                     sql += $")";
@@ -212,58 +211,6 @@ namespace Mirle.MPLC.MCProtocol
                                 }
                             }
                         }
-                    }
-                    else if(PLCHostNo == 2)
-                    {
-                        string strTemp = sb.ToString();
-                        int count = (strTemp.Length + 2000) / 2000;
-                        for (int i = 0; i < count; i++)
-                        {
-                            int startIndex = 2000 * i;
-                            if (sb.Length - (startIndex + 2000) > 0)
-                            {
-                                string sql = "UPDATE EQUPLCDATA ";
-                                sql += $"SET EQUPLCDATA='{sb.ToString(startIndex, 2000)}', ";
-                                sql += $"TrnDT='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
-                                sql += $"WHERE SERIALNO='{i}' ";
-                                sql += $"AND EQUNO='CV' ";
-                                sql += $"AND EquType='3' ";
-
-                                if (db.ExecuteSQL2(sql) != ExecuteSQLResult.Success)
-                                {
-                                    sql = $"INSERT INTO EQUPLCDATA VALUES (";
-                                    sql += $"'CV',";
-                                    sql += $"'{i}',";
-                                    sql += $"'{3}',";
-                                    sql += $"'{sb.ToString(startIndex, 2000)}',";
-                                    sql += $"'{DateTime.Now:yyyy-MM-dd HH:mm:ss}'";
-                                    sql += $")";
-                                    db.ExecuteSQL2(sql);
-                                }
-                            }
-                            else
-                            {
-                                string sql = "UPDATE EQUPLCDATA ";
-                                sql += $"SET EQUPLCDATA='{sb.ToString(startIndex, sb.Length - startIndex)}', ";
-                                sql += $"TrnDT='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
-                                sql += $"WHERE SERIALNO='{i}' ";
-                                sql += $"AND EQUNO='CV' ";
-                                sql += $"AND EquType='3' ";
-
-                                if (db.ExecuteSQL2(sql) != ExecuteSQLResult.Success)
-                                {
-                                    sql = $"INSERT INTO EQUPLCDATA VALUES (";
-                                    sql += $"'CV',";
-                                    sql += $"'{i}',";
-                                    sql += $"'{3}',";
-                                    sql += $"'{sb.ToString(startIndex, sb.Length - startIndex)}',";
-                                    sql += $"'{DateTime.Now:yyyy-MM-dd HH:mm:ss}'";
-                                    sql += $")";
-                                    db.ExecuteSQL2(sql);
-                                }
-                            }
-                        }
-                    }
                 }
             }
             catch (Exception ex)

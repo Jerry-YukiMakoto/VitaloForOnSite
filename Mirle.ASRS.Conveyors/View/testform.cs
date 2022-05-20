@@ -215,7 +215,7 @@ namespace Mirle.ASRS.WCS.Controller
             }
             if (error.Checked)
             {
-                _test.SetBitOn("D" + (101 + text1 * 10 + 2.4));
+                _test.SetBitOn("D" + (101 + text1 * 10 + 6.1));
             }
             if (emptynumber.Checked)
             {
@@ -223,7 +223,7 @@ namespace Mirle.ASRS.WCS.Controller
             }
             if (errorOff.Checked)
             {
-                _test.SetBitOff("D" + (101 + text1 * 10 + 2.4));
+                _test.SetBitOff("D" + (101 + text1 * 10 + 6.1));
             }
             if (InmodeOFF.Checked)
             {

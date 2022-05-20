@@ -14,7 +14,6 @@ using Mirle.MPLC.FileData;
 
 namespace Mirle.MPLC.DataBase
 {
-    //20210927 Louis
     public class DBReadWriter : IMPLCProvider, IDisposable
     {
         private class EquPlcData : ValueObject
@@ -39,6 +38,7 @@ namespace Mirle.MPLC.DataBase
         private readonly List<FileDataBlock> _dataBlocks = new List<FileDataBlock>();
         private readonly ThreadWorker _cacheWorker;
         private clsDbConfig _config = new clsDbConfig();
+        public int PLCHostNo { get; set; } = 0;
 
         private DBOptions _options = new DBOptions();
 
@@ -64,6 +64,7 @@ namespace Mirle.MPLC.DataBase
                 {
                     string sql = "SELECT * FROM EQUPLCDATA ";
                     sql += "WHERE EQUNO='CV' ";
+                    sql += $"AND EquType='{PLCHostNo+1}' ";//設備編號(加1原因為Crane編號為1)
                     sql += "ORDER BY SERIALNO";
                     if (db.GetData<EquPlcData>(sql, out DataObject<EquPlcData> dataObject) == GetDataResult.Success)
                     {
