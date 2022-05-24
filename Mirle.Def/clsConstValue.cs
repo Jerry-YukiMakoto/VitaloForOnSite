@@ -67,7 +67,7 @@ namespace Mirle.Def
 
             public const string CMDFInish = "7";
             /// <summary>
-            /// 置物
+            /// 退版
             /// </summary>
             public const string Deposit = "9";
         }

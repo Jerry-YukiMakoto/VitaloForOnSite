@@ -89,6 +89,10 @@ namespace Mirle.ASRS.WCS
                     clsStoreOut.StoreOutt_A01_01ToA01_11_CreateEquCmd();
 
                     clsStoreOut.StoreOut_EquCmdFinish();
+
+                    clsStoreOut.StoreOut_ShowKanBanStart();
+
+                    clsStoreOut.StoreOut_ShowKanBanFinish();
                 }
             }
             catch (Exception ex)
@@ -113,6 +117,12 @@ namespace Mirle.ASRS.WCS
                     clsStoreIn.FunOutsourceStoreIn_WriteCV();
 
                     clsStoreIn.FunProduceStoreInWriteCV();
+
+                    clsStoreIn.FunProduceStoreInReject();
+
+                    clsStoreIn.FunOutsourceStoreIn_ShowOnKanBan();
+
+                    clsStoreIn.FunOutsourceStoreIn_ShowOnKanBanFinish();
 
                     clsStoreIn.FunStoreInBCRCheck();
 

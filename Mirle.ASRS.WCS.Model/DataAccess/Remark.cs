@@ -18,5 +18,10 @@
         public const string NotStoreOutReady = "不是StoreOutReady狀態";
         public const string InsideLocWait = "內儲位有命令，請等待命令做完";
         public const string WMSReportComplete = "WMS出庫回報完成";
+        public const string StoreInKanBanStart = "入庫看板回報開始";
+        public const string StoreInKanBanFinsh = "入庫看板回報結束";
+        public const string StoreOutKanBanStart = "出庫看板回報開始";
+        public const string StoreOutKanBanFinish = "出庫看板回報結束";
+        public const string StoreInRejectFinish = "入庫退版流程結束";
     }
 }

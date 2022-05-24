@@ -92,5 +92,39 @@ namespace Mirle.DB.Object.Service
             }
         }
 
+        public static void StoreOut_ShowKanBanStart()
+        {
+            try
+            {
+                for (int bufferIndex = 31; bufferIndex <= 41; bufferIndex += 10)//出庫口buffer:A11-02 和 A11-04
+                {
+                    clsDB_Proc.GetDB_Object().GetProcess().StoreOut_ShowOnKanBanStart(bufferIndex);
+                }
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+            }
+        }
+
+        public static void StoreOut_ShowKanBanFinish()
+        {
+            try
+            {
+                for (int bufferIndex = 31; bufferIndex <= 41; bufferIndex += 10)//出庫口buffer:A11-02 和 A11-04
+                {
+                    clsDB_Proc.GetDB_Object().GetProcess().StoreOut_ShowOnKanBanFinish(bufferIndex);
+                }
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+            }
+        }
+
     }
 }

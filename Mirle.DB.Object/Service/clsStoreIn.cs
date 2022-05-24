@@ -24,13 +24,59 @@ namespace Mirle.DB.Object.Service
             }
         }
 
-        public static void FunProduceStoreInWriteCV()//A2toA4寫入buffer
+        public static void FunOutsourceStoreIn_ShowOnKanBan()
+        {
+            try
+            {
+                int bufferIndex = 48;
+                clsDB_Proc.GetDB_Object().GetProcess().StoreIn_ShowOnKanBan(StnNo.A11_06, bufferIndex);
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+            }
+        }
+
+        public static void FunOutsourceStoreIn_ShowOnKanBanFinish()
+        {
+            try
+            {
+                int bufferIndex = 48;
+                clsDB_Proc.GetDB_Object().GetProcess().StoreIn_ShowOnKanBanFinish(StnNo.A11_06, bufferIndex);
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+            }
+        }
+
+        public static void FunProduceStoreInWriteCV()
         {
             try
             {
                 int bufferIndex = 43;
                 clsDB_Proc.GetDB_Object().GetProcess().FunProduceStoreInWriPlc(StnNo.A08, bufferIndex);
                 
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+            }
+        }
+
+        public static void FunProduceStoreInReject()
+        {
+            try
+            {
+                int bufferIndex = 45;
+                clsDB_Proc.GetDB_Object().GetProcess().StoreIn_RejectFinish(bufferIndex);
+
             }
             catch (Exception ex)
             {

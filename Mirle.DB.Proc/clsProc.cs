@@ -91,6 +91,8 @@ namespace Mirle.DB.Proc
                             Lot_No = _conveyor.GetBuffer(bufferIndex).Lot_ID;
                             bool Pltfish= Plt_Id.Contains("-");//如果是餘板會有槓槓來與滿板分別，可以根據此條件尋找餘板的命令
 
+                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"BCR Notice Start:Item_No=>{Item_No} Plt_Id=>{Plt_Id} Lot_No=>{Lot_No}");//當讀取通知開始，紀錄讀到的的值
+
                             if (CMD_MST.GetCmdMstByStoreInStart(sStnNo, Item_No, Lot_No, Pltfish, Plt_Id, out var dataObject1, db).ResultCode == DBResult.Success)
                             {
                                 cmdSno = dataObject1[0].Cmd_Sno;
@@ -154,11 +156,6 @@ namespace Mirle.DB.Proc
                                     CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.NotAutoMode, db);
                                     return false;
                                 }
-                                //if (_conveyor.GetBuffer(bufferIndex).InMode != true)
-                                //{
-                                //    CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.NotInMode, db);
-                                //    return false;
-                                //}
                                 if (_conveyor.GetBuffer(bufferIndex).Error == true)
                                 {
                                     CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.BufferError, db);
@@ -380,6 +377,8 @@ namespace Mirle.DB.Proc
                             Plt_Id = _conveyor.GetBuffer(bufferIndex).Plt_Id;
                             Lot_No = _conveyor.GetBuffer(bufferIndex).Lot_ID;
 
+                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"BCR Notice Start:Item_No=>{Item_No} Plt_Id=>{Plt_Id} Lot_No=>{Lot_No}");//當讀取通知開始，紀錄讀到的的值
+
                             #region//根據buffer狀態更新命令
                             if (_conveyor.GetBuffer(bufferIndex).Auto != true)
                                 {
@@ -387,12 +386,6 @@ namespace Mirle.DB.Proc
                                         , $"Auto Not On");
                                 return false;
                                 }
-                                //if (_conveyor.GetBuffer(bufferIndex).InMode != true)
-                                //{
-                                //clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
-                                //    , $"Inmode Not On");
-                                //return false;
-                                //}
                                 if (_conveyor.GetBuffer(bufferIndex).Error == true)
                                 {
                                 clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
@@ -727,6 +720,218 @@ namespace Mirle.DB.Proc
             }
         }
 
+        public bool StoreIn_RejectFinish(int bufferIndex)//生產入庫口退版到退版出口時，更新命令為完成
+        {
+
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        var _conveyor = ControllerReader.GetCVControllerr().GetConveryor();
+                        if (_conveyor.GetBuffer(bufferIndex).CommandId > 0 && _conveyor.GetBuffer(bufferIndex).Presence)//當有貨物到退版站口時，更新命令使命令結束
+                        {
+                            string cmdSno = (_conveyor.GetBuffer(bufferIndex).CommandId).ToString().PadLeft(5, '0');
+
+                            if (CMD_MST.GetCmdMstByStoreInReject(cmdSno, out var dataObject, db).ResultCode == DBResult.Success)//搜尋退版命令
+                            {
+
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreIn)Buffer Get cmdsno To Reject=> {cmdSno}");
+
+                                if (db.TransactionCtrl2(TransactionTypes.Begin).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "(StoreIn)Buffer Get cmdsno To Reject, Begin Fail");
+
+                                    return false;
+                                }
+                                if (CMD_MST.UpdateCmdMst(cmdSno, CmdSts.CompleteWaitUpdate, Trace.StoreInReject, db).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreIn)Buffer Get cmdsno To Reject, Update CmdMst Fail => {cmdSno}");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                if (CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.StoreInRejectFinish, db).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreIn)Buffer Get cmdsno To Reject, Update CmdMst Fail => {cmdSno}");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                if (db.TransactionCtrl2(TransactionTypes.Commit).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreIn)Buffer Get cmdsno To Reject, Commit Fail => {cmdSno}");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                else return true;
+
+                            }
+                            else return false;
+                        }
+                        else return false;
+                    }
+                    else
+                    {
+                        string strEM = "Error: 開啟DB失敗！";
+                        clsWriLog.Log.FunWriTraceLog_CV(strEM);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return false;
+            }
+        }
+
+        public bool StoreIn_ShowOnKanBan(string sStnNo,int bufferIndex)//為了看板程式，更新命令Trace，使其可以顯示此命令
+        {
+
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        var _conveyor = ControllerReader.GetCVControllerr().GetConveryor();
+                        if (_conveyor.GetBuffer(bufferIndex).CommandId > 0 && _conveyor.GetBuffer(bufferIndex).Presence)//當有貨物在入庫站口時，更新命令使看板開始顯示
+                        {
+                            string cmdSno = (_conveyor.GetBuffer(bufferIndex).CommandId).ToString().PadLeft(5, '0');
+
+                            if (CMD_MST.GetCmdMstByStoreInForKanBan(cmdSno, out var dataObject, db).ResultCode == DBResult.Success)//搜尋尚未顯示於看板上的貨物命令
+                            {
+
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreIn)Buffer Get cmdsno To show KanBan=> {cmdSno}");
+
+                                if (db.TransactionCtrl2(TransactionTypes.Begin).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "(StoreIn)Buffer Get cmdsno To show KanBan, Begin Fail");
+
+                                    return false;
+                                }
+                                if (CMD_MST.UpdateCmdMst(cmdSno, Trace.StoreInKanBanStart, db).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreIn)Buffer Get cmdsno To show KanBan, Update CmdMst Fail => {cmdSno}");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                if (CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.StoreInKanBanStart , db).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreIn)Buffer Get cmdsno To show KanBan, Update CmdMst Fail => {cmdSno}");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                if (db.TransactionCtrl2(TransactionTypes.Commit).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreIn)Buffer Get cmdsno To show KanBan, Commit Fail => {cmdSno}");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                else return true;
+
+                            }
+                            else return false;
+                        }
+                        else return false;
+                    }
+                    else
+                    {
+                        string strEM = "Error: 開啟DB失敗！";
+                        clsWriLog.Log.FunWriTraceLog_CV(strEM);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return false;
+            }
+        }
+
+        public bool StoreIn_ShowOnKanBanFinish(string sStnNo, int bufferIndex)//為了看板程式，更新命令Trace，使其可以停止顯示此命令
+        {
+
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        var _conveyor = ControllerReader.GetCVControllerr().GetConveryor();
+                        if (_conveyor.GetBuffer(bufferIndex).CommandId > 0 && !_conveyor.GetBuffer(bufferIndex).Presence)//當貨物離開入庫站口時，更新命令使看板停止顯示
+                        {
+                            string cmdSno = (_conveyor.GetBuffer(bufferIndex).CommandId).ToString().PadLeft(5, '0');
+
+                            if (CMD_MST.GetCmdMstByStoreInForKanBanFinish(cmdSno, out var dataObject, db).ResultCode == DBResult.Success)//搜尋已經顯示於看板上的貨物命令
+                            {
+
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreIn)Buffer Get cmdsno To stop showing KanBan=> {cmdSno}");
+
+                                if (db.TransactionCtrl2(TransactionTypes.Begin).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "(StoreIn)Buffer Get cmdsno To stop showing KanBan, Begin Fail");
+
+                                    return false;
+                                }
+                                if (CMD_MST.UpdateCmdMst(cmdSno, Trace.StoreInKanBanFinish, db).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreIn)Buffer Get cmdsno To stop showing KanBan, Update CmdMst Fail => {cmdSno}");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                if (CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.StoreInKanBanFinsh, db).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreIn)Buffer Get cmdsno To stop showing KanBan, Update CmdMst Fail => {cmdSno}");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                if (db.TransactionCtrl2(TransactionTypes.Commit).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreIn)Buffer Get cmdsno To stop showing KanBan, Commit Fail => {cmdSno}");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                else return true;
+
+                            }
+                            else return false;
+                        }
+                        else return false;
+                    }
+                    else
+                    {
+                        string strEM = "Error: 開啟DB失敗！";
+                        clsWriLog.Log.FunWriTraceLog_CV(strEM);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return false;
+            }
+        }
         public bool FunStoreIn_BcrCheck(int bufferIndex)
         {
             string Item_No = "";
@@ -1275,7 +1480,7 @@ namespace Mirle.DB.Proc
 
                                         if (equCmd[0].CompleteCode == "92")//正常完成
                                         {
-                                            cmdsts = CmdSts.CompleteWaitUpdate;
+                                            cmdsts = CmdSts.Transferring;
                                             cmdabnormal = "NA";
                                             remark = "存取車搬送命令完成";
                                             bflag = true;
@@ -1297,7 +1502,7 @@ namespace Mirle.DB.Proc
                                         }
                                         else if (equCmd[0].CompleteCode == clsEnum.Cmd_Abnormal.FF.ToString()) //地上盤強制完成 FF
                                         {
-                                            cmdsts = CmdSts.CompleteWaitUpdate;
+                                            cmdsts = CmdSts.Transferring;
                                             cmdabnormal = clsEnum.Cmd_Abnormal.FF.ToString();
                                             remark = "存取車地上盤強制完成命令";
                                             bflag=true;
@@ -1309,13 +1514,10 @@ namespace Mirle.DB.Proc
                                             {
                                                 return false;
                                             }
-                                            if (cmdMst.IO_Type != IOtype.Cycle.ToString())
+                                            if (CMD_MST.UpdateCmdMst(equCmd[0].CmdSno, cmdsts, Trace.StoreOutCraneCmdFinish, db) != ExecuteSQLResult.Success)
                                             {
-                                                if (CMD_MST.UpdateCmdMst(equCmd[0].CmdSno, cmdsts, Trace.StoreOutCraneCmdFinish, db) != ExecuteSQLResult.Success)
-                                                {
-                                                    db.TransactionCtrl2(TransactionTypes.Rollback);
-                                                    return false;
-                                                }
+                                               db.TransactionCtrl2(TransactionTypes.Rollback);
+                                               return false;
                                             }
                                             if (CMD_MST.UpdateCmdMstRemarkandAbnormal(equCmd[0].CmdSno, remark, cmdabnormal, db).ResultCode != DBResult.Success)
                                             {
@@ -1355,7 +1557,149 @@ namespace Mirle.DB.Proc
                 return false;
             }
         }
-        
+
+        public bool StoreOut_ShowOnKanBanStart(int bufferIndex)//為了看板程式，更新命令Trace，使其可以開始顯示此命令
+        {
+
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        var _conveyor = ControllerReader.GetCVControllerr().GetConveryor();
+                        if (_conveyor.GetBuffer(bufferIndex).CommandId > 0 && _conveyor.GetBuffer(bufferIndex).Presence)//當貨物到出庫站口，更新命令使看板顯示開始
+                        {
+                            string cmdSno = (_conveyor.GetBuffer(bufferIndex).CommandId).ToString().PadLeft(5, '0');
+
+                            if (CMD_MST.GetCmdMstByStoreOutForKanBan(cmdSno, out var dataObject, db).ResultCode == DBResult.Success)//搜尋尚未顯示於看板上的貨物命令
+                            {
+
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreOut)Buffer Get cmdsno To start showing KanBan=> {cmdSno}");
+
+                                if (db.TransactionCtrl2(TransactionTypes.Begin).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "(StoreOut)Buffer Get cmdsno To start showing KanBan, Begin Fail");
+
+                                    return false;
+                                }
+                                if (CMD_MST.UpdateCmdMst(cmdSno, Trace.StoreOutKanBanStart, db).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreOut)Buffer Get cmdsno To start showing KanBan, Update CmdMst Fail => {cmdSno}");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                if (CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.StoreOutKanBanStart, db).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreOut)Buffer Get cmdsno To start showing KanBan, Update CmdMst Fail => {cmdSno}");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                if (db.TransactionCtrl2(TransactionTypes.Commit).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreOut)Buffer Get cmdsno To start showing KanBan, Commit Fail => {cmdSno}");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                else return true;
+
+                            }
+                            else return false;
+                        }
+                        else return false;
+                    }
+                    else
+                    {
+                        string strEM = "Error: 開啟DB失敗！";
+                        clsWriLog.Log.FunWriTraceLog_CV(strEM);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return false;
+            }
+        }
+
+        public bool StoreOut_ShowOnKanBanFinish(int bufferIndex)//為了看板程式，更新命令Trace，使其可以停止顯示此命令
+        {
+
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        var _conveyor = ControllerReader.GetCVControllerr().GetConveryor();
+                        if (_conveyor.GetBuffer(bufferIndex).CommandId > 0 && !_conveyor.GetBuffer(bufferIndex).Presence)//當貨物被搬離的時候，更新命令為回報結束的狀態
+                        {
+                            string cmdSno = (_conveyor.GetBuffer(bufferIndex).CommandId).ToString().PadLeft(5, '0');
+
+                            if (CMD_MST.GetCmdMstByStoreOutForKanBanFinish(cmdSno, out var dataObject, db).ResultCode == DBResult.Success)//搜尋已經顯示於看板上的貨物命令
+                            {
+
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreOut)Buffer Get cmdsno To stop showing KanBan=> {cmdSno}");
+
+                                if (db.TransactionCtrl2(TransactionTypes.Begin).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "(StoreOut)Buffer Get cmdsno To stop showing KanBan, Begin Fail");
+
+                                    return false;
+                                }
+                                if (CMD_MST.UpdateCmdMst(cmdSno,CmdSts.CompleteWaitUpdate ,Trace.StoreOutKanBanFinish, db).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreOut)Buffer Get cmdsno To stop showing KanBan, Update CmdMst Fail => {cmdSno}");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                if (CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.StoreOutKanBanFinish, db).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreOut)Buffer Get cmdsno To stop showing KanBan, Update CmdMst Fail => {cmdSno}");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                if (db.TransactionCtrl2(TransactionTypes.Commit).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreOut)Buffer Get cmdsno To stop showing KanBan, Commit Fail => {cmdSno}");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                else return true;
+
+                            }
+                            else return false;
+                        }
+                        else return false;
+                    }
+                    else
+                    {
+                        string strEM = "Error: 開啟DB失敗！";
+                        clsWriLog.Log.FunWriTraceLog_CV(strEM);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return false;
+            }
+        }
+
         #endregion StoreOut
 
         #region Other

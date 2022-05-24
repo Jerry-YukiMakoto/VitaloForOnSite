@@ -44,9 +44,9 @@ namespace Mirle.ASRS.WCS.Controller
                 var blockInfos1 = GetBlockInfos(CV_Config2.MPLCNo);
                 foreach (var block in blockInfos1)
                 {
-                    smWriter.AddDataBlock(new SMDataBlockInt32(block.DeviceRange, $@"Global\{block.SharedMemoryName}"));
+                    smWriter1.AddDataBlock(new SMDataBlockInt32(block.DeviceRange, $@"Global\{block.SharedMemoryName}"));
                 }
-                _converyor2 = new Conveyors.Conveyor(smWriter, CV_Config2.MPLCNo);
+                _converyor2 = new Conveyors.Conveyor(smWriter1, CV_Config2.MPLCNo);
             }
             else if(OnlyMonitor)//監控模式
             {

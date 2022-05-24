@@ -5,10 +5,15 @@
         public const string StoreOutWriteCraneCmdToCV = "11";
         public const string StoreOutCreateCraneCmd = "12";
         public const string StoreOutCraneCmdFinish = "13";
+        public const string StoreOutKanBanStart = "14";
+        public const string StoreOutKanBanFinish = "15";
 
         public const string StoreInWriteCmdToCV = "21";
-        public const string StoreInCreateCraneCmd = "22";
-        public const string StoreInCraneCmdFinish = "23";
+        public const string StoreInKanBanStart = "22";
+        public const string StoreInKanBanFinish = "23";
+        public const string StoreInCreateCraneCmd = "24";
+        public const string StoreInCraneCmdFinish = "25";
+        public const string StoreInReject = "29";
 
         public const string EmptyStoreOutWriteCraneCmdToCV = "31";
         public const string EmptyStoreOutCreateCraneCmd = "32";
