@@ -3,7 +3,7 @@ variables:
   NUGET_MIRLE_STANDARD_LIBRARIES: http://gitlab.mirle.com.tw/api/v4/projects/93/packages/nuget/index.json
   NUGET_READ_USER: nugetreadtoken
   NUGET_READ_TOKEN: 92Y2UyyFoaUHyMzSZBaD
-  SONAR_KEY: test
+  SONAR_KEY: AQ0.AQB.T1JUMAK0.WCS
   PACKAGE_REGISTRY_URL: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic
 
 
