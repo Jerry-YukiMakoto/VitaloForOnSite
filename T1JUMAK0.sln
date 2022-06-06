@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.32112.339
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.ASRS.Conveyors", "Mirle.ASRS.Conveyors\Mirle.ASRS.Conveyors.csproj", "{20D2F96E-F248-4E52-9F5A-F1CF028F8E98}"
 EndProject
@@ -14,8 +14,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.DB.Fun", "Mirle.DB.Fun\Mirle.DB.Fun.csproj", "{C40166B0-0F5D-4535-94A7-699764A59A83}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCS_API_Client", "WCS_API_Client\WCS_API_Client.csproj", "{C09122BB-250E-4FE2-9880-1620A2B6CEA4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Testing\Test.csproj", "{EB6A4DE5-8B07-4295-B71E-46F2A4F2DEBE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.Def.T1JUMAK0", "Mirle.Def.U0NXMA30\Mirle.Def.T1JUMAK0.csproj", "{E6F732FE-3905-49A7-B2CF-B4FA79C2DC5D}"
 EndProject
@@ -121,10 +119,6 @@ Global
 		{C09122BB-250E-4FE2-9880-1620A2B6CEA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C09122BB-250E-4FE2-9880-1620A2B6CEA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C09122BB-250E-4FE2-9880-1620A2B6CEA4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EB6A4DE5-8B07-4295-B71E-46F2A4F2DEBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EB6A4DE5-8B07-4295-B71E-46F2A4F2DEBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EB6A4DE5-8B07-4295-B71E-46F2A4F2DEBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EB6A4DE5-8B07-4295-B71E-46F2A4F2DEBE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E6F732FE-3905-49A7-B2CF-B4FA79C2DC5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E6F732FE-3905-49A7-B2CF-B4FA79C2DC5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6F732FE-3905-49A7-B2CF-B4FA79C2DC5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
