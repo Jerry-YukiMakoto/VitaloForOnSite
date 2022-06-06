@@ -96,9 +96,20 @@ namespace Mirle.DB.Object.Service
         {
             try
             {
+                string Stn_No = "";
+
                 for (int bufferIndex = 31; bufferIndex <= 41; bufferIndex += 10)//出庫口buffer:A11-02 和 A11-04
                 {
-                    clsDB_Proc.GetDB_Object().GetProcess().StoreOut_ShowOnKanBanStart(bufferIndex);
+                    if (bufferIndex == 31)
+                    {
+                        Stn_No = StnNo.A11_02;
+                    }
+                    else
+                    {
+                        Stn_No = StnNo.A11_04;
+                    }
+
+                    clsDB_Proc.GetDB_Object().GetProcess().StoreOut_ShowOnKanBanStart(bufferIndex,Stn_No);
                 }
             }
             catch (Exception ex)
@@ -113,9 +124,19 @@ namespace Mirle.DB.Object.Service
         {
             try
             {
+                string Stn_No = "";
+
                 for (int bufferIndex = 31; bufferIndex <= 41; bufferIndex += 10)//出庫口buffer:A11-02 和 A11-04
                 {
-                    clsDB_Proc.GetDB_Object().GetProcess().StoreOut_ShowOnKanBanFinish(bufferIndex);
+                    if (bufferIndex == 31)
+                    {
+                        Stn_No = StnNo.A11_02;
+                    }
+                    else
+                    {
+                        Stn_No = StnNo.A11_04;
+                    }
+                    clsDB_Proc.GetDB_Object().GetProcess().StoreOut_ShowOnKanBanFinish(bufferIndex,Stn_No);
                 }
             }
             catch (Exception ex)

@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\Mvs_Mst.cs" />
     <Compile Include="DataAccess\CVCalarm.cs" />
     <Compile Include="DataAccess\ItmMst.cs" />
     <Compile Include="DataAccess\CmdDtl.cs" />

@@ -24,6 +24,7 @@ namespace Mirle.DB.Proc
         private Fun.clsEqu_Cmd EQU_CMD = new Fun.clsEqu_Cmd();
         private Fun.clsLocMst Loc_Mst = new Fun.clsLocMst();
         private Fun.clsItmMst Itm_Mst = new Fun.clsItmMst();
+        private Fun.clsMsv_Mst MVS_Mst = new Fun.clsMsv_Mst();
         private Fun.clsSno SNO = new Fun.clsSno();
         private Fun.clsLocMst LocMst = new Fun.clsLocMst();
         private Fun.clsProc proc;
@@ -831,6 +832,13 @@ namespace Mirle.DB.Proc
                                     db.TransactionCtrl2(TransactionTypes.Rollback);
                                     return false;
                                 }
+                                if (MVS_Mst.ShowMVS(cmdSno, StnNo.A11_06, db).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreIn)Buffer Get cmdsno To show KanBan, Update MVS_MST Fail => {cmdSno}");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
                                 if (db.TransactionCtrl2(TransactionTypes.Commit).ResultCode != DBResult.Success)
                                 {
                                     clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreIn)Buffer Get cmdsno To show KanBan, Commit Fail => {cmdSno}");
@@ -898,6 +906,13 @@ namespace Mirle.DB.Proc
                                 if (CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.StoreInKanBanFinsh, db).ResultCode != DBResult.Success)
                                 {
                                     clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreIn)Buffer Get cmdsno To stop showing KanBan, Update CmdMst Fail => {cmdSno}");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                if (MVS_Mst.ShowMVS(" ", StnNo.A11_06, db).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreIn)Buffer Get cmdsno To stop showing KanBan, Update MVS_MST Fail => {cmdSno}");
 
                                     db.TransactionCtrl2(TransactionTypes.Rollback);
                                     return false;
@@ -1558,7 +1573,7 @@ namespace Mirle.DB.Proc
             }
         }
 
-        public bool StoreOut_ShowOnKanBanStart(int bufferIndex)//為了看板程式，更新命令Trace，使其可以開始顯示此命令
+        public bool StoreOut_ShowOnKanBanStart(int bufferIndex,string Stn_no)//為了看板程式，更新命令Trace，使其可以開始顯示此命令
         {
 
             try
@@ -1598,6 +1613,13 @@ namespace Mirle.DB.Proc
                                     db.TransactionCtrl2(TransactionTypes.Rollback);
                                     return false;
                                 }
+                                if(MVS_Mst.ShowMVS(cmdSno,Stn_no,db).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreOut)Buffer Get cmdsno To start showing KanBan, Update MVS_MST Fail => {cmdSno}");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
                                 if (db.TransactionCtrl2(TransactionTypes.Commit).ResultCode != DBResult.Success)
                                 {
                                     clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreOut)Buffer Get cmdsno To start showing KanBan, Commit Fail => {cmdSno}");
@@ -1629,7 +1651,7 @@ namespace Mirle.DB.Proc
             }
         }
 
-        public bool StoreOut_ShowOnKanBanFinish(int bufferIndex)//為了看板程式，更新命令Trace，使其可以停止顯示此命令
+        public bool StoreOut_ShowOnKanBanFinish(int bufferIndex,string Stn_no)//為了看板程式，更新命令Trace，使其可以停止顯示此命令
         {
 
             try
@@ -1665,6 +1687,13 @@ namespace Mirle.DB.Proc
                                 if (CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.StoreOutKanBanFinish, db).ResultCode != DBResult.Success)
                                 {
                                     clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreOut)Buffer Get cmdsno To stop showing KanBan, Update CmdMst Fail => {cmdSno}");
+
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                if (MVS_Mst.ShowMVS(" ", Stn_no, db).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreOut)Buffer Get cmdsno To stop showing KanBan, Update MVS_MST Fail => {cmdSno}");
 
                                     db.TransactionCtrl2(TransactionTypes.Rollback);
                                     return false;
