@@ -75,7 +75,7 @@ namespace Mirle.DB.Proc
             string cmdPlt_Id;
             bool cmdcheck = false;
             string Plt_Qty="";
-            string Item_Grp = "";
+            string Item_Type = "";
             bool IsCycle=false;
             try
             {
@@ -138,7 +138,7 @@ namespace Mirle.DB.Proc
 
                             if(Itm_Mst.GetItmMstDtl(Item_No, out var dataObject3,db).ResultCode==DBResult.Success)
                             {
-                                Item_Grp = dataObject3[0].Item_Grp;//根據料號的群組決定儲位的放法
+                                Item_Type = dataObject3[0].Item_Type;//根據料號的群組決定儲位的放法
                             }else
                             {
                                 cmdcheck=false;
@@ -199,7 +199,7 @@ namespace Mirle.DB.Proc
 
                                     if (IsHigh == 1)
                                     {
-                                        if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, Item_Grp, out var dataObject2, db).ResultCode == DBResult.Success)
+                                        if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, Item_Type, out var dataObject2, db).ResultCode == DBResult.Success)
                                         {
                                             clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find High Loc succeess => {cmdSno}");
                                             New_Loc = dataObject2[0].Loc;
@@ -213,10 +213,15 @@ namespace Mirle.DB.Proc
                                     }
                                     else
                                     {
-                                        if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No, Item_Grp, out var dataObject2, db).ResultCode == DBResult.Success)
+                                        if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No, Item_Type, out var dataObject2, db).ResultCode == DBResult.Success)
                                         {
                                             clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Loc succeess => {cmdSno}");
                                             New_Loc = dataObject2[0].Loc;
+                                        }
+                                        else if(Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, Item_Type, out var dataObject4, db).ResultCode == DBResult.Success)
+                                        {
+                                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Loc succeess => {cmdSno}");
+                                            New_Loc = dataObject4[0].Loc;
                                         }
                                         else
                                         {
@@ -458,6 +463,11 @@ namespace Mirle.DB.Proc
                                             , $"Find Loc success");
                                         New_Loc = dataObject2[0].Loc;
                                     }
+                                    else if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, Item_Type, out var dataObject4, db).ResultCode == DBResult.Success)
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Loc succeess");
+                                        New_Loc = dataObject4[0].Loc;
+                                    }
                                     else
                                     {
                                         clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
@@ -481,7 +491,7 @@ namespace Mirle.DB.Proc
                                 stuCmdMst.Prty = "5";
                                 stuCmdMst.StnNo = sStnNo;
                                 stuCmdMst.CmdMode = "1";
-                                stuCmdMst.IoType = "1";
+                                stuCmdMst.IoType = "13";
                                 stuCmdMst.WhId = "ASRS";
                                 stuCmdMst.EquNo = Equ_No;
                                 stuCmdMst.Loc = sStnNo;
@@ -502,7 +512,7 @@ namespace Mirle.DB.Proc
                                 }
                                 stuCmdDtl.Cmd_Sno = stuCmdMst.CmdSno;
                                 stuCmdDtl.Plt_Qty = Convert.ToDouble(Qty_Plt);
-                                stuCmdDtl.Trn_Qty = 0;
+                                stuCmdDtl.Trn_Qty = /*0;*/Convert.ToDouble(Qty_Plt);
                                 stuCmdDtl.Loc = New_Loc;
                                 stuCmdDtl.In_Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                                 stuCmdDtl.Item_No = Item_No;
@@ -559,6 +569,9 @@ namespace Mirle.DB.Proc
                                     db.TransactionCtrl2(TransactionTypes.Rollback);
                                     return false;
                                 }
+
+                                path = StoreInfindpathbyEquNo(Convert.ToInt32(Equ_No));//根據線別選入庫站
+
                                 WritePlccheck = _conveyor.GetBuffer(bufferIndex).WritePathChabgeNotice(path).Result;
                                 Result = WritePlccheck;
                                 if (Result != true)//寫入路徑
@@ -1668,6 +1681,7 @@ namespace Mirle.DB.Proc
 
                             if (CMD_MST.GetCmdMstByStoreOutForKanBanFinish(cmdSno, out var dataObject, db).ResultCode == DBResult.Success)//搜尋已經顯示於看板上的貨物命令
                             {
+                                string cmdmode= dataObject[0].Cmd_Mode;
 
                                 clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreOut)Buffer Get cmdsno To stop showing KanBan=> {cmdSno}");
 
@@ -1677,12 +1691,25 @@ namespace Mirle.DB.Proc
 
                                     return false;
                                 }
-                                if (CMD_MST.UpdateCmdMst(cmdSno,CmdSts.CompleteWaitUpdate ,Trace.StoreOutKanBanFinish, db).ResultCode != DBResult.Success)
+                                if (cmdmode != "3")
                                 {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreOut)Buffer Get cmdsno To stop showing KanBan, Update CmdMst Fail => {cmdSno}");
+                                    if (CMD_MST.UpdateCmdMst(cmdSno, CmdSts.CompleteWaitUpdate, Trace.StoreOutKanBanFinish, db).ResultCode != DBResult.Success)
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreOut)Buffer Get cmdsno To stop showing KanBan, Update CmdMst Fail => {cmdSno}");
 
-                                    db.TransactionCtrl2(TransactionTypes.Rollback);
-                                    return false;
+                                        db.TransactionCtrl2(TransactionTypes.Rollback);
+                                        return false;
+                                    }
+                                }
+                                else
+                                {
+                                    if (CMD_MST.UpdateCmdMst(cmdSno, CmdSts.Transferring, Trace.StoreOutKanBanFinish, db).ResultCode != DBResult.Success)
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreOut)Buffer Get cmdsno To stop showing KanBan, Update CmdMst Fail => {cmdSno}");
+
+                                        db.TransactionCtrl2(TransactionTypes.Rollback);
+                                        return false;
+                                    }
                                 }
                                 if (CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.StoreOutKanBanFinish, db).ResultCode != DBResult.Success)
                                 {

@@ -7,6 +7,7 @@ using Mirle.MPLC;
 using Mirle.MPLC.MCProtocol;
 using Mirle.ASRS.Conveyor.U2NMMA30.Service;
 using Mirle.ASRS.Converyor.View;
+using WCS;
 
 namespace Mirle.ASRS.Conveyors.View
 {
@@ -141,6 +142,48 @@ namespace Mirle.ASRS.Conveyors.View
             pnlHP.Visible = false;
             pnlUpper.Visible = true;
             pnlLower.Visible = false;
+        }
+
+        private Form Buffer_Restart;
+        private void buffer_Restart(object sender, EventArgs e)
+        {
+            if (Buffer_Restart == null)
+            {
+                Buffer_Restart = new frmBuffer_Initial(_conveyor);
+                Buffer_Restart.FormClosed += new FormClosedEventHandler(bufferrestart_FormClosed);
+                Buffer_Restart.Show();
+            }
+            else
+            {
+                Buffer_Restart.BringToFront();
+            }
+        }
+
+        private void bufferrestart_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (Buffer_Restart != null)
+                Buffer_Restart = null;
+        }
+
+        private Form Buffer_Restart2;
+        private void buffer_Restart2(object sender, EventArgs e)
+        {
+            if (Buffer_Restart2 == null)
+            {
+                Buffer_Restart2 = new frmBuffer_Initial2(_conveyor2);
+                Buffer_Restart2.FormClosed += new FormClosedEventHandler(bufferrestart_FormClosed2);
+                Buffer_Restart2.Show();
+            }
+            else
+            {
+                Buffer_Restart2.BringToFront();
+            }
+        }
+
+        private void bufferrestart_FormClosed2(object sender, FormClosedEventArgs e)
+        {
+            if (Buffer_Restart2 != null)
+                Buffer_Restart2 = null;
         }
     }
 }
