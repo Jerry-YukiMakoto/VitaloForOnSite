@@ -9,11 +9,9 @@ using Mirle.Grid.U0NXMA30;
 using Mirle.Structure;
 using Mirle.Structure.Info;
 using System.Linq;
-using WCS_API_Client.ReportInfo;
 using System.Data;
 using Mirle.ASRS.WCS.Model.PLCDefinitions;
 using Mirle.ASRS.WCS.Model.DataAccess;
-using Mirle.CENS.U0NXMA30;
 
 namespace Mirle.DB.Proc
 {

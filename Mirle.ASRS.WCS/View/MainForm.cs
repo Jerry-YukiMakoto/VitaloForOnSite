@@ -5,12 +5,10 @@ using Mirle.Grid.U0NXMA30;
 using Mirle.DB.Object;
 using Unity;
 using Mirle.Logger;
-using WCS_API_Client.View;
 using Mirle.ASRS.Close.Program;
 using System.Threading;
 using Mirle.ASRS.WCS.Library;
 using Mirle.ASRS.WCS.Controller;
-using Mirle.CENS.U0NXMA30;
 using Mirle.Def;
 using Mirle.DataBase;
 using Mirle.ASRS.Conveyors.View;
@@ -99,27 +97,6 @@ namespace Mirle.ASRS.WCS.View
 
         #region 側邊欄buttons
 
-        private MainTestForm mainTest;
-        private void btnSendAPITest_Click(object sender, EventArgs e)
-        {
-            if (mainTest == null)
-            {
-                mainTest = new MainTestForm(clInitSys.WmsApi_Config);
-                mainTest.TopMost = true;
-                mainTest.FormClosed += new FormClosedEventHandler(funMainTest_FormClosed);
-                mainTest.Show();
-            }
-            else
-            {
-                mainTest.BringToFront();
-            }
-        }
-
-        private void funMainTest_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            if (mainTest != null)
-                mainTest = null;
-        }
 
         private CraneSpeedMaintainView StockerSpeed;
         private void btnCraneSpeedMaintain_Click(object sender, EventArgs e)
