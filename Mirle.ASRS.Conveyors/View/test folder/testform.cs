@@ -17,6 +17,7 @@ namespace Mirle.ASRS.WCS.Controller
     public partial class Form1 : Form
     {
         private IMPLCProvider _test;
+        private IMPLCProvider _test2;
 
         public Form1()
         {
@@ -31,6 +32,14 @@ namespace Mirle.ASRS.WCS.Controller
                 smWriter.AddDataBlock(new SMDataBlockInt32(block.DeviceRange, $@"Global\{block.SharedMemoryName}"));
             }
             testsimulator(smWriter);
+
+            var smWriter1 = new SMReadWriter();
+            var blockInfos1 = GetBlockInfos2();
+            foreach (var block in blockInfos1)
+            {
+                smWriter1.AddDataBlock(new SMDataBlockInt32(block.DeviceRange, $@"Global\{block.SharedMemoryName}"));
+            }
+            testsimulator2(smWriter1);
         }
 
         private IEnumerable<BlockInfo> GetBlockInfos()
@@ -39,9 +48,20 @@ namespace Mirle.ASRS.WCS.Controller
             yield return new BlockInfo(new DDeviceRange("D3101", "D3590"), "Write", 1);
         }
 
+        private IEnumerable<BlockInfo> GetBlockInfos2()
+        {
+            yield return new BlockInfo(new DDeviceRange("D101", "D380"), "Read2", 2);
+            yield return new BlockInfo(new DDeviceRange("D3101", "D3360"), "Write2", 3);
+        }
+
         private void testsimulator(IMPLCProvider test)
         {
             _test = test;
+        }
+
+        private void testsimulator2(IMPLCProvider test)
+        {
+            _test2 = test;
         }
 
         private void buttonwrite(object sender, EventArgs e)
@@ -252,6 +272,217 @@ namespace Mirle.ASRS.WCS.Controller
             showwritevalue.Text += $",{_test.ReadWord("D" + (3101 + text1 * 10+4))}";
             showwritevalue.Text += $",{_test.ReadWord("D" + (3101 + text1 * 10 + 9))}";
             showwritevalue.Text += $",{_test.ReadWord("D" + (3101 + text1 * 10 + 8))}";
+
+        }
+
+        private void buttonwrite2(object sender, EventArgs e)
+        {
+            int text1 = 0;
+            if (textBox1.Text != "")
+            {
+                text1 = int.Parse(textBox1.Text);
+            }
+
+            int text2 = 0;
+            if (textBox2.Text != "")
+            {
+                text2 = int.Parse(textBox2.Text);
+            }
+
+            int text3 = 0;
+            if (textBox3.Text != "")
+            {
+                text3 = int.Parse(textBox3.Text);
+            }
+
+            int text4 = 0;
+            if (textBox4.Text != "")
+            {
+                text4 = int.Parse(textBox4.Text);
+            }
+
+            int text5 = 0;
+            if (textBox5.Text != "")
+            {
+                text5 = int.Parse(textBox5.Text);
+            }
+            int text6 = 0;
+            if (textBox6.Text != "")
+            {
+                text6 = int.Parse(textBox6.Text);
+            }
+            int text7 = 0;
+            if (textBox7.Text != "")
+            {
+                text7 = int.Parse(textBox7.Text);
+            }
+
+            if (CMD.Checked)
+            {
+                _test2.WriteWord("D" + (101 + text1 * 10), text2);
+            }
+            if (BCRItem_Name.Checked)
+            {
+                _test2.WriteWord("D591", text3);
+                _test2.WriteWord("D592", text4);
+                _test2.WriteWord("D593", text5);
+                _test2.WriteWord("D594", text6);
+                _test2.WriteWord("D595", text7);
+                _test2.WriteWord("D596", text3);
+                _test2.WriteWord("D597", text4);
+                _test2.WriteWord("D598", text5);
+                _test2.WriteWord("D599", text6);
+                _test2.WriteWord("D600", text7);
+            }
+            if (BCRPlt_Id.Checked)
+            {
+                _test2.WriteWord("D606", text3);
+                _test2.WriteWord("D607", text4);
+                _test2.WriteWord("D608", text5);
+                _test2.WriteWord("D609", text6);
+                _test2.WriteWord("D610", text7);
+            }
+            if (BCRLotID.Checked)
+            {
+                _test2.WriteWord("D601", text3);
+                _test2.WriteWord("D602", text4);
+                _test2.WriteWord("D603", text5);
+                _test2.WriteWord("D604", text6);
+                _test2.WriteWord("D605", text7);
+            }
+            if (BCRItem_Name.Checked)
+            {
+                _test2.WriteWord("D611", text3);
+                _test2.WriteWord("D612", text4);
+                _test2.WriteWord("D613", text5);
+                _test2.WriteWord("D614", text6);
+                _test2.WriteWord("D615", text7);
+                _test2.WriteWord("D616", text3);
+                _test2.WriteWord("D617", text4);
+                _test2.WriteWord("D618", text5);
+                _test2.WriteWord("D619", text6);
+                _test2.WriteWord("D620", text7);
+            }
+            if (BCRPlt_Id.Checked)
+            {
+                _test2.WriteWord("D626", text3);
+                _test2.WriteWord("D627", text4);
+                _test2.WriteWord("D628", text5);
+                _test2.WriteWord("D629", text6);
+                _test2.WriteWord("D630", text7);
+            }
+            if (BCRLotID.Checked)
+            {
+                _test2.WriteWord("D621", text3);
+                _test2.WriteWord("D622", text4);
+                _test2.WriteWord("D623", text5);
+                _test2.WriteWord("D624", text6);
+                _test2.WriteWord("D625", text7);
+            }
+            if (BCRItem_Name.Checked)
+            {
+                _test2.WriteWord("D361", text3);
+                _test2.WriteWord("D362", text4);
+                _test2.WriteWord("D363", text5);
+                _test2.WriteWord("D364", text6);
+                _test2.WriteWord("D365", text7);
+                _test2.WriteWord("D366", text3);
+                _test2.WriteWord("D367", text4);
+                _test2.WriteWord("D368", text5);
+                _test2.WriteWord("D369", text6);
+                _test2.WriteWord("D370", text7);
+            }
+            if (BCRPlt_Id.Checked)
+            {
+                _test2.WriteWord("D371", text3);
+                _test2.WriteWord("D372", text4);
+                _test2.WriteWord("D373", text5);
+                _test2.WriteWord("D374", text6);
+                _test2.WriteWord("D375", text7);
+            }
+            if (BCRLotID.Checked)
+            {
+                _test2.WriteWord("D376", text3);
+                _test2.WriteWord("D377", text4);
+                _test2.WriteWord("D378", text5);
+                _test2.WriteWord("D379", text6);
+                _test2.WriteWord("D380", text7);
+            }
+            if (mode.Checked)
+            {
+                _test2.WriteWord("D" + (101 + text1 * 10 + 1), text2);
+            }
+            if (Auto.Checked)
+            {
+                _test2.SetBitOn("D" + (101 + text1 * 10 + 2.5));
+            }
+            if (presence.Checked)
+            {
+                _test2.SetBitOn("D" + (101 + text1 * 10 + 2.7));
+            }
+            if (initialnotice.Checked)
+            {
+                _test2.WriteWord("D" + (101 + text1 * 10 + 9), text2);
+            }
+            if (ready.Checked)
+            {
+                _test2.WriteWord("D" + (101 + text1 * 10 + 3), text2);
+            }
+            if (path.Checked)
+            {
+                _test2.WriteWord("D" + (101 + text1 * 10 + 4), text2);
+            }
+            if (switchmode.Checked)
+            {
+                _test2.WriteWord("D" + (101 + text1 * 10 + 8), text2);
+            }
+            if (Inmode.Checked)
+            {
+                _test2.SetBitOn("D" + (101 + text1 * 10 + 2.1));
+            }
+            if (Outmode.Checked)
+            {
+                _test2.SetBitOn("D" + (101 + text1 * 10 + 2.2));
+            }
+            if (error.Checked)
+            {
+                _test2.SetBitOn("D" + (101 + text1 * 10 + 6.1));
+            }
+            if (emptynumber.Checked)
+            {
+                _test2.WriteWord("D" + (101 + text1 * 10 + 7), text2);
+            }
+            if (errorOff.Checked)
+            {
+                _test2.SetBitOff("D" + (101 + text1 * 10 + 6.1));
+            }
+            if (InmodeOFF.Checked)
+            {
+                _test2.SetBitOff("D" + (101 + text1 * 10 + 2.1));
+            }
+            if (outmodeoff.Checked)
+            {
+                _test2.SetBitOff("D" + (101 + text1 * 10 + 2.2));
+            }
+            if (Autooff.Checked)
+            {
+                _test2.SetBitOff("D" + (101 + text1 * 10 + 2.5));
+            }
+            if (presenceOFF.Checked)
+            {
+                _test2.SetBitOff("D" + (101 + text1 * 10 + 2.7));
+            }
+            if (BCRNotice.Checked)
+            {
+                _test2.WriteWord("D" + (101 + text1 * 10 + 3), text2);
+            }
+
+
+            showwritevalue.Text = $",{_test2.ReadWord("D" + (3101 + text1 * 10))}";
+            showwritevalue.Text += $",{_test2.ReadWord("D" + (3101 + text1 * 10 + 1))}";
+            showwritevalue.Text += $",{_test2.ReadWord("D" + (3101 + text1 * 10 + 4))}";
+            showwritevalue.Text += $",{_test2.ReadWord("D" + (3101 + text1 * 10 + 9))}";
+            showwritevalue.Text += $",{_test2.ReadWord("D" + (3101 + text1 * 10 + 8))}";
 
         }
     }

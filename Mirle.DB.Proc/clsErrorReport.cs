@@ -2,8 +2,6 @@
 using Mirle.Def;
 using Mirle.DataBase;
 using Mirle.ASRS.WCS.Model.DataAccess;
-using Mirle.CENS.U0NXMA30;
-using WCS_API_Client.ReportInfo;
 using Mirle.ASRS.WCS.Model.PLCDefinitions;
 using System.Timers;
 using System.Collections.Generic;
