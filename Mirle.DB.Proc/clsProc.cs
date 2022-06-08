@@ -510,7 +510,7 @@ namespace Mirle.DB.Proc
                                 }
                                 stuCmdDtl.Cmd_Sno = stuCmdMst.CmdSno;
                                 stuCmdDtl.Plt_Qty = Convert.ToDouble(Qty_Plt);
-                                stuCmdDtl.Trn_Qty = /*0;*/Convert.ToDouble(Qty_Plt);
+                                stuCmdDtl.Trn_Qty = Convert.ToDouble(Qty_Plt);
                                 stuCmdDtl.Loc = New_Loc;
                                 stuCmdDtl.In_Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                                 stuCmdDtl.Item_No = Item_No;
