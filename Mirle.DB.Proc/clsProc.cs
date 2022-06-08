@@ -309,6 +309,7 @@ namespace Mirle.DB.Proc
                             }
                             else
                             {
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "OutSource WithDraw Start");
                                 path = 31;//退板
                                 var WritePlccheck = _conveyor.GetBuffer(bufferIndex).WritePathChabgeNotice(path).Result;
                                 bool Result = WritePlccheck;
@@ -323,7 +324,7 @@ namespace Mirle.DB.Proc
                                 Result = WritePlccheck;
                                 if (Result != true)//通知讀取完成
                                 {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC BCR-Notice Fail");
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC With Draw BCR-Notice Fail");
 
                                     db.TransactionCtrl2(TransactionTypes.Rollback);
                                     return false;
@@ -600,6 +601,8 @@ namespace Mirle.DB.Proc
                             }
                             else //當搜尋不到料號資料，執行退版動作
                             {
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "Produce WithDraw Start");
+
                                 cmdSno = SNO.FunGetSeqNo(clsEnum.enuSnoType.CMDSNO, db);
                                 if (cmdSno == "" || cmdSno == "00000")
                                 {

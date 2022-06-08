@@ -103,10 +103,10 @@
     <Compile Include="View\frmBuffer_Initial.Designer.cs">
       <DependentUpon>frmBuffer_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\testform.cs">
+    <Compile Include="View\test folder\testform.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\testform.Designer.cs">
+    <Compile Include="View\test folder\testform.Designer.cs">
       <DependentUpon>testform.cs</DependentUpon>
     </Compile>
     <Compile Include="View\MainView.cs">
@@ -140,7 +140,7 @@
     <EmbeddedResource Include="View\MainView.resx">
       <DependentUpon>MainView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\testform.resx">
+    <EmbeddedResource Include="View\test folder\testform.resx">
       <DependentUpon>testform.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
