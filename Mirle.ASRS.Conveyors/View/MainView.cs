@@ -149,7 +149,7 @@ namespace Mirle.ASRS.Conveyors.View
         {
             if (Buffer_Restart == null)
             {
-                Buffer_Restart = new frmBuffer_Initial(_conveyor);
+                Buffer_Restart = new frmBuffer_Initial(_conveyor,1);
                 Buffer_Restart.FormClosed += new FormClosedEventHandler(bufferrestart_FormClosed);
                 Buffer_Restart.Show();
             }
@@ -170,7 +170,7 @@ namespace Mirle.ASRS.Conveyors.View
         {
             if (Buffer_Restart2 == null)
             {
-                Buffer_Restart2 = new frmBuffer_Initial2(_conveyor2);
+                Buffer_Restart2 = new frmBuffer_Initial(_conveyor2,2);
                 Buffer_Restart2.FormClosed += new FormClosedEventHandler(bufferrestart_FormClosed2);
                 Buffer_Restart2.Show();
             }
