@@ -91,7 +91,7 @@ namespace Mirle.DB.Proc
                         int sBufferIndex = e.BufferIndex;
                         string hAlarmBit = e.AlarmBit.ToString("X");
 
-                        clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, "Alarm bit on");
+                        clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, "PLC 1 Alarm bit on");
                         if (CVC_Alarm.GetAlarmCVCInfo(1,sBufferIndex, hAlarmBit, out var alarminfo, db) == GetDataResult.Success)
                         {
                             sAlarmDesc = alarminfo[0].AlarmDesc;
@@ -110,11 +110,11 @@ namespace Mirle.DB.Proc
                             {
                                 if (CVC_Alarm.InsertNewAlarmCVCLog(alarminfo[0].AlarmCode, db) == ExecuteSQLResult.Success)
                                 {
-                                    clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Write alarm log:[{sAlarmDesc}]");
+                                    clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"PLC 1 Write alarm log:[{sAlarmDesc}]");
                                 }
                                 else
                                 {
-                                    clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Write alarm log:[{sAlarmDesc}] fail.");
+                                    clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"PLC 1 Write alarm log:[{sAlarmDesc}] fail.");
                                 }
                             }
                         }
@@ -156,7 +156,7 @@ namespace Mirle.DB.Proc
                         int sBufferIndex = e.BufferIndex;
                         string hAlarmBit = e.AlarmBit.ToString("X");
 
-                        clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, "Alarm bit off");
+                        clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, "PLC 1 Alarm bit off");
                         if (CVC_Alarm.GetAlarmCVCInfo(1,sBufferIndex, hAlarmBit, out var alarminfo, db) == GetDataResult.Success)
                         {
                             sAlarmDesc = alarminfo[0].AlarmDesc;
