@@ -261,6 +261,56 @@ namespace Mirle.DB.Fun
             }
         }
 
+        public bool InsertSTSEquCmd(int bufferIndex, string bufferName, int craneNo, string cmdSno, string source, string destination, int priority, SqlServer db)
+        {
+            try
+            {
+                var _conveyor = ControllerReader.GetCVControllerr().GetConveryor();
+                if (destination.Length != 7)
+                {
+                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Check destination Fail, Please Check => {cmdSno}, " +
+                        $"{craneNo}, " +
+                        $"{source}, " +
+                        $"{destination}");
+
+                    return false;
+                }
+
+                destination = EquStoreInDestination(destination);
+
+                if (CheckExecutionEquCmd(bufferIndex, bufferName, craneNo, cmdSno, EquCmdMode.StnToStn, source, destination, db) == false)
+                {
+                    if (InsertEquCmd(craneNo, cmdSno, ((int)EquCmdMode.StnToStn).ToString(), source, destination, priority, db) == ExecuteSQLResult.Success)
+                    {
+                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert Equ Cmd => {cmdSno}, " +
+                        $"{craneNo}, " +
+                        $"{source}, " +
+                        $"{destination}");
+                        return true;
+                    }
+                    else
+                    {
+                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert Equ Cmd Fail => {cmdSno}, " +
+                        $"{craneNo}, " +
+                        $"{source}, " +
+                        $"{destination}");
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return false;
+            }
+        }
+
         public ExecuteSQLResult DeleteEquCmd(string cmdSno, SqlServer db)
         {
             string sql = "UPDATE EQUCMD ";

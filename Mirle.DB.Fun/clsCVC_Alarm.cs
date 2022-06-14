@@ -21,40 +21,42 @@ namespace Mirle.DB.Fun
                 return db.GetData(sql, out dataObject);
             
         }
-        public GetDataResult GetAlarmCVCInfo(int bufferIndex, string alarmBit, out DataObject<AlarmCVCInfo> dataObject, SqlServer db)
+        public GetDataResult GetAlarmCVCInfo(int PLCNO,int bufferIndex, string alarmBit, out DataObject<AlarmCVCInfo> dataObject, SqlServer db)
         {
 
                 string sql = $"SELECT * FROM ALARMCVCDEF ";
                 sql += $"WHERE BUFFERID='{bufferIndex}' ";
                 sql += $"AND ALARMCVCBIT='{alarmBit}' ";
-                return db.GetData(sql, out dataObject);
+                sql += $"AND PLCNO='{PLCNO}' ";
+            return db.GetData(sql, out dataObject);
             
         }
+
         public GetDataResult GetAlarmLog(string alarmCvcCode, out DataObject<AlarmCVCLog> dataObject, SqlServer db)
         {
 
-                string sql = $"SELECT * FROM ALARMCVCLOG ";
-                sql += $"WHERE ALARMCVCCODE='{alarmCvcCode}' ";
-                sql += $"AND CLRDT in (NULL,'')  ";
-                return db.GetData(sql, out dataObject);
+            string sql = $"SELECT * FROM ALARMCVCLOG ";
+            sql += $"WHERE ALARMCVCCODE='{alarmCvcCode}' ";
+            sql += $"AND CLRDT in (NULL,'')  ";
+            return db.GetData(sql, out dataObject);
         }
 
         public ExecuteSQLResult InsertNewAlarmCVCLog(string AlarmCVCcode, SqlServer db)
         {
- 
-                string sql = "INSERT INTO ALARMCVCLOG (";
-                sql += "STRDT, ";
-                sql += "ALARMCVCCODE, ";
-                sql += "CLRDT, ";
-                sql += "TOTALSECS ";
-                sql += ") VALUES (";
-                sql += $"'{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}', ";
-                sql += $"'{AlarmCVCcode}', ";
-                sql += $"'', ";
-                sql += $"'{1}'";
-                sql += $")";
-                return db.ExecuteSQL2(sql);
-            
+
+            string sql = "INSERT INTO ALARMCVCLOG (";
+            sql += "STRDT, ";
+            sql += "ALARMCVCCODE, ";
+            sql += "CLRDT, ";
+            sql += "TOTALSECS ";
+            sql += ") VALUES (";
+            sql += $"'{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}', ";
+            sql += $"'{AlarmCVCcode}', ";
+            sql += $"'', ";
+            sql += $"'{1}'";
+            sql += $")";
+            return db.ExecuteSQL2(sql);
+
         }
 
         public ExecuteSQLResult UpdateAlarmLogEnd(string strDT, string alarmCVCCode, string clrDT, string secs, SqlServer db)

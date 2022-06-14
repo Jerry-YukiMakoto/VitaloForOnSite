@@ -96,6 +96,16 @@ namespace Mirle.DB.Fun
             return db.GetData(sql, out dataObject);
         }
 
+        public GetDataResult GetCmdMstByStoreInAbnormalCrane(string cmdsno, out DataObject<CmdMst> dataObject, SqlServer db) //同時處理盤點入庫
+        {
+            string sql = "SELECT * FROM Cmd_Mst ";
+            sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockIn}', '{clsConstValue.CmdMode.Cycle}') ";
+            sql += $"AND Cmd_Sno='{cmdsno}' ";
+            sql += $"AND TRACE IN ('{Trace.StoreInAbnormalCreateEquCmd}') ";
+            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
+            return db.GetData(sql, out dataObject);
+        }
+
         public GetDataResult GetCmdMstAndDtlCheck(string cmdsno, out DataObject<CmdMst> dataObject, SqlServer db) //檢查BCR資料用途
         {
             string sql = "SELECT * FROM Cmd_Mst as A full join Cmd_Dtl as B On A.Cmd_Sno=B.Cmd_Sno ";
@@ -241,6 +251,17 @@ namespace Mirle.DB.Fun
             string sql = "UPDATE Cmd_Mst  ";
             sql += $"SET TRACE='{trace}',";
             sql += $"Remark=''";
+            sql += $"WHERE Cmd_Sno='{cmdSno}' ";
+            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
+            return db.ExecuteSQL2(sql);
+        }
+
+        public ExecuteSQLResult UpdateCmdMstForAbnormal(string cmdSno,string cmdmode, string trace, SqlServer db)
+        {
+            string sql = "UPDATE Cmd_Mst  ";
+            sql += $"SET TRACE='{trace}',";
+            sql += $"Remark='異常排出開始',";
+            sql += $"Cmd_Mode='{cmdmode}'";
             sql += $"WHERE Cmd_Sno='{cmdSno}' ";
             sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
             return db.ExecuteSQL2(sql);

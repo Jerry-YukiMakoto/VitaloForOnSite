@@ -62,6 +62,16 @@ namespace Mirle.DB.Fun
             return db.ExecuteSQL2(sql);
         }
 
+        public ExecuteSQLResult UpdateStoreInLocMstAbnormal(string Loc, SqlServer db)
+        {
+            string sql = "UPDATE Loc_Mst ";
+            sql += $"SET Loc_sts='N', ";
+            sql += $"TRN_DATE='{DateTime.Now:yyyy-MM-dd HH:mm:ss}', ";
+            sql += $"TRN_USER='WCS' ";
+            sql += $" WHERE LOC='{Loc}' ";
+            return db.ExecuteSQL2(sql);
+        }
+
         public string GetLoc(string BoxID, SqlServer db)
         {
             DataTable dtTmp = new DataTable();

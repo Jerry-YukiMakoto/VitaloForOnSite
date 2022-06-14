@@ -25,5 +25,8 @@
 
         public const string LoctoLocReady = "51";
         public const string LoctoLocReadyFinish = "52";
+
+        public const string StoreInAbnormalCreateEquCmd = "61";
+        public const string StoreInAbnormalCreateEquCmdstart = "62";
     }
 }

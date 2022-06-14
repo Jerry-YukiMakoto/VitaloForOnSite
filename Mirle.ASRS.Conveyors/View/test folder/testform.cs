@@ -66,6 +66,10 @@ namespace Mirle.ASRS.WCS.Controller
 
         private void buttonwrite(object sender, EventArgs e)
         {
+            int PLCINDEX=101;
+
+            int PCIndex=3101;
+
             int text1 = 0;
             if (textBox1.Text != "")
             {
@@ -199,84 +203,88 @@ namespace Mirle.ASRS.WCS.Controller
             }
             if (mode.Checked)
             {
-                _test.WriteWord("D" + (101 + text1 * 10 + 1), text2);
+                _test.WriteWord("D" + (PLCINDEX + text1 * 10 + 1), text2);
             }
             if (Auto.Checked)
             {
-                _test.SetBitOn("D" + (101 + text1 * 10 + 2.5));
+                _test.SetBitOn("D" + (PLCINDEX + text1 * 10 + 2.5));
             }
             if (presence.Checked)
             {
-                _test.SetBitOn("D" + (101 + text1 * 10 + 2.7));
+                _test.SetBitOn("D" + (PLCINDEX + text1 * 10 + 2.7));
             }
             if (initialnotice.Checked)
             {
-                _test.WriteWord("D" + (101 + text1 * 10 + 9), text2);
+                _test.WriteWord("D" + (PLCINDEX + text1 * 10 + 9), text2);
             }
             if (ready.Checked)
             {
-                _test.WriteWord("D" + (101 + text1 * 10 + 3), text2);
+                _test.WriteWord("D" + (PLCINDEX + text1 * 10 + 3), text2);
             }
             if (path.Checked)
             {
-                _test.WriteWord("D" + (101 + text1 * 10 + 4), text2);
+                _test.WriteWord("D" + (PLCINDEX + text1 * 10 + 4), text2);
             }
             if (switchmode.Checked)
             {
-                _test.WriteWord("D" + (101 + text1 * 10 + 8), text2);
+                _test.WriteWord("D" + (PLCINDEX + text1 * 10 + 8), text2);
             }
             if (Inmode.Checked)
             {
-                _test.SetBitOn("D" + (101 + text1 * 10 + 2.1));
+                _test.SetBitOn("D" + (PLCINDEX + text1 * 10 + 2.1));
             }
             if (Outmode.Checked)
             {
-                _test.SetBitOn("D" + (101 + text1 * 10 + 2.2));
+                _test.SetBitOn("D" + (PLCINDEX + text1 * 10 + 2.2));
             }
             if (error.Checked)
             {
-                _test.SetBitOn("D" + (101 + text1 * 10 + 6.1));
+                _test.SetBitOn("D" + (PLCINDEX + text1 * 10 + 6.1));
             }
             if (emptynumber.Checked)
             {
-                _test.WriteWord("D" + (101 + text1 * 10 + 7), text2);
+                _test.WriteWord("D" + (PLCINDEX + text1 * 10 + 7), text2);
             }
             if (errorOff.Checked)
             {
-                _test.SetBitOff("D" + (101 + text1 * 10 + 6.1));
+                _test.SetBitOff("D" + (PLCINDEX + text1 * 10 + 6.1));
             }
             if (InmodeOFF.Checked)
             {
-                _test.SetBitOff("D" + (101 + text1 * 10 + 2.1));
+                _test.SetBitOff("D" + (PLCINDEX + text1 * 10 + 2.1));
             }
             if (outmodeoff.Checked)
             {
-                _test.SetBitOff("D" + (101 + text1 * 10 + 2.2));
+                _test.SetBitOff("D" + (PLCINDEX + text1 * 10 + 2.2));
             }
             if (Autooff.Checked)
             {
-                _test.SetBitOff("D" + (101 + text1 * 10 + 2.5));
+                _test.SetBitOff("D" + (PLCINDEX + text1 * 10 + 2.5));
             }
             if (presenceOFF.Checked)
             {
-                _test.SetBitOff("D" + (101 + text1 * 10 + 2.7));
+                _test.SetBitOff("D" + (PLCINDEX + text1 * 10 + 2.7));
             }
             if (BCRNotice.Checked)
             {
-                _test.WriteWord("D" + (101 + text1 * 10 + 3), text2);
+                _test.WriteWord("D" + (PLCINDEX + text1 * 10 + 3), text2);
             }
 
 
-            showwritevalue.Text = $",{_test.ReadWord("D" + (3101 + text1 * 10))}";
-            showwritevalue.Text += $",{_test.ReadWord("D" + (3101 + text1 * 10+1))}";
-            showwritevalue.Text += $",{_test.ReadWord("D" + (3101 + text1 * 10+4))}";
-            showwritevalue.Text += $",{_test.ReadWord("D" + (3101 + text1 * 10 + 9))}";
-            showwritevalue.Text += $",{_test.ReadWord("D" + (3101 + text1 * 10 + 8))}";
+            showwritevalue.Text = $",{_test.ReadWord("D" + (PCIndex + text1 * 10))}";
+            showwritevalue.Text += $",{_test.ReadWord("D" + (PCIndex + text1 * 10+1))}";
+            showwritevalue.Text += $",{_test.ReadWord("D" + (PCIndex + text1 * 10+4))}";
+            showwritevalue.Text += $",{_test.ReadWord("D" + (PCIndex + text1 * 10 + 9))}";
+            showwritevalue.Text += $",{_test.ReadWord("D" + (PCIndex + text1 * 10 + 8))}";
 
         }
 
         private void buttonwrite2(object sender, EventArgs e)
         {
+            int PLCINDEX = 101;
+
+            int PCIndex = 3101;
+
             int text1 = 0;
             if (textBox1.Text != "")
             {
@@ -410,79 +418,79 @@ namespace Mirle.ASRS.WCS.Controller
             }
             if (mode.Checked)
             {
-                _test2.WriteWord("D" + (101 + text1 * 10 + 1), text2);
+                _test2.WriteWord("D" + (PLCINDEX + text1 * 10 + 1), text2);
             }
             if (Auto.Checked)
             {
-                _test2.SetBitOn("D" + (101 + text1 * 10 + 2.5));
+                _test2.SetBitOn("D" + (PLCINDEX + text1 * 10 + 2.5));
             }
             if (presence.Checked)
             {
-                _test2.SetBitOn("D" + (101 + text1 * 10 + 2.7));
+                _test2.SetBitOn("D" + (PLCINDEX + text1 * 10 + 2.7));
             }
             if (initialnotice.Checked)
             {
-                _test2.WriteWord("D" + (101 + text1 * 10 + 9), text2);
+                _test2.WriteWord("D" + (PLCINDEX + text1 * 10 + 9), text2);
             }
             if (ready.Checked)
             {
-                _test2.WriteWord("D" + (101 + text1 * 10 + 3), text2);
+                _test2.WriteWord("D" + (PLCINDEX + text1 * 10 + 3), text2);
             }
             if (path.Checked)
             {
-                _test2.WriteWord("D" + (101 + text1 * 10 + 4), text2);
+                _test2.WriteWord("D" + (PLCINDEX + text1 * 10 + 4), text2);
             }
             if (switchmode.Checked)
             {
-                _test2.WriteWord("D" + (101 + text1 * 10 + 8), text2);
+                _test2.WriteWord("D" + (PLCINDEX + text1 * 10 + 8), text2);
             }
             if (Inmode.Checked)
             {
-                _test2.SetBitOn("D" + (101 + text1 * 10 + 2.1));
+                _test2.SetBitOn("D" + (PLCINDEX + text1 * 10 + 2.1));
             }
             if (Outmode.Checked)
             {
-                _test2.SetBitOn("D" + (101 + text1 * 10 + 2.2));
+                _test2.SetBitOn("D" + (PLCINDEX + text1 * 10 + 2.2));
             }
             if (error.Checked)
             {
-                _test2.SetBitOn("D" + (101 + text1 * 10 + 6.1));
+                _test2.SetBitOn("D" + (PLCINDEX + text1 * 10 + 6.1));
             }
             if (emptynumber.Checked)
             {
-                _test2.WriteWord("D" + (101 + text1 * 10 + 7), text2);
+                _test2.WriteWord("D" + (PLCINDEX + text1 * 10 + 7), text2);
             }
             if (errorOff.Checked)
             {
-                _test2.SetBitOff("D" + (101 + text1 * 10 + 6.1));
+                _test2.SetBitOff("D" + (PLCINDEX + text1 * 10 + 6.1));
             }
             if (InmodeOFF.Checked)
             {
-                _test2.SetBitOff("D" + (101 + text1 * 10 + 2.1));
+                _test2.SetBitOff("D" + (PLCINDEX + text1 * 10 + 2.1));
             }
             if (outmodeoff.Checked)
             {
-                _test2.SetBitOff("D" + (101 + text1 * 10 + 2.2));
+                _test2.SetBitOff("D" + (PLCINDEX + text1 * 10 + 2.2));
             }
             if (Autooff.Checked)
             {
-                _test2.SetBitOff("D" + (101 + text1 * 10 + 2.5));
+                _test2.SetBitOff("D" + (PLCINDEX + text1 * 10 + 2.5));
             }
             if (presenceOFF.Checked)
             {
-                _test2.SetBitOff("D" + (101 + text1 * 10 + 2.7));
+                _test2.SetBitOff("D" + (PLCINDEX + text1 * 10 + 2.7));
             }
             if (BCRNotice.Checked)
             {
-                _test2.WriteWord("D" + (101 + text1 * 10 + 3), text2);
+                _test2.WriteWord("D" + (PLCINDEX + text1 * 10 + 3), text2);
             }
 
 
-            showwritevalue.Text = $",{_test2.ReadWord("D" + (3101 + text1 * 10))}";
-            showwritevalue.Text += $",{_test2.ReadWord("D" + (3101 + text1 * 10 + 1))}";
-            showwritevalue.Text += $",{_test2.ReadWord("D" + (3101 + text1 * 10 + 4))}";
-            showwritevalue.Text += $",{_test2.ReadWord("D" + (3101 + text1 * 10 + 9))}";
-            showwritevalue.Text += $",{_test2.ReadWord("D" + (3101 + text1 * 10 + 8))}";
+            showwritevalue.Text = $",{_test2.ReadWord("D" + (PCIndex + text1 * 10))}";
+            showwritevalue.Text += $",{_test2.ReadWord("D" + (PCIndex + text1 * 10 + 1))}";
+            showwritevalue.Text += $",{_test2.ReadWord("D" + (PCIndex + text1 * 10 + 4))}";
+            showwritevalue.Text += $",{_test2.ReadWord("D" + (PCIndex + text1 * 10 + 9))}";
+            showwritevalue.Text += $",{_test2.ReadWord("D" + (PCIndex + text1 * 10 + 8))}";
 
         }
     }
