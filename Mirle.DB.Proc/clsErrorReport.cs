@@ -79,70 +79,16 @@ namespace Mirle.DB.Proc
 
         private void Buffer_OnAlarmTrigger(object sender, AlarmEventArgs e)
         {
-            try
-            {
-                using (var db = clsGetDB.GetDB(_config))
-                {
-                    int iRet = clsGetDB.FunDbOpen(db);
-                    if (iRet == DBResult.Success)
-                    {
-
-                        string sAlarmDesc = "";
-                        int sBufferIndex = e.BufferIndex;
-                        string hAlarmBit = e.AlarmBit.ToString("X");
-
-                        clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, "PLC 1 Alarm bit on");
-                        if (CVC_Alarm.GetAlarmCVCInfo(1,sBufferIndex, hAlarmBit, out var alarminfo, db) == GetDataResult.Success)
-                        {
-                            sAlarmDesc = alarminfo[0].AlarmDesc;
-                            try
-                            {
-                                _CVCalarm.Add(sAlarmDesc, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                            }
-                            catch (Exception ex)
-                            {
-                                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
-                                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
-                            }
-
-                            if (!_onlyMonitor)//監控模式下
-                            {
-                                if (CVC_Alarm.InsertNewAlarmCVCLog(alarminfo[0].AlarmCode, db) == ExecuteSQLResult.Success)
-                                {
-                                    clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"PLC 1 Write alarm log:[{sAlarmDesc}]");
-                                }
-                                else
-                                {
-                                    clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"PLC 1 Write alarm log:[{sAlarmDesc}] fail.");
-                                }
-                            }
-                        }
-                        else
-                        {
-                            clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Get alarm info fail. (Alarm Bit:{hAlarmBit})");
-                        }
-
-                    }
-                    else
-                    {
-                        string strEM = "Error: 開啟DB失敗！";
-                        clsWriLog.Log.FunWriTraceLog_CV(strEM);
-
-                    }
-                }
-
-            }
-            catch (Exception ex)
-            {
-                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
-                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
-            }
+            AlarmTrigger(sender, e, 1);
         }
 
 
         private void Buffer_OnAlarmClear(object sender, AlarmEventArgs e)
+        {
+            Alarmclear(sender, e,1);
+        }
+
+        private void Alarmclear(object sender , AlarmEventArgs e,int PLCNO)
         {
             try
             {
@@ -157,7 +103,7 @@ namespace Mirle.DB.Proc
                         string hAlarmBit = e.AlarmBit.ToString("X");
 
                         clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, "PLC 1 Alarm bit off");
-                        if (CVC_Alarm.GetAlarmCVCInfo(1,sBufferIndex, hAlarmBit, out var alarminfo, db) == GetDataResult.Success)
+                        if (CVC_Alarm.GetAlarmCVCInfo(PLCNO, sBufferIndex, hAlarmBit, out var alarminfo, db) == GetDataResult.Success)
                         {
                             sAlarmDesc = alarminfo[0].AlarmDesc;
                             try
@@ -213,7 +159,7 @@ namespace Mirle.DB.Proc
                         {
                             clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Get alarm info fail. (Alarm Bit:{hAlarmBit})");
                         }
-                        
+
 
                     }
                     else
@@ -233,7 +179,7 @@ namespace Mirle.DB.Proc
             }
         }
 
-        private void Buffer_OnAlarmTrigger2(object sender, AlarmEventArgs e)
+        private void AlarmTrigger(object sender, AlarmEventArgs e,int PLCNO)
         {
             try
             {
@@ -248,7 +194,7 @@ namespace Mirle.DB.Proc
                         string hAlarmBit = e.AlarmBit.ToString("X");
 
                         clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, "Alarm bit on");
-                        if (CVC_Alarm.GetAlarmCVCInfo(2, sBufferIndex, hAlarmBit, out var alarminfo, db) == GetDataResult.Success)
+                        if (CVC_Alarm.GetAlarmCVCInfo(PLCNO, sBufferIndex, hAlarmBit, out var alarminfo, db) == GetDataResult.Success)
                         {
                             sAlarmDesc = alarminfo[0].AlarmDesc;
                             try
@@ -297,96 +243,15 @@ namespace Mirle.DB.Proc
             }
         }
 
+        private void Buffer_OnAlarmTrigger2(object sender, AlarmEventArgs e)
+        {
+            AlarmTrigger(sender, e, 2);
+        }
+
 
         private void Buffer_OnAlarmClear2(object sender, AlarmEventArgs e)
         {
-            try
-            {
-                using (var db = clsGetDB.GetDB(_config))
-                {
-                    int iRet = clsGetDB.FunDbOpen(db);
-                    if (iRet == DBResult.Success)
-                    {
-
-                        string sAlarmDesc = "";
-                        int sBufferIndex = e.BufferIndex;
-                        string hAlarmBit = e.AlarmBit.ToString("X");
-
-                        clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, "Alarm bit off");
-                        if (CVC_Alarm.GetAlarmCVCInfo(2, sBufferIndex, hAlarmBit, out var alarminfo, db) == GetDataResult.Success)
-                        {
-                            sAlarmDesc = alarminfo[0].AlarmDesc;
-                            try
-                            {
-                                _CVCalarm.Remove(sAlarmDesc);
-                            }
-                            catch (Exception ex)
-                            {
-                                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
-                                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
-                            }
-
-                            if (!_onlyMonitor)//監控模式下
-                            {
-                                if (CVC_Alarm.GetAlarmLog(alarminfo[0].AlarmCode, out var alarmlog, db) == ExecuteSQLResult.Success)
-                                {
-                                    foreach (var alog in alarmlog.Data)
-                                    {
-                                        if (!DateTime.TryParse(alog.StrDt, out DateTime starttmp))
-                                        {
-                                            clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Get start time fail. ({alarminfo[0].AlarmCode})");
-                                            continue;
-                                        }
-                                        String date;
-                                        date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                                        if (!DateTime.TryParse(date, out DateTime cleartmp))
-                                        {
-                                            clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Get clear time fail. ({alarminfo[0].AlarmCode})");
-                                            continue;
-                                        }
-                                        TimeSpan secs = cleartmp - starttmp;
-
-                                        if (CVC_Alarm.UpdateAlarmLogEnd(alog.StrDt, alarminfo[0].AlarmCode, date, Convert.ToInt32(secs.TotalSeconds).ToString(), db) == ExecuteSQLResult.Success)
-                                        {
-                                            clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Update alarm log success. ({alarminfo[0].AlarmCode})");
-                                        }
-                                        else
-                                        {
-                                            clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Update alarm log fail. ({alarminfo[0].AlarmCode})");
-                                        }
-
-                                    }
-                                }
-                                else
-                                {
-                                    clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Get alarm log:[{sAlarmDesc}] fail.");
-                                }
-                            }
-
-                        }
-                        else
-                        {
-                            clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Get alarm info fail. (Alarm Bit:{hAlarmBit})");
-                        }
-
-
-                    }
-                    else
-                    {
-                        string strEM = "Error: 開啟DB失敗！";
-                        clsWriLog.Log.FunWriTraceLog_CV(strEM);
-
-                    }
-                }
-
-            }
-            catch (Exception ex)
-            {
-                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
-                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
-            }
+            Alarmclear(sender, e, 2);
         }
 
         private void Converyor_OnSystemAlarmTrigger(object sender, AlarmEventArgs e)
