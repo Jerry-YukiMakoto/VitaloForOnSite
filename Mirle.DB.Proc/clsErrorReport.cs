@@ -119,39 +119,7 @@ namespace Mirle.DB.Proc
 
                             if (!_onlyMonitor)//監控模式下
                             {
-                                if (CVC_Alarm.GetAlarmLog(alarminfo[0].AlarmCode, out var alarmlog, db) == ExecuteSQLResult.Success)
-                                {
-                                    foreach (var alog in alarmlog.Data)
-                                    {
-                                        if (!DateTime.TryParse(alog.StrDt, out DateTime starttmp))
-                                        {
-                                            clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Get start time fail. ({alarminfo[0].AlarmCode})");
-                                            continue;
-                                        }
-                                        String date;
-                                        date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                                        if (!DateTime.TryParse(date, out DateTime cleartmp))
-                                        {
-                                            clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Get clear time fail. ({alarminfo[0].AlarmCode})");
-                                            continue;
-                                        }
-                                        TimeSpan secs = cleartmp - starttmp;
-
-                                        if (CVC_Alarm.UpdateAlarmLogEnd(alog.StrDt, alarminfo[0].AlarmCode, date, Convert.ToInt32(secs.TotalSeconds).ToString(), db) == ExecuteSQLResult.Success)
-                                        {
-                                            clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Update alarm log success. ({alarminfo[0].AlarmCode})");
-                                        }
-                                        else
-                                        {
-                                            clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Update alarm log fail. ({alarminfo[0].AlarmCode})");
-                                        }
-
-                                    }
-                                }
-                                else
-                                {
-                                    clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Get alarm log:[{sAlarmDesc}] fail.");
-                                }
+                                clear(alarminfo, db, hAlarmBit, e);
                             }
 
                         }
@@ -318,41 +286,7 @@ namespace Mirle.DB.Proc
 
                         if (CVC_Alarm.GetSystemAlarmInfo(hAlarmBit, out var alarminfo, db) == GetDataResult.Success)
                         {
-                            if (CVC_Alarm.GetAlarmLog(alarminfo[0].AlarmCode, out var alarmlog, db) == GetDataResult.Success)
-                            {
-                                foreach (var alog in alarmlog.Data)
-                                {
-                                    if (!DateTime.TryParse(alog.StrDt, out DateTime starttmp))
-                                    {
-
-                                        clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Get start time fail. ({alarminfo[0].AlarmCode})");
-                                        continue;
-                                    }
-                                    String date;
-                                    date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                                    if (!DateTime.TryParse(date, out DateTime cleartmp))
-                                    {
-
-                                        clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Get clear time fail. ({alarminfo[0].AlarmCode})");
-                                        continue;
-                                    }
-
-                                    TimeSpan secs = cleartmp - starttmp;
-
-                                    if (CVC_Alarm.UpdateAlarmLogEnd(alog.StrDt, alarminfo[0].AlarmCode, date, Convert.ToInt32(secs.TotalSeconds).ToString(), db) == ExecuteSQLResult.Success)
-                                    {
-                                        clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Update alarm log success. ({alarminfo[0].AlarmCode})");
-                                    }
-                                    else
-                                    {
-                                        clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Update alarm log fail. ({alarminfo[0].AlarmCode})");
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Can't find alarm log.");
-                            }
+                            clear(alarminfo, db, hAlarmBit, e);
                         }
                         else
                         {
@@ -373,6 +307,45 @@ namespace Mirle.DB.Proc
                 int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
                 var cmet = System.Reflection.MethodBase.GetCurrentMethod();
                 clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+            }
+        }
+
+        private void clear(DataObject<AlarmCVCInfo> alarminfo,SqlServer db,string hAlarmBit,AlarmEventArgs e)
+        {
+            if (CVC_Alarm.GetAlarmLog(alarminfo[0].AlarmCode, out var alarmlog, db) == GetDataResult.Success)
+            {
+                foreach (var alog in alarmlog.Data)
+                {
+                    if (!DateTime.TryParse(alog.StrDt, out DateTime starttmp))
+                    {
+
+                        clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Get start time fail. ({alarminfo[0].AlarmCode})");
+                        continue;
+                    }
+                    String date;
+                    date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                    if (!DateTime.TryParse(date, out DateTime cleartmp))
+                    {
+
+                        clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Get clear time fail. ({alarminfo[0].AlarmCode})");
+                        continue;
+                    }
+
+                    TimeSpan secs = cleartmp - starttmp;
+
+                    if (CVC_Alarm.UpdateAlarmLogEnd(alog.StrDt, alarminfo[0].AlarmCode, date, Convert.ToInt32(secs.TotalSeconds).ToString(), db) == ExecuteSQLResult.Success)
+                    {
+                        clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Update alarm log success. ({alarminfo[0].AlarmCode})");
+                    }
+                    else
+                    {
+                        clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Update alarm log fail. ({alarminfo[0].AlarmCode})");
+                    }
+                }
+            }
+            else
+            {
+                clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Can't find alarm log.");
             }
         }
 
