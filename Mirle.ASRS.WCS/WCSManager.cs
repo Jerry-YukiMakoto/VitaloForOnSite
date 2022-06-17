@@ -40,7 +40,6 @@ namespace Mirle.ASRS.WCS
             _storeInProcess.Elapsed += StoreInProcess;
             _otherProcess.Elapsed += OtherProcess;
             
-            ErrorReport();
         }
 
         public void Start()
@@ -154,9 +153,11 @@ namespace Mirle.ASRS.WCS
 
                     clsOther.clsL2L.Other_LocToLocfinish();
 
-                    //clsOther.clsEmptyPallets.EmptyStoreOut_A1_CreateEquCmd();
+                    //clsSTSabnormal.StoreAbnormalSTS_WriteCV();
 
-                    //clsOther.clsEmptyPallets.EmptyStoreOut_EquCmdFinish();
+                    //clsSTSabnormal.StoreAbnormalSTS_CrateCrane();
+
+                    //clsSTSabnormal.StoreAbnormalSTS_Finish();
                 }
             }
             catch (Exception ex)

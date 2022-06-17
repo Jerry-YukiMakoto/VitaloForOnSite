@@ -518,7 +518,7 @@ namespace Mirle.DB.Proc
                                 stuCmdDtl.Item_No = Item_No;
                                 stuCmdDtl.Lot_No = Lot_No;
                                 stuCmdDtl.Plt_Id = Plt_Id;
-                                stuCmdDtl.Company_ID = "";
+                                stuCmdDtl.Company_ID = "ASRS";
                                 stuCmdDtl.Item_Desc = Item_Desc;
                                 stuCmdDtl.Uom = Item_Unit;
                                 stuCmdDtl.Created_by = "WCS";
@@ -1197,27 +1197,49 @@ namespace Mirle.DB.Proc
                             }
                             else
                             {
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"LOC and EQU Abnormal, Start Update Command to 退版  => {cmdSno}");
+
                                 if (db.TransactionCtrl2(TransactionTypes.Begin).ResultCode != DBResult.Success)
                                 {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "Create Crane STS Abnormal Command, Begin Fail");
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "Create  STS Abnormal Command, Begin Fail");
 
                                     return false;
                                 }
-                                //if (Loc_Mst.UpdateStoreInLocMstAbnormal(dest, db).ResultCode != DBResult.Success)
-                                //{
-                                //    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Create Crane STS Abnormal Command, Update CmdMst Fail => {cmdSno}");
-                                //    db.TransactionCtrl2(TransactionTypes.Rollback);
-                                //    return false;
-                                //}
-                                //if (CMD_MST.UpdateCmdMst(cmdSno,"2", Trace.StoreInAbnormalCreateEquCmd, db).ResultCode != DBResult.Success)
-                                //{
-                                //    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Create Crane STS Abnormal Command, Update CmdMst Fail => {cmdSno}");
-                                //    db.TransactionCtrl2(TransactionTypes.Rollback);
-                                //    return false;
-                                //}
+                                if (Loc_Mst.UpdateStoreInLocMstAbnormal(dest, db).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Create STS Abnormal Command, Update LocMst Fail => {cmdSno}");
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                string abnormal_IOtype="";//退版分成生產入庫退版和單據入庫退版
+                                if(IOType==IOtype.ProduceStoreIn.ToString())
+                                {
+                                    abnormal_IOtype = IOtype.abnormalOUT.ToString();
+                                }
+                                else if(IOType==IOtype.ErpStoreIn.ToString())
+                                {
+                                    abnormal_IOtype = IOtype.ERPtktabnormalOUT.ToString();
+                                }
+                                else
+                                {
+                                    abnormal_IOtype = IOtype.abnormalOUT.ToString();
+                                }
+
+                                if (CMD_MST.UpdateCmdMstabnormal(cmdSno, "2", Trace.StoreInAbnormaStartd,abnormal_IOtype, db).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Create STS Abnormal Command, Update CmdMst Fail => {cmdSno}");
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                if (CMD_MST.UpdateCmdDtlabnormal(cmdSno, db).ResultCode != DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Create STS Abnormal Command, Update CmdDtl Fail => {cmdSno}");
+                                    db.TransactionCtrl2(TransactionTypes.Rollback);
+                                    return false;
+                                }
                                 if (db.TransactionCtrl2(TransactionTypes.Commit).ResultCode != DBResult.Success)
                                 {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Create Crane STS Abnormal Command, Commit Fail => {cmdSno}");
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Create STS Abnormal Command, Commit Fail => {cmdSno}");
 
                                     db.TransactionCtrl2(TransactionTypes.Rollback);
                                     return false;
@@ -1245,124 +1267,336 @@ namespace Mirle.DB.Proc
             }
         }
 
-        //public bool FunStoreOut_AbNormalCreateEquCmd(int bufferIndex)
-        //{
-        //    try
-        //    {
-        //        using (var db = clsGetDB.GetDB(_config))
-        //        {
-        //            int iRet = clsGetDB.FunDbOpen(db);
-        //            if (iRet == DBResult.Success)
-        //            {
-        //                var _conveyor = ControllerReader.GetCVControllerr().GetConveryor2();
+        public bool FunSTS_Abonormal_WritePLC(int bufferIndex)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        var _conveyor2 = ControllerReader.GetCVControllerr().GetConveryor2();
+                        var _conveyor = ControllerReader.GetCVControllerr().GetConveryor();
+                        string cmd_Sno = _conveyor2.GetBuffer(bufferIndex).CommandId.ToString().PadLeft(5, '0');
 
-        //                string cmdSno = (_conveyor.GetBuffer(bufferIndex).CommandId).ToString().PadLeft(5, '0');
-        //                if (CMD_MST.GetCmdMstByStoreInAbnormalCrane(cmdSno, out var dataObject, db).ResultCode == DBResult.Success)
-        //                {
+                        if (CMD_MST.GetCmdMstBySTSCrane(cmd_Sno, out var dataObject, db).ResultCode == DBResult.Success)
+                        {
+                            cmd_Sno = dataObject[0].Cmd_Sno;
+                            string source = CranePortNo.Floor2;
+                            int Cmd_Mode = Convert.ToInt32(dataObject[0].Cmd_Mode);
 
-        //                    #region//根據buffer狀態更新命令
-        //                    if (_conveyor.GetBuffer(bufferIndex).Auto != true)
-        //                    {
-        //                        CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.NotAutoMode, db);
-        //                        return false;
-        //                    }
-        //                    if (_conveyor.GetBuffer(bufferIndex).InMode != true)
-        //                    {
-        //                        CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.NotInMode, db);
-        //                        return false;
-        //                    }
-        //                    if (_conveyor.GetBuffer(bufferIndex).Error == true)
-        //                    {
-        //                        CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.BufferError, db);
-        //                        return false;
-        //                    }
-        //                    if (_conveyor.GetBuffer(bufferIndex).Presence != true)
-        //                    {
-        //                        CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.PresenceNotExist, db);
-        //                        return false;
-        //                    }
-        //                    #endregion
+                            #region//站口狀態確認
+                            if (_conveyor.GetBuffer(bufferIndex).Auto != true)
+                            {
+                                CMD_MST.UpdateCmdMstRemark(cmd_Sno, Remark.NotAutoMode, db);
+                                return false;
+                            }
+                            if (_conveyor.GetBuffer(bufferIndex).CommandId >0 )
+                            {
+                                CMD_MST.UpdateCmdMstRemark(cmd_Sno, Remark.CmdLeftOver, db);
+                                return false;
+                            }
+                            if (_conveyor.GetBuffer(bufferIndex).OutMode != true)
+                            {
+                                CMD_MST.UpdateCmdMstRemark(cmd_Sno, Remark.NotOutMode, db);
+                                return false;
+                            }
+                            if (_conveyor.GetBuffer(bufferIndex).Error == true)
+                            {
+                                CMD_MST.UpdateCmdMstRemark(cmd_Sno, Remark.BufferError, db);
+                                return false;
+                            }
+                            if (_conveyor.GetBuffer(bufferIndex).Presence == true)
+                            {
+                                CMD_MST.UpdateCmdMstRemark(cmd_Sno, Remark.PresenceExist, db);
+                                return false;
+                            }
+                            #endregion
 
-        //                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Ready Abnormal Crane CMDn=> {cmdSno}");
 
-        //                    string IOType = dataObject[0].IO_Type;
-        //                    string dest = "";
-        //                    string Cmd_mode = dataObject[0].Cmd_Mode;
-        //                    int EquNo = 0;
-        //                    bool EquCheck = true;//檢查到站口的貨物是否符合命令號的目的地，不符合退板處理
+                            clsWriLog.StoreOutLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Ready Receive STS Command => {cmd_Sno}, " +
+                                   $"{Cmd_Mode}");
 
-        //                    if (bufferIndex == 1)
-        //                    {
-        //                        EquNo = 1;
-        //                    }
-        //                    else if (bufferIndex == 3)
-        //                    {
-        //                        EquNo = 2;
-        //                    }
-        //                    else if (bufferIndex == 5)
-        //                    {
-        //                        EquNo = 3;
-        //                    }
-        //                    else if (bufferIndex == 7)
-        //                    {
-        //                        EquNo = 4;
-        //                    }
-        //                    else if (bufferIndex == 9)
-        //                    {
-        //                        EquNo = 5;
-        //                    }
-        //                    else if (bufferIndex == 11)
-        //                    {
-        //                        EquNo = 6;
-        //                    }
+                            if (db.TransactionCtrl2(TransactionTypes.Begin).ResultCode != DBResult.Success)
+                            {
+                                clsWriLog.StoreOutLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Begin Fail => {cmd_Sno}");
+                                return false;
+                            }
+                            if (CMD_MST.UpdateCmdMstTransferring(cmd_Sno, Trace.StoreInAbnormalWritePLC, db).ResultCode == DBResult.Success)
+                            {
+                                clsWriLog.StoreOutLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Upadte STS cmd Success => {cmd_Sno}, " +
+                                $"{Cmd_Mode}");
+                            }
+                            else
+                            {
+                                clsWriLog.StoreOutLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Upadte cmd fail => {cmd_Sno}, " +
+                                $"{Cmd_Mode}");
+                                db.TransactionCtrl2(TransactionTypes.Rollback);
+                                return false;
+                            }
+                            var WritePlccheck = _conveyor.GetBuffer(bufferIndex).WriteCommandIdAsync(cmd_Sno, Cmd_Mode).Result;//寫入命令和模式//確認寫入PLC的方法是否正常運作，傳回結果和有異常的時候的訊息
+                            bool Result = WritePlccheck;
+                            if (Result != true)//寫入命令和模式
+                            {
+                                clsWriLog.StoreOutLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"STS WritePLC Command-mode Fail");
+                                db.TransactionCtrl2(TransactionTypes.Rollback);
+                                return false;
+                            }
+                            int path = PathNotice.OutPath1_toA11_04;
 
-        //                        if (db.TransactionCtrl2(TransactionTypes.Begin).ResultCode != DBResult.Success)
-        //                        {
-        //                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "Create Crane StoreIn Command, Begin Fail");
+                            WritePlccheck = _conveyor.GetBuffer(bufferIndex).WritePathChabgeNotice(path).Result;//錯誤時回傳exmessage
+                            Result = WritePlccheck;
+                            if (Result != true)
+                            {
+                                clsWriLog.StoreOutLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"STS WritePLC Path-Mode Fail");
+                                db.TransactionCtrl2(TransactionTypes.Rollback);
+                                return false;
+                            }
+                            if (db.TransactionCtrl2(TransactionTypes.Commit).ResultCode != DBResult.Success)
+                            {
+                                clsWriLog.StoreOutLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "STS Commit Fail");
+                                db.TransactionCtrl2(TransactionTypes.Rollback);
+                                return false;
+                            }
+                            return true;
 
-        //                            return false;
-        //                        }
-        //                        if (CMD_MST.UpdateCmdMst(cmdSno, Trace.StoreInAbnormalCreateEquCmdstart, db).ResultCode != DBResult.Success)
-        //                        {
-        //                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Create Crane StoreIn Command, Update CmdMst Fail => {cmdSno}");
+                        }
+                        return true;
+                    }
+                    else
+                    {
+                        string strEM = "Error: 開啟DB失敗！";
+                        clsWriLog.Log.FunWriTraceLog_CV(strEM);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return false;
+            }
+        }
 
-        //                            db.TransactionCtrl2(TransactionTypes.Rollback);
-        //                            return false;
-        //                        }
-        //                        if (EQU_CMD.InsertSTSEquCmd(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, EquNo, cmdSno, CranePortNo.Floor2, CranePortNo.Floor1, 5, db) == false)
-        //                        {
-        //                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Create Crane StoreIn Command, Insert EquCmd Fail => {cmdSno}");
+        public bool FunSTSabnormal_CreateEquCmd(int bufferIndex)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        var _conveyor = ControllerReader.GetCVControllerr().GetConveryor();
+                        string cmdSno = _conveyor.GetBuffer(bufferIndex).CommandId.ToString().PadLeft(5, '0');
 
-        //                            db.TransactionCtrl2(TransactionTypes.Rollback);
-        //                            return false;
-        //                        }
-        //                        if (db.TransactionCtrl2(TransactionTypes.Commit).ResultCode != DBResult.Success)
-        //                        {
-        //                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Create Crane StoreIn Command, Commit Fail => {cmdSno}");
+                        if (CMD_MST.GetCmdMstBySTSabnormal(cmdSno, out var dataObject, db).ResultCode == DBResult.Success)
+                        {
+                            cmdSno = dataObject[0].Cmd_Sno;
+                            string source = CranePortNo.Floor2;
+                            int EquNo = 0;
+                            if (bufferIndex == 1)
+                            {
+                                EquNo = 1;
+                            }
+                            else if (bufferIndex == 3)
+                            {
+                                EquNo = 2;
+                            }
+                            else if (bufferIndex == 5)
+                            {
+                                EquNo = 3;
+                            }
+                            else if (bufferIndex == 7)
+                            {
+                                EquNo = 4;
+                            }
+                            else if (bufferIndex == 9)
+                            {
+                                EquNo = 5;
+                            }
+                            else if (bufferIndex == 11)
+                            {
+                                EquNo = 6;
+                            }
 
-        //                            db.TransactionCtrl2(TransactionTypes.Rollback);
-        //                            return false;
-        //                        }
-        //                        else return true;
-        //                }
-        //                else return false;
-        //            }
-        //            else
-        //            {
-        //                string strEM = "Error: 開啟DB失敗！";
-        //                clsWriLog.Log.FunWriTraceLog_CV(strEM);
-        //                return false;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
-        //        var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-        //        clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
-        //        return false;
-        //    }
-        //}
+                            #region//站口狀態確認
+                            if (_conveyor.GetBuffer(bufferIndex).Auto != true)
+                            {
+                                CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.NotAutoMode, db);
+                                return false;
+                            }
+                            if (_conveyor.GetBuffer(bufferIndex).OutMode != true)
+                            {
+                                CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.NotOutMode, db);
+                                return false;
+                            }
+                            if (_conveyor.GetBuffer(bufferIndex).Error == true)
+                            {
+                                CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.BufferError, db);
+                                return false;
+                            }
+                            if (_conveyor.GetBuffer(bufferIndex).Presence == true)
+                            {
+                                CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.PresenceExist, db);
+                                return false;
+                            }
+                            #endregion
+
+
+                            clsWriLog.StoreOutLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Ready STS=> {cmdSno}");
+
+                            if (db.TransactionCtrl2(TransactionTypes.Begin).ResultCode != DBResult.Success)
+                            {
+                                clsWriLog.StoreOutLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Create Crane STS Command, Begin Fail => {cmdSno}");
+                                return false;
+                            }
+                            if (CMD_MST.UpdateCmdMst(cmdSno, Trace.StoreInAbnormalCreateSTSCmd, db).ResultCode != DBResult.Success)
+                            {
+                                clsWriLog.StoreOutLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Create Crane STS Command, Update CmdMst Fail => {cmdSno}");
+                                db.TransactionCtrl2(TransactionTypes.Rollback);
+                                return false;
+                            }
+                            if (EQU_CMD.InsertSTSEquCmd(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, EquNo, cmdSno, CranePortNo.Floor2, CranePortNo.Floor1, 5, db) == false)
+                            {
+                                clsWriLog.StoreOutLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Create Crane STS Command, Insert EquCmd Fail => {cmdSno}");
+                                db.TransactionCtrl2(TransactionTypes.Rollback);
+                                return false;
+                            }
+                            if (db.TransactionCtrl2(TransactionTypes.Commit).ResultCode != DBResult.Success)
+                            {
+                                clsWriLog.StoreOutLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Create Crane STS Command, Commit Fail => {cmdSno}");
+                                db.TransactionCtrl2(TransactionTypes.Rollback);
+                                return false;
+                            }
+                            return true;
+
+                        }
+                        return true;
+                    }
+                    else
+                    {
+                        string strEM = "Error: 開啟DB失敗！";
+                        clsWriLog.Log.FunWriTraceLog_CV(strEM);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return false;
+            }
+        }
+
+        public bool FunStoreStsEquCmdFinish()
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        if (CMD_MST.GetCmdMstBySTSFinish(out var dataObject, db).ResultCode == DBResult.Success)
+                        {
+                            foreach (var cmdMst in dataObject.Data)
+                            {
+
+                                if (EQU_CMD.GetEquCmd(cmdMst.Cmd_Sno, out var equCmd, db).ResultCode == DBResult.Success)
+                                {
+                                    if (equCmd[0].ReNeqFlag != "F" && equCmd[0].CmdSts == "9")
+                                    {
+                                        string cmdsts = "";
+                                        string cmdabnormal = "";
+                                        string remark = "";
+                                        bool bflag = false;
+
+                                        if (equCmd[0].CompleteCode == "92")//正常完成
+                                        {
+                                            cmdsts = CmdSts.Transferring;
+                                            cmdabnormal = "NA";
+                                            remark = "存取車搬送命令完成";
+                                            bflag = true;
+                                        }
+                                        else if (equCmd[0].CompleteCode.StartsWith("W"))
+                                        {
+                                            if (EQU_CMD.UpdateEquCmdRetry(equCmd[0].CmdSno, db).ResultCode != DBResult.Success)
+                                            {
+                                                return false;
+                                            }
+                                            bflag = false;
+                                        }
+                                        else if (equCmd[0].CompleteCode == clsEnum.Cmd_Abnormal.EF.ToString()) //地上盤強制取消 EF
+                                        {
+                                            cmdsts = CmdSts.CmdCancel;
+                                            cmdabnormal = clsEnum.Cmd_Abnormal.EF.ToString();
+                                            remark = "存取車地上盤強制取消命令";
+                                            bflag = true;
+                                        }
+                                        else if (equCmd[0].CompleteCode == clsEnum.Cmd_Abnormal.FF.ToString()) //地上盤強制完成 FF
+                                        {
+                                            cmdsts = CmdSts.Transferring;
+                                            cmdabnormal = clsEnum.Cmd_Abnormal.FF.ToString();
+                                            remark = "存取車地上盤強制完成命令";
+                                            bflag = true;
+                                        }
+                                        if (bflag == true)
+                                        {
+                                            if (db.TransactionCtrl2(TransactionTypes.Begin).ResultCode != DBResult.Success)
+                                            {
+                                                return false;
+                                            }
+                                            if (CMD_MST.UpdateCmdMst(equCmd[0].CmdSno, cmdsts, Trace.StoreOutCraneCmdFinish, db).ResultCode != DBResult.Success)
+                                            {
+                                                db.TransactionCtrl2(TransactionTypes.Rollback);
+                                                return false;
+                                            }
+                                            if (CMD_MST.UpdateCmdMstRemarkandAbnormal(equCmd[0].CmdSno, remark, cmdabnormal, db).ResultCode != DBResult.Success)
+                                            {
+                                                db.TransactionCtrl2(TransactionTypes.Rollback);
+                                                return false;
+                                            }
+                                            if (EQU_CMD.DeleteEquCmd(equCmd[0].CmdSno, db).ResultCode != DBResult.Success)
+                                            {
+                                                db.TransactionCtrl2(TransactionTypes.Rollback);
+                                                return false;
+                                            }
+                                            if (db.TransactionCtrl2(TransactionTypes.Commit).ResultCode != DBResult.Success)
+                                            {
+                                                return false;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            return true;
+                        }
+                        else return true;
+                    }
+                    else
+                    {
+                        string strEM = "Error: 開啟DB失敗！";
+                        clsWriLog.Log.FunWriTraceLog_CV(strEM);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return false;
+            }
+        }
+
+
 
         public bool FunStoreInEquCmdFinish()
         {

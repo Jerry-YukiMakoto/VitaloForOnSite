@@ -69,6 +69,7 @@ namespace Mirle.DB.Fun
             sql += $"TRN_DATE='{DateTime.Now:yyyy-MM-dd HH:mm:ss}', ";
             sql += $"TRN_USER='WCS' ";
             sql += $" WHERE LOC='{Loc}' ";
+            sql += $"AND Loc_Sts='I' ";
             return db.ExecuteSQL2(sql);
         }
 

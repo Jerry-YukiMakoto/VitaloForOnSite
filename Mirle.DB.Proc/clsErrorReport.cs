@@ -102,7 +102,7 @@ namespace Mirle.DB.Proc
                         int sBufferIndex = e.BufferIndex;
                         string hAlarmBit = e.AlarmBit.ToString("X");
 
-                        clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, "PLC 1 Alarm bit off");
+                        clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, "Alarm bit off");
                         if (CVC_Alarm.GetAlarmCVCInfo(PLCNO, sBufferIndex, hAlarmBit, out var alarminfo, db) == GetDataResult.Success)
                         {
                             sAlarmDesc = alarminfo[0].AlarmDesc;
@@ -239,16 +239,16 @@ namespace Mirle.DB.Proc
                             string alarmdesc = alarminfo[0].AlarmDesc;
                             if (CVC_Alarm.InsertNewAlarmCVCLog(alarminfo[0].AlarmCode, db) == ExecuteSQLResult.Success)
                             {
-                                clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Write alarm log:[{alarmdesc}]");
+                                clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Conveyor Write alarm log:[{alarmdesc}]");
                             }
                             else
                             {
-                                clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Write alarm log:[{alarmdesc}] fail.");
+                                clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Conveyor Write alarm log:[{alarmdesc}] fail.");
                             }
                         }
                         else
                         {
-                            clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, "Get system alarm info fail.");
+                            clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, "Conveyor Get system alarm info fail.");
                         }
 
 
@@ -282,7 +282,7 @@ namespace Mirle.DB.Proc
                     {
 
                         string hAlarmBit = e.AlarmBit.ToString("X");
-                        clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Alarm bit off. (Alarm Bit:{hAlarmBit})");
+                        clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Conveyor Alarm bit off. (Alarm Bit:{hAlarmBit})");
 
                         if (CVC_Alarm.GetSystemAlarmInfo(hAlarmBit, out var alarminfo, db) == GetDataResult.Success)
                         {
@@ -290,7 +290,7 @@ namespace Mirle.DB.Proc
                         }
                         else
                         {
-                            clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Get alarm info fail. (Alarm Bit:{hAlarmBit})");
+                            clsWriAlarmLog.AlarmLogTrace(e.BufferIndex, hAlarmBit, $"Conveyor Get alarm info fail. (Alarm Bit:{hAlarmBit})");
                         }
                     }
                     else

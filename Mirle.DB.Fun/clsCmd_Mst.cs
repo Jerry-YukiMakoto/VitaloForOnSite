@@ -91,7 +91,7 @@ namespace Mirle.DB.Fun
             string sql = "SELECT * FROM Cmd_Mst ";
             sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockIn}', '{clsConstValue.CmdMode.Cycle}') ";
             sql += $"AND Cmd_Sno='{cmdsno}' ";
-            sql += $"AND TRACE IN ('{Trace.StoreInKanBanFinish}') "; 
+            sql += $"AND TRACE IN ('{Trace.StoreInKanBanFinish}','{Trace.StoreInWriteCmdToCV}') "; 
             sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
             return db.GetData(sql, out dataObject);
         }
@@ -101,7 +101,7 @@ namespace Mirle.DB.Fun
             string sql = "SELECT * FROM Cmd_Mst ";
             sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockIn}', '{clsConstValue.CmdMode.Cycle}') ";
             sql += $"AND Cmd_Sno='{cmdsno}' ";
-            sql += $"AND TRACE IN ('{Trace.StoreInAbnormalCreateEquCmd}') ";
+            sql += $"AND TRACE IN ('{Trace.StoreInAbnormaStartd}') ";
             sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
             return db.GetData(sql, out dataObject);
         }
@@ -139,6 +139,16 @@ namespace Mirle.DB.Fun
             return db.GetData(sql, out dataObject);
         }
 
+        public GetDataResult GetCmdMstBySTSFinish(out DataObject<CmdMst> dataObject, SqlServer db)
+        {
+            string sql = "SELECT * FROM Cmd_Mst ";
+            sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockOut}') ";
+            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
+            sql += $"AND TRACE IN ('{Trace.StoreInAbnormalCreateSTSCmd}') ";
+  
+            return db.GetData(sql, out dataObject);
+        }
+
         #endregion Store In
 
 
@@ -161,6 +171,26 @@ namespace Mirle.DB.Fun
             sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockOut}', '{clsConstValue.CmdMode.Cycle}') ";
             sql += $"AND Cmd_Sno='{CmdSno}' ";
             sql += $"AND TRACE='{Trace.StoreOutWriteCraneCmdToCV}' ";
+            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
+            return db.GetData(sql, out dataObject);
+        }
+
+        public GetDataResult GetCmdMstBySTSabnormal(string CmdSno, out DataObject<CmdMst> dataObject, SqlServer db)
+        {
+            string sql = "SELECT * FROM Cmd_Mst ";
+            sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockOut}' ";
+            sql += $"AND Cmd_Sno='{CmdSno}' ";
+            sql += $"AND TRACE='{Trace.StoreInAbnormalWritePLC}' ";
+            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
+            return db.GetData(sql, out dataObject);
+        }
+
+        public GetDataResult GetCmdMstBySTSCrane(string CmdSno, out DataObject<CmdMst> dataObject, SqlServer db)
+        {
+            string sql = "SELECT * FROM Cmd_Mst ";
+            sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockOut}'";
+            sql += $"AND Cmd_Sno='{CmdSno}' ";
+            sql += $"AND TRACE='{Trace.StoreInAbnormaStartd}' ";
             sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
             return db.GetData(sql, out dataObject);
         }
@@ -256,22 +286,24 @@ namespace Mirle.DB.Fun
             return db.ExecuteSQL2(sql);
         }
 
-        public ExecuteSQLResult UpdateCmdMstForAbnormal(string cmdSno,string cmdmode, string trace, SqlServer db)
-        {
-            string sql = "UPDATE Cmd_Mst  ";
-            sql += $"SET TRACE='{trace}',";
-            sql += $"Remark='異常排出開始',";
-            sql += $"Cmd_Mode='{cmdmode}'";
-            sql += $"WHERE Cmd_Sno='{cmdSno}' ";
-            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
-            return db.ExecuteSQL2(sql);
-        }
 
         public ExecuteSQLResult UpdateCmdMst(string cmdSno, string cmdSts, string trace, SqlServer db)
         {
             string sql = "UPDATE Cmd_Mst ";
             sql += $"SET TRACE='{trace}', ";
             sql += $"Cmd_Sts='{cmdSts}' ";
+            sql += $"WHERE Cmd_Sno='{cmdSno}' ";
+            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
+            return db.ExecuteSQL2(sql);
+        }
+
+        public ExecuteSQLResult UpdateCmdMstabnormal(string cmdSno, string Cmd_Mode, string trace,string IOTYPE, SqlServer db)
+        {
+            string sql = "UPDATE Cmd_Mst ";
+            sql += $"SET TRACE='{trace}', ";
+            sql += $"Remark='異常排出開始',";
+            sql += $"IO_Type='{IOTYPE}',";
+            sql += $"Cmd_Mode='{Cmd_Mode}' ";
             sql += $"WHERE Cmd_Sno='{cmdSno}' ";
             sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
             return db.ExecuteSQL2(sql);
@@ -309,6 +341,16 @@ namespace Mirle.DB.Fun
             sql += $"SET Plt_Id='{Plt_Id}' ,";
             sql += $"Loc='{New_Loc}', ";
             sql += $"In_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}', ";
+            sql += $"Updated_by='WCS', ";
+            sql += $"Updated_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
+            sql += $"WHERE Cmd_Sno='{cmdSno}' ";
+            return db.ExecuteSQL2(sql);
+        }
+
+        public ExecuteSQLResult UpdateCmdDtlabnormal(string cmdSno, SqlServer db)
+        {
+            string sql = "UPDATE Cmd_Dtl ";
+            sql += $"SET Memo='在二樓入庫異常排出(命令儲位與入庫站口不符)' ,";
             sql += $"Updated_by='WCS', ";
             sql += $"Updated_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
             sql += $"WHERE Cmd_Sno='{cmdSno}' ";
