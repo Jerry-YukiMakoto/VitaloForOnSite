@@ -327,7 +327,7 @@ namespace Mirle.DB.Fun
             sql += $"SET Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}', ";
             sql += $"Plt_Id='{Plt_Id}', ";
             sql += $"TRACE='{trace}', ";
-            sql += $"New_Loc='{New_Loc}', ";
+            sql += $"Loc='{New_Loc}', ";
             sql += $"Remark='', ";
             sql += $"EXP_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
             sql += $"WHERE Cmd_Sno='{cmdSno}' ";

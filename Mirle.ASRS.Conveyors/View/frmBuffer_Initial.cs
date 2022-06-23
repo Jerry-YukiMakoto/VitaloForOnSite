@@ -59,8 +59,6 @@ namespace WCS
                 txtPath_Plc.Text = "0";
                 txtRead_Ack.Text = "0";
                 txtReceive.Text = "0";
-                txtSwitchMode_PLC.Text = "0";
-                txtSwitchMode_PC.Text = "0";
             }
 
 
@@ -157,9 +155,10 @@ namespace WCS
             this.Close();
         }
 
-        private void btnInitial_Pc_Click(object sender, EventArgs e)
+        private void btnInitial_Pc_Click(object sender, EventArgs e)//清PC->PLC的值
         {
-           //已做好自己清值功能，暫不做清PC初始
+            _conveyor.GetBuffer(StnIdx).WriteCommandIdAsync("0", 0);
+            _conveyor.GetBuffer(StnIdx).WritePathChabgeNotice(0);
         }
 
         private void btnInitial_Plc_Click(object sender, EventArgs e)

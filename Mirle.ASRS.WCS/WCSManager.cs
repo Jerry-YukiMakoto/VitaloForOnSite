@@ -39,6 +39,9 @@ namespace Mirle.ASRS.WCS
             _storeOutProcess.Elapsed += StoreOutProcess;
             _storeInProcess.Elapsed += StoreInProcess;
             _otherProcess.Elapsed += OtherProcess;
+
+            ErrorReport();
+
             
         }
 

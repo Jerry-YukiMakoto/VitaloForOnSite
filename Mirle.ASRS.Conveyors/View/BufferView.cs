@@ -91,6 +91,7 @@ namespace Mirle.ASRS.Conveyors.View
             string strPresence = "荷有:\n橘色V -> 此位置有物";
             string strSwitch_Ack = "站口模式切換:\n0 -> 不允許ON\n1 -> 允許"; //A1
             string strInitialNotice = "初始通知:\n1 -> CV通知WCS輸送機初始已完成";
+            string BCRnotice = "讀取通知:\n0 -> OFF\n1 -> ON"; 
             //string strError = "異常碼";
 
 
@@ -112,7 +113,8 @@ namespace Mirle.ASRS.Conveyors.View
             objToolTip.SetToolTip(lblPresence, strPresence);
             objToolTip.SetToolTip(lblSwitch_Ack, strSwitch_Ack);
             objToolTip.SetToolTip(lblInitialNotice, strInitialNotice);
-           
+            objToolTip.SetToolTip(lblBCRnotice, BCRnotice);
+
         }
 
         public void Refresh_Buffer(Buffer buffer)
@@ -125,6 +127,7 @@ namespace Mirle.ASRS.Conveyors.View
             Refresh(lblPathNotice, buffer.PathNotice.ToString());
             Refresh(lblPresence, Presence(buffer.Presence), buffer.Presence.ToColor(Color.Orange, Color.White));
             Refresh(lblInitialNotice, buffer.InitialNotice.ToString());
+            Refresh(lblBCRnotice, buffer.BcrNotice.ToString());
         }
 
         public void Refresh_BufferPLCError(Buffer buffer)
@@ -137,6 +140,7 @@ namespace Mirle.ASRS.Conveyors.View
             Refresh(lblPresence, String.Empty, Color.White);
             Refresh(lblSwitch_Ack, Switch_Ack.NoAck.ToString());
             Refresh(lblInitialNotice, InitialNotice.Initial.ToString());
+            Refresh(lblBCRnotice, InitialNotice.Initial.ToString());
         }
 
         private void Refresh(Label label, string value)

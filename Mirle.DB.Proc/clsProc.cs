@@ -494,8 +494,8 @@ namespace Mirle.DB.Proc
                                 stuCmdMst.IoType = "13";
                                 stuCmdMst.WhId = "ASRS";
                                 stuCmdMst.EquNo = Equ_No;
-                                stuCmdMst.Loc = sStnNo;
-                                stuCmdMst.NewLoc = New_Loc;
+                                stuCmdMst.Loc = New_Loc;
+                                stuCmdMst.NewLoc = "";
                                 stuCmdMst.CrtDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                                 stuCmdMst.TrnUser = "WCS";
                                 stuCmdMst.HostName = System.Environment.MachineName;
@@ -622,7 +622,7 @@ namespace Mirle.DB.Proc
                                 stuCmdMst.IoType = "9";
                                 stuCmdMst.WhId = "ASRS";
                                 stuCmdMst.EquNo = "";
-                                stuCmdMst.Loc = sStnNo;
+                                stuCmdMst.Loc = "";
                                 stuCmdMst.NewLoc = "";
                                 stuCmdMst.CrtDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                                 stuCmdMst.TrnUser = "WCS";
