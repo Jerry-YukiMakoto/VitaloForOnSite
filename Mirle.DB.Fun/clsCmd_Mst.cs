@@ -335,11 +335,10 @@ namespace Mirle.DB.Fun
             return db.ExecuteSQL2(sql);
         }
 
-        public ExecuteSQLResult UpdateCmdDtlTransferring(string cmdSno,string New_Loc, string Plt_Id, SqlServer db)
+        public ExecuteSQLResult UpdateCmdDtlTransferring(string cmdSno, string Plt_Id, SqlServer db)
         {
             string sql = "UPDATE Cmd_Dtl ";
             sql += $"SET Plt_Id='{Plt_Id}' ,";
-            sql += $"Loc='{New_Loc}', ";
             sql += $"In_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}', ";
             sql += $"Updated_by='WCS', ";
             sql += $"Updated_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
@@ -417,13 +416,12 @@ namespace Mirle.DB.Fun
 
         public ExecuteSQLResult FunInsCmdDtl(struCmdDtl stuCmdDtl, SqlServer db)
         {
-            string sSQL = "INSERT INTO Cmd_Dtl (Cmd_Txno, Cmd_Sno, Plt_Qty, Trn_Qty, Loc , In_Date, Item_No, Lot_No, Plt_Id , Company_ID, Item_Desc, Uom,";
+            string sSQL = "INSERT INTO Cmd_Dtl (Cmd_Txno, Cmd_Sno, Plt_Qty, Trn_Qty , In_Date, Item_No, Lot_No, Plt_Id , Company_ID, Item_Desc, Uom,";
             sSQL += "Created_by,Created_Date) values(";
             sSQL += "'" + stuCmdDtl.Cmd_Txno + "', ";
             sSQL += "'" + stuCmdDtl.Cmd_Sno + "', ";
             sSQL += "'" + stuCmdDtl.Plt_Qty + "', ";
             sSQL += "'" + stuCmdDtl.Trn_Qty + "', ";
-            sSQL += "'" + stuCmdDtl.Loc + "', ";
             sSQL += "'" + stuCmdDtl.In_Date + "', ";
             sSQL += "'" + stuCmdDtl.Item_No + "', ";
             sSQL += "'" + stuCmdDtl.Lot_No + "', ";
