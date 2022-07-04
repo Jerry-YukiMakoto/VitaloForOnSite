@@ -64,8 +64,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "通訊協定", "通訊協�
 		Documents\通訊協定\0524維他露ASRS_週邊輸送機通訊協定-V_1.0.0.5_revised.xlsx = Documents\通訊協定\0524維他露ASRS_週邊輸送機通訊協定-V_1.0.0.5_revised.xlsx
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.CENS.U0NXMA30", "Mirle.CENS.U0NXMA30\Mirle.CENS.U0NXMA30.csproj", "{DCBE44B8-7C23-4DBA-86AE-9CA5F9CB3774}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FileLayout", "FileLayout", "{099F4337-36A1-4962-8414-92CBD811E2E6}"
 	ProjectSection(SolutionItems) = preProject
 		Documents\FileLayout\維他露_ASRS_FileLayOut_v0.5.docx = Documents\FileLayout\維他露_ASRS_FileLayOut_v0.5.docx
@@ -156,10 +154,6 @@ Global
 		{95116D24-80F9-4BDE-94CA-7F3567C76CDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95116D24-80F9-4BDE-94CA-7F3567C76CDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95116D24-80F9-4BDE-94CA-7F3567C76CDF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DCBE44B8-7C23-4DBA-86AE-9CA5F9CB3774}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DCBE44B8-7C23-4DBA-86AE-9CA5F9CB3774}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DCBE44B8-7C23-4DBA-86AE-9CA5F9CB3774}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DCBE44B8-7C23-4DBA-86AE-9CA5F9CB3774}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C0E20E08-92E3-4746-8F64-3C436D0A3CB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C0E20E08-92E3-4746-8F64-3C436D0A3CB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0E20E08-92E3-4746-8F64-3C436D0A3CB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
