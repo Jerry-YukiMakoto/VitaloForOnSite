@@ -321,13 +321,13 @@ namespace Mirle.DB.Fun
             return db.ExecuteSQL2(sql);
         }
 
-        public ExecuteSQLResult UpdateCmdMstTransferring(string cmdSno, string trace,string New_Loc,string Plt_Id, SqlServer db)
+        public ExecuteSQLResult UpdateCmdMstTransferring(string cmdSno, string trace,string Loc,string Plt_Id, SqlServer db)
         {
             string sql = "UPDATE Cmd_Mst ";
             sql += $"SET Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}', ";
             sql += $"Plt_Id='{Plt_Id}', ";
             sql += $"TRACE='{trace}', ";
-            sql += $"Loc='{New_Loc}', ";
+            sql += $"Loc='{Loc}', ";
             sql += $"Remark='', ";
             sql += $"EXP_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
             sql += $"WHERE Cmd_Sno='{cmdSno}' ";

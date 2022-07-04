@@ -1103,13 +1103,13 @@ namespace Mirle.DB.Proc
                             int EquNo = 0;
                             bool EquCheck = true;//檢查到站口的貨物是否符合命令號的目的地，不符合退板處理
 
-                            if (Cmd_mode == "3")//如果是撿料，入庫儲位欄位是LOC，一般入庫是NewLoc
+                            if (Cmd_mode == "3")
                             {
                                 dest = $"{dataObject[0].Loc}";
                             }
                             else
                             {
-                                dest = $"{dataObject[0].NewLoc}";
+                                dest = $"{dataObject[0].Loc}";
                             }
 
                             if(bufferIndex == 1)
