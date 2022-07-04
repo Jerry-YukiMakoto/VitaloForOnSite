@@ -1479,7 +1479,7 @@ namespace Mirle.DB.Proc
                     else
                     {
                         string strEM = "Error: 開啟DB失敗！";
-                        clsWriLog.Log.FunWriTraceLog_CV(strEM);
+                        clsWriLog.Log.FunWriTraceLog_CV(strEM); 
                         return false;
                     }
                 }
