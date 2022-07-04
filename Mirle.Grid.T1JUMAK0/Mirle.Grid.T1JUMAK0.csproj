@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E6F732FE-3905-49A7-B2CF-B4FA79C2DC5D}</ProjectGuid>
+    <ProjectGuid>{39A4C47B-C53B-4057-9DC5-93B8907639E8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mirle.Def.U0NXMA30</RootNamespace>
-    <AssemblyName>Mirle.Def.U0NXMA30</AssemblyName>
+    <RootNamespace>Mirle.Grid.T1JUMAK0</RootNamespace>
+    <AssemblyName>Mirle.Grid.T1JUMAK0</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -36,6 +36,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,30 +45,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ASRSINI.cs" />
+    <Compile Include="ColumnDef.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StatusDef.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mirle.Def\Mirle.Def.csproj">
-      <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
-      <Name>Mirle.Def</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mirle.Structure\Mirle.Structure.csproj">
-      <Project>{0a0d222e-0c76-4838-a8b1-6ca6f26cb225}</Project>
-      <Name>Mirle.Structure</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Config.Net">
-      <Version>4.13.7</Version>
-    </PackageReference>
     <PackageReference Include="Mirle.MPLC.MCProtocol">
       <Version>2.0.0</Version>
     </PackageReference>
     <PackageReference Include="Mirle.MPLC.MXComponent">
       <Version>1.0.2</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mirle.Grid\Mirle.Grid.csproj">
+      <Project>{8ab5fac9-7cc2-4eec-b583-39778e66ce1f}</Project>
+      <Name>Mirle.Grid</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

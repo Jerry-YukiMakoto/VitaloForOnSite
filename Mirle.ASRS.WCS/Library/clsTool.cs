@@ -2,8 +2,8 @@
 using Mirle.Def;
 using System.Linq;
 using System.Windows.Forms;
-using Mirle.Def.U0NXMA30;
-using Mirle.Grid.U0NXMA30;
+using Mirle.Def.T1JUMAK0;
+using Mirle.Grid.T1JUMAK0;
 
 using System.Data;
 using Mirle.DB.Object;

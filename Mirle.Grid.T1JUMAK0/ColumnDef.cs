@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Mirle.Grid;
 
-namespace Mirle.Grid.U0NXMA30
+namespace Mirle.Grid.T1JUMAK0
 {
     public class ColumnDef
     {

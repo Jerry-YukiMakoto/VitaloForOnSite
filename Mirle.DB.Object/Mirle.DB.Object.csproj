@@ -82,7 +82,7 @@
       <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
       <Name>Mirle.Def</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mirle.Grid.U0NXMA30\Mirle.Grid.T1JUMAK0.csproj">
+    <ProjectReference Include="..\Mirle.Grid.T1JUMAK0\Mirle.Grid.T1JUMAK0.csproj">
       <Project>{39a4c47b-c53b-4057-9dc5-93b8907639e8}</Project>
       <Name>Mirle.Grid.T1JUMAK0</Name>
     </ProjectReference>

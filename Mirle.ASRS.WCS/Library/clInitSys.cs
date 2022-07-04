@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using Mirle.Def;
 using Config.Net;
-using Mirle.Def.U0NXMA30;
+using Mirle.Def.T1JUMAK0;
 using Mirle.DataBase;
 using Mirle.Structure;
 using System.Text;

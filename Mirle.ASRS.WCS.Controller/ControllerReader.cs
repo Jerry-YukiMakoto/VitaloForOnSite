@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Mirle.DataBase;
 using Config.Net;
 using System.Windows.Forms;
-using Mirle.Def.U0NXMA30;
+using Mirle.Def.T1JUMAK0;
 using Mirle.Def;
 using Mirle.ASRS.Conveyors.View;
 

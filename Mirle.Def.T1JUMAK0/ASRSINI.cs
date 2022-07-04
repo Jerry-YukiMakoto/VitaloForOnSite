@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Config.Net;
 
-namespace Mirle.Def.U0NXMA30
+namespace Mirle.Def.T1JUMAK0
 {
     public interface ASRSINI
     {

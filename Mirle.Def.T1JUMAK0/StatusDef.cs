@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mirle.Def.U0NXMA30
+namespace Mirle.Def.T1JUMAK0
 {
     public class StatusDef
     {
