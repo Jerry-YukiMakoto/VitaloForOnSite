@@ -1661,7 +1661,7 @@ namespace Mirle.DB.Proc
                                             {
                                                 return false;
                                             }
-                                            if (CMD_MST.UpdateCmdMst(equCmd[0].CmdSno, cmdsts, Trace.StoreInCraneCmdFinish, db).ResultCode != DBResult.Success)
+                                            if (CMD_MST.UpdateCmdMstEnd(equCmd[0].CmdSno, cmdsts, Trace.StoreInCraneCmdFinish, db).ResultCode != DBResult.Success)
                                             {
                                                 db.TransactionCtrl2(TransactionTypes.Rollback);
                                                 return false;
@@ -1987,7 +1987,7 @@ namespace Mirle.DB.Proc
                                                db.TransactionCtrl2(TransactionTypes.Rollback);
                                                return false;
                                             }
-                                            if (CMD_MST.UpdateCmdMstRemarkandAbnormal(equCmd[0].CmdSno, remark, cmdabnormal, db).ResultCode != DBResult.Success)
+                                            if (CMD_MST.UpdateCmdMstRemarkandAbnormalforStoreOut(equCmd[0].CmdSno, remark, cmdabnormal, db).ResultCode != DBResult.Success)
                                             {
                                                 db.TransactionCtrl2(TransactionTypes.Rollback);
                                                 return false;
@@ -2133,7 +2133,7 @@ namespace Mirle.DB.Proc
                                 }
                                 if (cmdmode != "3")
                                 {
-                                    if (CMD_MST.UpdateCmdMst(cmdSno, CmdSts.CompleteWaitUpdate, Trace.StoreOutKanBanFinish, db).ResultCode != DBResult.Success)
+                                    if (CMD_MST.UpdateCmdMstEnd(cmdSno, CmdSts.CompleteWaitUpdate, Trace.StoreOutKanBanFinish, db).ResultCode != DBResult.Success)
                                     {
                                         clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreOut)Buffer Get cmdsno To stop showing KanBan, Update CmdMst Fail => {cmdSno}");
 

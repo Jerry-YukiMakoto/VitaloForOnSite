@@ -297,6 +297,17 @@ namespace Mirle.DB.Fun
             return db.ExecuteSQL2(sql);
         }
 
+        public ExecuteSQLResult UpdateCmdMstEnd(string cmdSno, string cmdSts, string trace, SqlServer db)
+        {
+            string sql = "UPDATE Cmd_Mst ";
+            sql += $"SET TRACE='{trace}', ";
+            sql += $"Cmd_Sts='{cmdSts}', ";
+            sql += $"End_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
+            sql += $"WHERE Cmd_Sno='{cmdSno}' ";
+            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
+            return db.ExecuteSQL2(sql);
+        }
+
         public ExecuteSQLResult UpdateCmdMstabnormal(string cmdSno, string Cmd_Mode, string trace,string IOTYPE, SqlServer db)
         {
             string sql = "UPDATE Cmd_Mst ";
@@ -380,6 +391,16 @@ namespace Mirle.DB.Fun
             string sql = "UPDATE Cmd_Mst ";
             sql += $"SET Exp_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}', ";
             sql += $"End_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ,";
+            sql += $"REMARK='{REMARK}' ,";
+            sql += $"Cmd_Abnormal='{abnormal}' ";
+            sql += $"WHERE Cmd_Sno='{cmdSno}' ";
+            return db.ExecuteSQL2(sql);
+        }
+
+        public ExecuteSQLResult UpdateCmdMstRemarkandAbnormalforStoreOut(string cmdSno, string REMARK, string abnormal, SqlServer db)
+        {
+            string sql = "UPDATE Cmd_Mst ";
+            sql += $"SET Exp_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}', ";
             sql += $"REMARK='{REMARK}' ,";
             sql += $"Cmd_Abnormal='{abnormal}' ";
             sql += $"WHERE Cmd_Sno='{cmdSno}' ";
