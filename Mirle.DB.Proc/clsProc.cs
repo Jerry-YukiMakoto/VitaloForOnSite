@@ -961,6 +961,7 @@ namespace Mirle.DB.Proc
                 return false;
             }
         }
+
         public bool FunStoreIn_BcrCheck(int bufferIndex)
         {
             string Item_No = "";
@@ -1019,7 +1020,7 @@ namespace Mirle.DB.Proc
                                 }
                                 else
                                 {
-                                    dest = $"{dataObject[0].NewLoc}";
+                                    dest = $"{dataObject[0].Loc}";
                                 }
 
                                 var WritePlccheck = _conveyor.GetBuffer(bufferIndex).BCRNoticeComplete(1).Result;
@@ -1594,8 +1595,6 @@ namespace Mirle.DB.Proc
                 return false;
             }
         }
-
-
 
         public bool FunStoreInEquCmdFinish()
         {

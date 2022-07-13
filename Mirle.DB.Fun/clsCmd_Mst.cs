@@ -41,11 +41,11 @@ namespace Mirle.DB.Fun
         public GetDataResult GetCmdMstByStoreInForKanBan(string cmdsno, out DataObject<CmdMst> dataObject, SqlServer db)
         {
             string sql = "SELECT * FROM Cmd_Mst  ";
-            sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockIn}'), '{clsConstValue.CmdMode.Cycle}' ";
+            sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockIn}', '{clsConstValue.CmdMode.Cycle}') ";
             sql += $"AND Cmd_Sts IN ('{clsConstValue.CmdSts.strCmd_Running}') ";
             sql += $"AND Cmd_Sno='{cmdsno}' ";
             sql += $"AND Trace = '{Trace.StoreInWriteCmdToCV}' ";
-            sql += $"AND Remark<>'{Remark.StoreInKanBanStart}' ";
+            sql += $"AND Remark<>'{Remark.StoreInKanBanStart}' or Remark is null ";
             sql += $"order by prty , crt_date , cmd_sno";
             return db.GetData(sql, out dataObject);
         }
@@ -56,7 +56,7 @@ namespace Mirle.DB.Fun
             sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.Deposit}') ";
             sql += $"AND Cmd_Sts IN ('{clsConstValue.CmdSts.strCmd_Running}') ";
             sql += $"AND Cmd_Sno='{cmdsno}' ";
-            sql += $"AND Remark<>'{Remark.StoreInRejectFinish}' ";
+            sql += $"AND Remark<>'{Remark.StoreInRejectFinish}' or Remark is null ";
             sql += $"order by prty , crt_date , cmd_sno";
             return db.GetData(sql, out dataObject);
         }
@@ -68,7 +68,7 @@ namespace Mirle.DB.Fun
             sql += $"AND Cmd_Sts IN ('{clsConstValue.CmdSts.strCmd_Running}') ";
             sql += $"AND Cmd_Sno='{cmdsno}' ";
             sql += $"AND Trace = '{Trace.StoreInKanBanStart}' ";
-            sql += $"AND Remark<>'{Remark.StoreInKanBanFinsh}' ";
+            sql += $"AND Remark<>'{Remark.StoreInKanBanFinsh}'  or Remark is null ";
             sql += $"order by prty , crt_date , cmd_sno";
             return db.GetData(sql, out dataObject);
         }
@@ -178,7 +178,7 @@ namespace Mirle.DB.Fun
         public GetDataResult GetCmdMstBySTSabnormal(string CmdSno, out DataObject<CmdMst> dataObject, SqlServer db)
         {
             string sql = "SELECT * FROM Cmd_Mst ";
-            sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockOut}' ";
+            sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockOut}') ";
             sql += $"AND Cmd_Sno='{CmdSno}' ";
             sql += $"AND TRACE='{Trace.StoreInAbnormalWritePLC}' ";
             sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
@@ -188,7 +188,7 @@ namespace Mirle.DB.Fun
         public GetDataResult GetCmdMstBySTSCrane(string CmdSno, out DataObject<CmdMst> dataObject, SqlServer db)
         {
             string sql = "SELECT * FROM Cmd_Mst ";
-            sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockOut}'";
+            sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockOut}')";
             sql += $"AND Cmd_Sno='{CmdSno}' ";
             sql += $"AND TRACE='{Trace.StoreInAbnormaStartd}' ";
             sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
@@ -225,11 +225,11 @@ namespace Mirle.DB.Fun
         public GetDataResult GetCmdMstByStoreOutForKanBan(string cmdsno, out DataObject<CmdMst> dataObject, SqlServer db)
         {
             string sql = "SELECT * FROM Cmd_Mst  ";
-            sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockOut}'), '{clsConstValue.CmdMode.Cycle}' ";
+            sql += $"WHERE Cmd_Mode IN ('{clsConstValue.CmdMode.StockOut}', '{clsConstValue.CmdMode.Cycle}') ";
             sql += $"AND Cmd_Sts IN ('{clsConstValue.CmdSts.strCmd_Running}') ";
             sql += $"AND Cmd_Sno='{cmdsno}' ";
             sql += $"AND Trace = '{Trace.StoreOutCraneCmdFinish}' ";
-            sql += $"AND Remark<>'{Remark.StoreOutKanBanStart}' ";
+            sql += $"AND Remark<>'{Remark.StoreOutKanBanStart}' or Remark is null ";
             sql += $"order by prty , crt_date , cmd_sno";
             return db.GetData(sql, out dataObject);
         }
@@ -241,7 +241,7 @@ namespace Mirle.DB.Fun
             sql += $"AND Cmd_Sts IN ('{clsConstValue.CmdSts.strCmd_Running}') ";
             sql += $"AND Cmd_Sno='{cmdsno}' ";
             sql += $"AND Trace = '{Trace.StoreOutKanBanStart}' ";
-            sql += $"AND Remark<>'{Remark.StoreOutKanBanFinish}' ";
+            sql += $"AND Remark<>'{Remark.StoreOutKanBanFinish}'  or Remark is null";
             sql += $"order by prty , crt_date , cmd_sno";
             return db.GetData(sql, out dataObject);
         }
@@ -328,7 +328,7 @@ namespace Mirle.DB.Fun
             sql += $"Remark='', ";
             sql += $"EXP_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
             sql += $"WHERE Cmd_Sno='{cmdSno}' ";
-            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Initial}' ";
+            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
             return db.ExecuteSQL2(sql);
         }
 
