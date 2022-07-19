@@ -91,6 +91,8 @@ namespace Mirle.DB.Proc
                             Lot_No = Regex.Replace(_conveyor.GetBuffer(bufferIndex).Lot_ID.Trim(), @"[^A-Z,a-z,0-9]", string.Empty);
                             bool Pltfish= Plt_Id.Contains("-");//如果是餘板會有槓槓來與滿板分別，可以根據此條件尋找餘板的命令
 
+                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"BCR Notice Start:Item_No=>{Item_No} Plt_Id=>{Plt_Id} Lot_No=>{Lot_No}");//當讀取通知開始，紀錄讀到的的值
+
                             #region//根據buffer狀態更新命令
                             if (_conveyor.GetBuffer(bufferIndex).Auto != true)
                             {
@@ -114,8 +116,8 @@ namespace Mirle.DB.Proc
                             }
                             #endregion
 
-                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"BCR Notice Start:Item_No=>{Item_No} Plt_Id=>{Plt_Id} Lot_No=>{Lot_No}");//當讀取通知開始，紀錄讀到的的值
-
+                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Ready Receive StoreIn Command");
+                           
                             if (CMD_MST.GetCmdMstByStoreInStart(sStnNo, Item_No, Lot_No, Pltfish, Plt_Id, out var dataObject1, db).ResultCode == DBResult.Success)
                             {
                                 cmdSno = dataObject1[0].Cmd_Sno;
@@ -240,10 +242,6 @@ namespace Mirle.DB.Proc
                             {
                                 clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Get StoreIn Command => {cmdSno}, " +
                                         $"{CmdMode}");
-
-
-                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Ready Receive StoreIn Command=> {cmdSno}");
-                               
 
                                 path = StoreInfindpathbyEquNo(Convert.ToInt32(Equ_No));//根據線別選入庫站
 
@@ -483,7 +481,7 @@ namespace Mirle.DB.Proc
                                         clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
                                             , $"Find High Loc fail");
                                     return false;//這邊不選擇直接退板因為其他線別可能有位子，讓他重進function選擇新線別
-                                }
+                                    }
                                 }
                                 else
                                 {
@@ -508,6 +506,8 @@ namespace Mirle.DB.Proc
 
                                 if (cmdcheck)
                                 {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "Produce Normal Start");
+
                                     cmdSno = SNO.FunGetSeqNo(clsEnum.enuSnoType.CMDSNO, db); //尋找最新不重複的命令號
                                     if (cmdSno == "" || cmdSno == "00000")
                                     {
@@ -1044,7 +1044,6 @@ namespace Mirle.DB.Proc
 
                                 dest = $"{dataObject[0].Loc}";
                                 
-
                                 var WritePlccheck = _conveyor.GetBuffer(bufferIndex).BCRNoticeComplete(1).Result;
                                 bool Result = WritePlccheck;
                                 if (Result != true)//通知讀取完成
@@ -1126,14 +1125,8 @@ namespace Mirle.DB.Proc
                             int EquNo = 0;
                             bool EquCheck = true;//檢查到站口的貨物是否符合命令號的目的地，不符合退板處理
 
-                            if (Cmd_mode == "3")
-                            {
-                                dest = $"{dataObject[0].Loc}";
-                            }
-                            else
-                            {
-                                dest = $"{dataObject[0].Loc}";
-                            }
+                            dest = $"{dataObject[0].Loc}";
+                            
 
                             if(bufferIndex == 1)
                             {

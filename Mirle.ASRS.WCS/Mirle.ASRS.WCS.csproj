@@ -51,7 +51,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>MainControl.ico</ApplicationIcon>
+    <ApplicationIcon>ComputerNameTask.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
@@ -274,6 +274,7 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ComputerNameTask.ico" />
     <Content Include="MainControl.ico" />
   </ItemGroup>
   <ItemGroup>
