@@ -862,7 +862,7 @@ namespace Mirle.DB.Proc
 
                                     return false;
                                 }
-                                if (CMD_MST.UpdateCmdMst(cmdSno, CmdSts.CompleteWaitUpdate, Trace.StoreInReject, db).ResultCode != DBResult.Success)
+                                if (CMD_MST.UpdateCmdMstEnd(cmdSno, CmdSts.CompleteWaitUpdate, Trace.StoreInReject, db).ResultCode != DBResult.Success)
                                 {
                                     clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreIn)Buffer Get cmdsno To Reject, Update CmdMst Fail => {cmdSno}");
 
@@ -2413,7 +2413,7 @@ namespace Mirle.DB.Proc
                                             {
                                                 return false;
                                             }
-                                            if (CMD_MST.UpdateCmdMst(equCmd[0].CmdSno, cmdsts, Trace.LoctoLocReadyFinish, db).ResultCode != DBResult.Success)
+                                            if (CMD_MST.UpdateCmdMstEnd(equCmd[0].CmdSno, cmdsts, Trace.LoctoLocReadyFinish, db).ResultCode != DBResult.Success)
                                             {
                                                 db.TransactionCtrl2(TransactionTypes.Rollback);
                                                 return false;
