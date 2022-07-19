@@ -35,6 +35,8 @@
             this.btnHP = new System.Windows.Forms.Button();
             this.btnLower = new System.Windows.Forms.Button();
             this.btnUpper = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.pnlHP = new System.Windows.Forms.Panel();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -50,15 +52,6 @@
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pnlLower = new System.Windows.Forms.Panel();
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.pnlUpper = new System.Windows.Forms.Panel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.timerMainProc = new System.Windows.Forms.Timer(this.components);
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.barcodeDataView2 = new Mirle.ASRS.Converyor.View.BarcodeDataView();
             this.barcodeDataView1 = new Mirle.ASRS.Converyor.View.BarcodeDataView();
             this.bufferView25 = new Mirle.ASRS.Conveyors.View.BufferView();
@@ -86,7 +79,10 @@
             this.bufferView3 = new Mirle.ASRS.Conveyors.View.BufferView();
             this.bufferView2 = new Mirle.ASRS.Conveyors.View.BufferView();
             this.bufferView1 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.pnlLower = new System.Windows.Forms.Panel();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.bufferView68 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.label3 = new System.Windows.Forms.Label();
             this.bufferView51 = new Mirle.ASRS.Conveyors.View.BufferView();
             this.bufferView52 = new Mirle.ASRS.Conveyors.View.BufferView();
             this.bufferView53 = new Mirle.ASRS.Conveyors.View.BufferView();
@@ -111,9 +107,12 @@
             this.bufferView73 = new Mirle.ASRS.Conveyors.View.BufferView();
             this.bufferView74 = new Mirle.ASRS.Conveyors.View.BufferView();
             this.bufferView75 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.pnlUpper = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.barcodeDataView3 = new Mirle.ASRS.Converyor.View.BarcodeDataView();
             this.bufferView77 = new Mirle.ASRS.Conveyors.View.BufferView();
             this.bufferView76 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.label2 = new System.Windows.Forms.Label();
             this.bufferView50 = new Mirle.ASRS.Conveyors.View.BufferView();
             this.bufferView49 = new Mirle.ASRS.Conveyors.View.BufferView();
             this.bufferView48 = new Mirle.ASRS.Conveyors.View.BufferView();
@@ -139,6 +138,7 @@
             this.bufferView28 = new Mirle.ASRS.Conveyors.View.BufferView();
             this.bufferView27 = new Mirle.ASRS.Conveyors.View.BufferView();
             this.bufferView26 = new Mirle.ASRS.Conveyors.View.BufferView();
+            this.timerMainProc = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -164,7 +164,7 @@
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.IsSplitterFixed = true;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -194,7 +194,7 @@
             this.flowLayoutPanel1.Controls.Add(this.button2);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(1922, 46);
             this.flowLayoutPanel1.TabIndex = 0;
@@ -203,11 +203,11 @@
             // 
             this.btnHP.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnHP.Location = new System.Drawing.Point(4, 4);
-            this.btnHP.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnHP.Margin = new System.Windows.Forms.Padding(4);
             this.btnHP.Name = "btnHP";
             this.btnHP.Size = new System.Drawing.Size(154, 60);
             this.btnHP.TabIndex = 0;
-            this.btnHP.Text = "HP";
+            this.btnHP.Text = "一樓HP側";
             this.btnHP.UseVisualStyleBackColor = true;
             this.btnHP.Click += new System.EventHandler(this.btnHP_Click);
             // 
@@ -215,11 +215,11 @@
             // 
             this.btnLower.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnLower.Location = new System.Drawing.Point(166, 4);
-            this.btnLower.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnLower.Margin = new System.Windows.Forms.Padding(4);
             this.btnLower.Name = "btnLower";
             this.btnLower.Size = new System.Drawing.Size(170, 60);
             this.btnLower.TabIndex = 1;
-            this.btnLower.Text = "Lower";
+            this.btnLower.Text = "一樓";
             this.btnLower.UseVisualStyleBackColor = true;
             this.btnLower.Click += new System.EventHandler(this.btnLower_Click);
             // 
@@ -227,13 +227,37 @@
             // 
             this.btnUpper.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnUpper.Location = new System.Drawing.Point(344, 4);
-            this.btnUpper.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnUpper.Margin = new System.Windows.Forms.Padding(4);
             this.btnUpper.Name = "btnUpper";
             this.btnUpper.Size = new System.Drawing.Size(176, 60);
             this.btnUpper.TabIndex = 2;
-            this.btnUpper.Text = "Upper";
+            this.btnUpper.Text = "二樓";
             this.btnUpper.UseVisualStyleBackColor = true;
             this.btnUpper.Click += new System.EventHandler(this.btnUpper_Click);
+            // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.button1.Location = new System.Drawing.Point(528, 4);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(218, 60);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "輸送機初始(1)";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.buffer_Restart);
+            // 
+            // button2
+            // 
+            this.button2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.button2.Location = new System.Drawing.Point(754, 4);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(208, 60);
+            this.button2.TabIndex = 4;
+            this.button2.Text = "輸送機初始(2)";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.buffer_Restart2);
             // 
             // pnlHP
             // 
@@ -280,7 +304,7 @@
             this.pnlHP.Controls.Add(this.bufferView1);
             this.pnlHP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlHP.Location = new System.Drawing.Point(0, 0);
-            this.pnlHP.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pnlHP.Margin = new System.Windows.Forms.Padding(4);
             this.pnlHP.Name = "pnlHP";
             this.pnlHP.Size = new System.Drawing.Size(1922, 942);
             this.pnlHP.TabIndex = 3;
@@ -329,7 +353,7 @@
             // 
             this.pictureBox8.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox8.Image")));
             this.pictureBox8.Location = new System.Drawing.Point(220, 48);
-            this.pictureBox8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox8.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox8.Name = "pictureBox8";
             this.pictureBox8.Size = new System.Drawing.Size(42, 118);
             this.pictureBox8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -340,7 +364,7 @@
             // 
             this.pictureBox7.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox7.Image")));
             this.pictureBox7.Location = new System.Drawing.Point(1700, 580);
-            this.pictureBox7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox7.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox7.Name = "pictureBox7";
             this.pictureBox7.Size = new System.Drawing.Size(42, 118);
             this.pictureBox7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -351,7 +375,7 @@
             // 
             this.pictureBox6.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox6.Image")));
             this.pictureBox6.Location = new System.Drawing.Point(668, 580);
-            this.pictureBox6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox6.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox6.Name = "pictureBox6";
             this.pictureBox6.Size = new System.Drawing.Size(42, 118);
             this.pictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -410,7 +434,7 @@
             // 
             this.pictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox5.Image")));
             this.pictureBox5.Location = new System.Drawing.Point(1348, 494);
-            this.pictureBox5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox5.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox5.Name = "pictureBox5";
             this.pictureBox5.Size = new System.Drawing.Size(156, 44);
             this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -421,7 +445,7 @@
             // 
             this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
             this.pictureBox3.Location = new System.Drawing.Point(424, 494);
-            this.pictureBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox3.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(156, 44);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -432,160 +456,12 @@
             // 
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
             this.pictureBox2.Location = new System.Drawing.Point(140, 662);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(45, 140);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 78;
             this.pictureBox2.TabStop = false;
-            // 
-            // pnlLower
-            // 
-            this.pnlLower.Controls.Add(this.pictureBox4);
-            this.pnlLower.Controls.Add(this.bufferView68);
-            this.pnlLower.Controls.Add(this.label3);
-            this.pnlLower.Controls.Add(this.bufferView51);
-            this.pnlLower.Controls.Add(this.bufferView52);
-            this.pnlLower.Controls.Add(this.bufferView53);
-            this.pnlLower.Controls.Add(this.bufferView54);
-            this.pnlLower.Controls.Add(this.bufferView55);
-            this.pnlLower.Controls.Add(this.bufferView56);
-            this.pnlLower.Controls.Add(this.bufferView57);
-            this.pnlLower.Controls.Add(this.bufferView58);
-            this.pnlLower.Controls.Add(this.bufferView59);
-            this.pnlLower.Controls.Add(this.bufferView60);
-            this.pnlLower.Controls.Add(this.bufferView61);
-            this.pnlLower.Controls.Add(this.bufferView62);
-            this.pnlLower.Controls.Add(this.bufferView63);
-            this.pnlLower.Controls.Add(this.bufferView64);
-            this.pnlLower.Controls.Add(this.bufferView65);
-            this.pnlLower.Controls.Add(this.bufferView66);
-            this.pnlLower.Controls.Add(this.bufferView67);
-            this.pnlLower.Controls.Add(this.bufferView69);
-            this.pnlLower.Controls.Add(this.bufferView70);
-            this.pnlLower.Controls.Add(this.bufferView71);
-            this.pnlLower.Controls.Add(this.bufferView72);
-            this.pnlLower.Controls.Add(this.bufferView73);
-            this.pnlLower.Controls.Add(this.bufferView74);
-            this.pnlLower.Controls.Add(this.bufferView75);
-            this.pnlLower.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlLower.Location = new System.Drawing.Point(0, 0);
-            this.pnlLower.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.pnlLower.Name = "pnlLower";
-            this.pnlLower.Size = new System.Drawing.Size(1922, 942);
-            this.pnlLower.TabIndex = 5;
-            // 
-            // pictureBox4
-            // 
-            this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
-            this.pictureBox4.Location = new System.Drawing.Point(1590, 502);
-            this.pictureBox4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(188, 50);
-            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox4.TabIndex = 103;
-            this.pictureBox4.TabStop = false;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("微軟正黑體", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.label3.Location = new System.Drawing.Point(40, 38);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(123, 61);
-            this.label3.TabIndex = 99;
-            this.label3.Text = "下層";
-            // 
-            // pnlUpper
-            // 
-            this.pnlUpper.Controls.Add(this.pictureBox1);
-            this.pnlUpper.Controls.Add(this.barcodeDataView3);
-            this.pnlUpper.Controls.Add(this.bufferView77);
-            this.pnlUpper.Controls.Add(this.bufferView76);
-            this.pnlUpper.Controls.Add(this.label2);
-            this.pnlUpper.Controls.Add(this.bufferView50);
-            this.pnlUpper.Controls.Add(this.bufferView49);
-            this.pnlUpper.Controls.Add(this.bufferView48);
-            this.pnlUpper.Controls.Add(this.bufferView47);
-            this.pnlUpper.Controls.Add(this.bufferView46);
-            this.pnlUpper.Controls.Add(this.bufferView45);
-            this.pnlUpper.Controls.Add(this.bufferView44);
-            this.pnlUpper.Controls.Add(this.bufferView43);
-            this.pnlUpper.Controls.Add(this.bufferView42);
-            this.pnlUpper.Controls.Add(this.bufferView41);
-            this.pnlUpper.Controls.Add(this.bufferView40);
-            this.pnlUpper.Controls.Add(this.bufferView39);
-            this.pnlUpper.Controls.Add(this.bufferView38);
-            this.pnlUpper.Controls.Add(this.bufferView37);
-            this.pnlUpper.Controls.Add(this.bufferView36);
-            this.pnlUpper.Controls.Add(this.bufferView35);
-            this.pnlUpper.Controls.Add(this.bufferView34);
-            this.pnlUpper.Controls.Add(this.bufferView33);
-            this.pnlUpper.Controls.Add(this.bufferView32);
-            this.pnlUpper.Controls.Add(this.bufferView31);
-            this.pnlUpper.Controls.Add(this.bufferView30);
-            this.pnlUpper.Controls.Add(this.bufferView29);
-            this.pnlUpper.Controls.Add(this.bufferView28);
-            this.pnlUpper.Controls.Add(this.bufferView27);
-            this.pnlUpper.Controls.Add(this.bufferView26);
-            this.pnlUpper.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlUpper.Location = new System.Drawing.Point(0, 0);
-            this.pnlUpper.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.pnlUpper.Name = "pnlUpper";
-            this.pnlUpper.Size = new System.Drawing.Size(1922, 942);
-            this.pnlUpper.TabIndex = 4;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(1450, 568);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(150, 74);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 78;
-            this.pictureBox1.TabStop = false;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("微軟正黑體", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.label2.Location = new System.Drawing.Point(24, 26);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(123, 61);
-            this.label2.TabIndex = 72;
-            this.label2.Text = "上層";
-            // 
-            // timerMainProc
-            // 
-            this.timerMainProc.Interval = 500;
-            this.timerMainProc.Tick += new System.EventHandler(this.timerMainProc_Tick);
-            // 
-            // button1
-            // 
-            this.button1.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.button1.Location = new System.Drawing.Point(528, 4);
-            this.button1.Margin = new System.Windows.Forms.Padding(4);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(218, 60);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "輸送機初始(1)";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.buffer_Restart);
-            // 
-            // button2
-            // 
-            this.button2.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.button2.Location = new System.Drawing.Point(754, 4);
-            this.button2.Margin = new System.Windows.Forms.Padding(4);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(208, 60);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "輸送機初始(2)";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.buffer_Restart2);
             // 
             // barcodeDataView2
             // 
@@ -880,6 +756,53 @@
             this.bufferView1.Size = new System.Drawing.Size(120, 98);
             this.bufferView1.TabIndex = 0;
             // 
+            // pnlLower
+            // 
+            this.pnlLower.Controls.Add(this.pictureBox4);
+            this.pnlLower.Controls.Add(this.bufferView68);
+            this.pnlLower.Controls.Add(this.label3);
+            this.pnlLower.Controls.Add(this.bufferView51);
+            this.pnlLower.Controls.Add(this.bufferView52);
+            this.pnlLower.Controls.Add(this.bufferView53);
+            this.pnlLower.Controls.Add(this.bufferView54);
+            this.pnlLower.Controls.Add(this.bufferView55);
+            this.pnlLower.Controls.Add(this.bufferView56);
+            this.pnlLower.Controls.Add(this.bufferView57);
+            this.pnlLower.Controls.Add(this.bufferView58);
+            this.pnlLower.Controls.Add(this.bufferView59);
+            this.pnlLower.Controls.Add(this.bufferView60);
+            this.pnlLower.Controls.Add(this.bufferView61);
+            this.pnlLower.Controls.Add(this.bufferView62);
+            this.pnlLower.Controls.Add(this.bufferView63);
+            this.pnlLower.Controls.Add(this.bufferView64);
+            this.pnlLower.Controls.Add(this.bufferView65);
+            this.pnlLower.Controls.Add(this.bufferView66);
+            this.pnlLower.Controls.Add(this.bufferView67);
+            this.pnlLower.Controls.Add(this.bufferView69);
+            this.pnlLower.Controls.Add(this.bufferView70);
+            this.pnlLower.Controls.Add(this.bufferView71);
+            this.pnlLower.Controls.Add(this.bufferView72);
+            this.pnlLower.Controls.Add(this.bufferView73);
+            this.pnlLower.Controls.Add(this.bufferView74);
+            this.pnlLower.Controls.Add(this.bufferView75);
+            this.pnlLower.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlLower.Location = new System.Drawing.Point(0, 0);
+            this.pnlLower.Margin = new System.Windows.Forms.Padding(4);
+            this.pnlLower.Name = "pnlLower";
+            this.pnlLower.Size = new System.Drawing.Size(1922, 942);
+            this.pnlLower.TabIndex = 5;
+            // 
+            // pictureBox4
+            // 
+            this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
+            this.pictureBox4.Location = new System.Drawing.Point(1590, 502);
+            this.pictureBox4.Margin = new System.Windows.Forms.Padding(4);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(188, 50);
+            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox4.TabIndex = 103;
+            this.pictureBox4.TabStop = false;
+            // 
             // bufferView68
             // 
             this.bufferView68.BufferIndex = 18;
@@ -890,6 +813,17 @@
             this.bufferView68.Name = "bufferView68";
             this.bufferView68.Size = new System.Drawing.Size(120, 98);
             this.bufferView68.TabIndex = 81;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("微軟正黑體", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label3.Location = new System.Drawing.Point(40, 38);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(123, 61);
+            this.label3.TabIndex = 99;
+            this.label3.Text = "下層";
             // 
             // bufferView51
             // 
@@ -1155,6 +1089,56 @@
             this.bufferView75.Size = new System.Drawing.Size(120, 98);
             this.bufferView75.TabIndex = 74;
             // 
+            // pnlUpper
+            // 
+            this.pnlUpper.Controls.Add(this.pictureBox1);
+            this.pnlUpper.Controls.Add(this.barcodeDataView3);
+            this.pnlUpper.Controls.Add(this.bufferView77);
+            this.pnlUpper.Controls.Add(this.bufferView76);
+            this.pnlUpper.Controls.Add(this.label2);
+            this.pnlUpper.Controls.Add(this.bufferView50);
+            this.pnlUpper.Controls.Add(this.bufferView49);
+            this.pnlUpper.Controls.Add(this.bufferView48);
+            this.pnlUpper.Controls.Add(this.bufferView47);
+            this.pnlUpper.Controls.Add(this.bufferView46);
+            this.pnlUpper.Controls.Add(this.bufferView45);
+            this.pnlUpper.Controls.Add(this.bufferView44);
+            this.pnlUpper.Controls.Add(this.bufferView43);
+            this.pnlUpper.Controls.Add(this.bufferView42);
+            this.pnlUpper.Controls.Add(this.bufferView41);
+            this.pnlUpper.Controls.Add(this.bufferView40);
+            this.pnlUpper.Controls.Add(this.bufferView39);
+            this.pnlUpper.Controls.Add(this.bufferView38);
+            this.pnlUpper.Controls.Add(this.bufferView37);
+            this.pnlUpper.Controls.Add(this.bufferView36);
+            this.pnlUpper.Controls.Add(this.bufferView35);
+            this.pnlUpper.Controls.Add(this.bufferView34);
+            this.pnlUpper.Controls.Add(this.bufferView33);
+            this.pnlUpper.Controls.Add(this.bufferView32);
+            this.pnlUpper.Controls.Add(this.bufferView31);
+            this.pnlUpper.Controls.Add(this.bufferView30);
+            this.pnlUpper.Controls.Add(this.bufferView29);
+            this.pnlUpper.Controls.Add(this.bufferView28);
+            this.pnlUpper.Controls.Add(this.bufferView27);
+            this.pnlUpper.Controls.Add(this.bufferView26);
+            this.pnlUpper.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlUpper.Location = new System.Drawing.Point(0, 0);
+            this.pnlUpper.Margin = new System.Windows.Forms.Padding(4);
+            this.pnlUpper.Name = "pnlUpper";
+            this.pnlUpper.Size = new System.Drawing.Size(1922, 942);
+            this.pnlUpper.TabIndex = 4;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(1450, 568);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(150, 74);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 78;
+            this.pictureBox1.TabStop = false;
+            // 
             // barcodeDataView3
             // 
             this.barcodeDataView3.BufferIndex = 73;
@@ -1185,6 +1169,17 @@
             this.bufferView76.Name = "bufferView76";
             this.bufferView76.Size = new System.Drawing.Size(120, 98);
             this.bufferView76.TabIndex = 73;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("微軟正黑體", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label2.Location = new System.Drawing.Point(24, 26);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(123, 61);
+            this.label2.TabIndex = 72;
+            this.label2.Text = "上層";
             // 
             // bufferView50
             // 
@@ -1460,6 +1455,11 @@
             this.bufferView26.Name = "bufferView26";
             this.bufferView26.Size = new System.Drawing.Size(120, 98);
             this.bufferView26.TabIndex = 22;
+            // 
+            // timerMainProc
+            // 
+            this.timerMainProc.Interval = 500;
+            this.timerMainProc.Tick += new System.EventHandler(this.timerMainProc_Tick);
             // 
             // MainView
             // 

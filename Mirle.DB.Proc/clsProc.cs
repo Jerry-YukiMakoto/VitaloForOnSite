@@ -72,7 +72,7 @@ namespace Mirle.DB.Proc
             int CmdMode=0;
             int IOType;
             string cmdPlt_Id;
-            bool cmdcheck = false;
+            bool cmdcheck = true;
             string Plt_Qty="";
             string Item_Type = "";
             bool IsCycle=false;
@@ -87,9 +87,32 @@ namespace Mirle.DB.Proc
                         if (iRet == DBResult.Success)
                         {
                             Item_No = Regex.Replace(_conveyor.GetBuffer(bufferIndex).Item_No.Trim(), @"[^A-Z,a-z,0-9]", string.Empty);
-                            Plt_Id = Regex.Replace(_conveyor.GetBuffer(bufferIndex).Plt_Id.Trim(), @"[^A-Z,a-z,0-9]", string.Empty);
+                            Plt_Id = Regex.Replace(_conveyor.GetBuffer(bufferIndex).Plt_Id.Trim(), @"[^A-Z,a-z,0-9,-]", string.Empty);
                             Lot_No = Regex.Replace(_conveyor.GetBuffer(bufferIndex).Lot_ID.Trim(), @"[^A-Z,a-z,0-9]", string.Empty);
                             bool Pltfish= Plt_Id.Contains("-");//如果是餘板會有槓槓來與滿板分別，可以根據此條件尋找餘板的命令
+
+                            #region//根據buffer狀態更新命令
+                            if (_conveyor.GetBuffer(bufferIndex).Auto != true)
+                            {
+                                CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.NotAutoMode, db);
+                                return false;
+                            }
+                            if (_conveyor.GetBuffer(bufferIndex).Error == true)
+                            {
+                                CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.BufferError, db);
+                                return false;
+                            }
+                            if (_conveyor.GetBuffer(bufferIndex).CommandId > 0)
+                            {
+                                CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.CmdLeftOver, db);
+                                return false;
+                            }
+                            if (_conveyor.GetBuffer(bufferIndex).Presence != true)
+                            {
+                                CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.PresenceNotExist, db);
+                                return false;
+                            }
+                            #endregion
 
                             clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"BCR Notice Start:Item_No=>{Item_No} Plt_Id=>{Plt_Id} Lot_No=>{Lot_No}");//當讀取通知開始，紀錄讀到的的值
 
@@ -129,6 +152,7 @@ namespace Mirle.DB.Proc
                                 clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Can't Find Cmd Please Check ");
                             }
 
+
                             if (string.IsNullOrWhiteSpace(Plt_Qty)) //數量並未填入，發出異常(像餘板一定要額外輸)
                             {
                                 cmdcheck = false;
@@ -138,46 +162,18 @@ namespace Mirle.DB.Proc
                             if(Itm_Mst.GetItmMstDtl(Item_No, out var dataObject3,db).ResultCode==DBResult.Success)
                             {
                                 Item_Type = dataObject3[0].Item_Type;//根據料號的群組決定儲位的放法
-                            }else
+                            }
+                            else
                             {
                                 cmdcheck=false;
                                 clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Can't find Itm_Grp Pease Check ");
                             }
 
-
-                            if (cmdcheck) //都蒐集不到資料執行退板
+                            bool FindEqu = false;
+                            if (!IsCycle)//盤點不需尋找新儲位，盤點會回到原本的儲位
                             {
-                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Get StoreIn Command => {cmdSno}, " +
-                                        $"{CmdMode}");
-
-                                #region//根據buffer狀態更新命令
-                                if (_conveyor.GetBuffer(bufferIndex).Auto != true)
+                                if (cmdcheck == true)
                                 {
-                                    CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.NotAutoMode, db);
-                                    return false;
-                                }
-                                if (_conveyor.GetBuffer(bufferIndex).Error == true)
-                                {
-                                    CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.BufferError, db);
-                                    return false;
-                                }
-                                if (_conveyor.GetBuffer(bufferIndex).CommandId > 0)
-                                {
-                                    CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.CmdLeftOver, db);
-                                    return false;
-                                }
-                                if (_conveyor.GetBuffer(bufferIndex).Presence != true)
-                                {
-                                    CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.PresenceNotExist, db);
-                                    return false;
-                                }
-                                #endregion
-
-                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Ready Receive StoreIn Command=> {cmdSno}");
-
-                                if (!IsCycle)//盤點不需尋找新儲位，盤點會回到原本的儲位
-                                {
-
                                     Equ_No = GetEquNo();//照順序選擇線別
                                     int Sequ_No = Convert.ToInt32(Equ_No);
                                     for (int i = 0; i < 6; i++)//從起始的線別開始尋找是否有線別異常
@@ -189,48 +185,65 @@ namespace Mirle.DB.Proc
                                                 Sequ_No %= 6;
                                             }
                                             Equ_No = Sequ_No.ToString();
+                                            FindEqu = true;
+                                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Equ Get:{Sequ_No}");
                                             break;
                                         }
                                         Sequ_No++;
                                     }
 
-                                    IsHigh = _conveyor.GetBuffer(bufferIndex).LoadHeight;//根據荷高去選儲位位置
-
-                                    if (IsHigh == 1)
+                                    if (!FindEqu)
                                     {
-                                        if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, Item_Type, out var dataObject2, db).ResultCode == DBResult.Success)
-                                        {
-                                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find High Loc succeess => {cmdSno}");
-                                            Loc = dataObject2[0].Loc;
-                                        }
-                                        else
-                                        {
-                                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
-                                                , $"Find High Loc fail");
-                                            return false;
-                                        }
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                                , $"Find Equ fail");
+                                        cmdcheck = false;
+                                    }
+                                }
+                                IsHigh = _conveyor.GetBuffer(bufferIndex).LoadHeight;//根據荷高去選儲位位置
+
+                                if (IsHigh == 1)
+                                {
+                                    if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, Item_Type, out var dataObject2, db).ResultCode == DBResult.Success)
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find High Loc succeess => {cmdSno}");
+                                        Loc = dataObject2[0].Loc;
                                     }
                                     else
                                     {
-                                        if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No, Item_Type, out var dataObject2, db).ResultCode == DBResult.Success)
-                                        {
-                                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Loc succeess => {cmdSno}");
-                                            Loc = dataObject2[0].Loc;
-                                        }
-                                        else if(Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, Item_Type, out var dataObject4, db).ResultCode == DBResult.Success)
-                                        {
-                                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Loc succeess => {cmdSno}");
-                                            Loc = dataObject4[0].Loc;
-                                        }
-                                        else
-                                        {
-                                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
-                                                , $"Find Loc fail");
-                                            return false;
-                                        }
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                            , $"Find High Loc fail");
+                                        return false;//這邊不選擇直接退板因為其他線別可能有位子，讓他重進function選擇新線別
                                     }
-
                                 }
+                                else
+                                {
+                                    if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No, Item_Type, out var dataObject2, db).ResultCode == DBResult.Success)
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Low Loc succeess => {cmdSno}");
+                                        Loc = dataObject2[0].Loc;
+                                    }
+                                    else if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, Item_Type, out var dataObject4, db).ResultCode == DBResult.Success)
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Cant find low loc => Find high Loc succeess => {cmdSno}");
+                                        Loc = dataObject4[0].Loc;
+                                    }
+                                    else
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                            , $"Find Loc fail");
+                                        return false;//這邊不選擇直接退板因為其他線別可能有位子，讓他重進function選擇新線別
+                                    }
+                                }
+                            }
+
+                            if (cmdcheck) //都蒐集不到資料執行退板，無法找到線別與儲位，執行退版動作
+                            {
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Get StoreIn Command => {cmdSno}, " +
+                                        $"{CmdMode}");
+
+
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Ready Receive StoreIn Command=> {cmdSno}");
+                               
 
                                 path = StoreInfindpathbyEquNo(Convert.ToInt32(Equ_No));//根據線別選入庫站
 
@@ -369,6 +382,7 @@ namespace Mirle.DB.Proc
             string Qty_Plt ="";
             int path = 0;
             string[] Cranests = new string[6];
+            bool cmdcheck=true;
             try
             {
                 var _conveyor = ControllerReader.GetCVControllerr().GetConveryor();
@@ -387,62 +401,78 @@ namespace Mirle.DB.Proc
 
                             #region//根據buffer狀態更新命令
                             if (_conveyor.GetBuffer(bufferIndex).Auto != true)
-                                {
+                            {
                                 clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
                                         , $"Auto Not On");
                                 return false;
-                                }
-                                if (_conveyor.GetBuffer(bufferIndex).Error == true)
-                                {
+                            }
+                            if (_conveyor.GetBuffer(bufferIndex).Error == true)
+                            {
                                 clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
                                     , $"Error ON");
                                 return false;
-                                }
-                                if (_conveyor.GetBuffer(bufferIndex).CommandId > 0 || _conveyor.GetBuffer(bufferIndex).PCCommandId > 0)
-                                {
+                            }
+                            if (_conveyor.GetBuffer(bufferIndex).CommandId > 0 || _conveyor.GetBuffer(bufferIndex).PCCommandId > 0)
+                            {
                                 clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
                                      , $"CommanId exist On Buffer");
                                 return false;
-                                }
-                                if (_conveyor.GetBuffer(bufferIndex).Presence == false)
-                                {
+                            }
+                            if (_conveyor.GetBuffer(bufferIndex).Presence == false)
+                            {
                                 clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
                                     , $" No Presence PLease Check");
                                 return false;
-                                }
-                                #endregion
+                            }
+                            #endregion
 
-                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Ready Receive StoreIn Command=> {cmdSno}");
+                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Ready Receive StoreIn Command");
 
-                            if (Itm_Mst.GetItmMstDtl(Item_No, out var dataObject3, db).ResultCode == DBResult.Success && Plt_Id!="" && Lot_No!="")//當搜尋不到料號資料(和效期或版號是空值時)，執行退版動作
+                            if (Itm_Mst.GetItmMstDtl(Item_No, out var dataObject3, db).ResultCode == DBResult.Success && Plt_Id != "" && Lot_No != "")//當搜尋不到料號資料(和效期或版號是空值時)，執行退版動作
                             {
                                 Item_Desc = dataObject3[0].Item_Desc;
                                 Item_Unit = dataObject3[0].Item_Unit;
                                 Item_Type = dataObject3[0].Item_Type;//根據料號的群組決定儲位的放法 U高價位/D低價位
                                 Qty_Plt = dataObject3[0].Qty_Plt;
                                 Item_Grp = dataObject3[0].Item_Grp;
-
-                                Equ_No = GetEquNo();//貨物照線別順序輪流放
+                            }
+                            else
+                            {
+                                cmdcheck = false;
+                            }
+                            bool FindEqu = false;
+                            if (cmdcheck)
+                            {
+                                Equ_No = GetEquNo();//照順序選擇線別
                                 int Sequ_No = Convert.ToInt32(Equ_No);
-                                for (int i = 0; i < 6; i++)//從輪流放的的線別排除有異常的Crane
+                                for (int i = 0; i < 6; i++)//從起始的線別開始尋找是否有線別異常
                                 {
-                                    if (EQU_CMD.GetEquStatus(Sequ_No, out var dataObject1, db).ResultCode == DBResult.NoDataSelect)
+                                    if (EQU_CMD.GetEquStatus(Sequ_No, out var dataObject4, db).ResultCode == DBResult.NoDataSelect)
                                     {
                                         if (Sequ_No != 6)
                                         {
                                             Sequ_No %= 6;
                                         }
                                         Equ_No = Sequ_No.ToString();
+                                        FindEqu = true;
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Equ Get:{Sequ_No}");
                                         break;
                                     }
                                     Sequ_No++;
                                 }
 
+                                if (!FindEqu)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                            , $"Find Equ fail");
+                                    cmdcheck = false;
+                                }
+                            }
                                 IsHigh = _conveyor.GetBuffer(bufferIndex).LoadHeight;//根據荷高去選儲位位置，高荷高只找高儲位，低荷高先找低再找高
 
                                 if (IsHigh == 1)
                                 {
-                                    if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No,Item_Type ,out var dataObject2, db).ResultCode == DBResult.Success)
+                                    if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, Item_Type, out var dataObject2, db).ResultCode == DBResult.Success)
                                     {
                                         clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
                                             , $"Find High Loc success");
@@ -452,269 +482,268 @@ namespace Mirle.DB.Proc
                                     {
                                         clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
                                             , $"Find High Loc fail");
-                                        return false;
-                                    }
+                                    return false;//這邊不選擇直接退板因為其他線別可能有位子，讓他重進function選擇新線別
+                                }
                                 }
                                 else
                                 {
-                                    if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No,Item_Type, out var dataObject2, db).ResultCode == DBResult.Success)
+                                    if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No, Item_Type, out var dataObject2, db).ResultCode == DBResult.Success)
                                     {
                                         clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
-                                            , $"Find Loc success");
+                                            , $"Find Low Loc success");
                                         Loc = dataObject2[0].Loc;
                                     }
                                     else if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, Item_Type, out var dataObject4, db).ResultCode == DBResult.Success)
                                     {
-                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Loc succeess");
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Low fail=>Find high Loc succeess");
                                         Loc = dataObject4[0].Loc;
                                     }
                                     else
                                     {
                                         clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
                                             , $"Find Loc fail");
+                                    return false;//這邊不選擇直接退板因為其他線別可能有位子，讓他重進function選擇新線別
+                                }
+                                }
+
+                                if (cmdcheck)
+                                {
+                                    cmdSno = SNO.FunGetSeqNo(clsEnum.enuSnoType.CMDSNO, db); //尋找最新不重複的命令號
+                                    if (cmdSno == "" || cmdSno == "00000")
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                                , $"Find cmdSno fail");
                                         return false;
                                     }
-                                }
 
-                                cmdSno = SNO.FunGetSeqNo(clsEnum.enuSnoType.CMDSNO, db); //尋找最新不重複的命令號
-                                if (cmdSno == "" || cmdSno == "00000")
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
-                                            , $"Find cmdSno fail");
-                                    return false;
-                                }
+                                    struCmdMst stuCmdMst = new struCmdMst(); //生產由WCS建立命令
+                                    stuCmdMst.CmdSno = cmdSno;
+                                    stuCmdMst.CmdSts = "1";
+                                    stuCmdMst.CmdAbnormal = "NA";
+                                    stuCmdMst.Prty = "5";
+                                    stuCmdMst.StnNo = sStnNo;
+                                    stuCmdMst.CmdMode = "1";
+                                    stuCmdMst.IoType = "13";
+                                    stuCmdMst.WhId = "ASRS";
+                                    stuCmdMst.EquNo = Equ_No;
+                                    stuCmdMst.Loc = Loc;
+                                    stuCmdMst.NewLoc = "";
+                                    stuCmdMst.CrtDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                                    stuCmdMst.TrnUser = "WCS";
+                                    stuCmdMst.HostName = System.Environment.MachineName;
+                                    stuCmdMst.Trace = Trace.StoreInWriteCmdToCV;
+                                    stuCmdMst.Plt_Id = Plt_Id;
 
-                                struCmdMst stuCmdMst = new struCmdMst(); //生產由WCS建立命令
-                                stuCmdMst.CmdSno = cmdSno;
-                                stuCmdMst.CmdSts = "1";
-                                stuCmdMst.CmdAbnormal = "NA";
-                                stuCmdMst.Prty = "5";
-                                stuCmdMst.StnNo = sStnNo;
-                                stuCmdMst.CmdMode = "1";
-                                stuCmdMst.IoType = "13";
-                                stuCmdMst.WhId = "ASRS";
-                                stuCmdMst.EquNo = Equ_No;
-                                stuCmdMst.Loc = Loc;
-                                stuCmdMst.NewLoc = "";
-                                stuCmdMst.CrtDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                                stuCmdMst.TrnUser = "WCS";
-                                stuCmdMst.HostName = System.Environment.MachineName;
-                                stuCmdMst.Trace = Trace.StoreInWriteCmdToCV;
-                                stuCmdMst.Plt_Id = Plt_Id;
+                                    struCmdDtl stuCmdDtl = new struCmdDtl();   //命令交易編號 = 儲位交易編號
+                                    stuCmdDtl.Cmd_Txno = SNO.FunGetSeqNo(clsEnum.enuSnoType.LOCTXNO, db);
+                                    if (stuCmdDtl.Cmd_Txno == "" || stuCmdDtl.Cmd_Txno == "00000")
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                                , $"Find cmd_Txno fail");
+                                        return false;
+                                    }
+                                    stuCmdDtl.Cmd_Sno = stuCmdMst.CmdSno;
+                                    stuCmdDtl.Plt_Qty = Convert.ToDouble(Qty_Plt);
+                                    stuCmdDtl.Trn_Qty = Convert.ToDouble(Qty_Plt);
+                                    stuCmdDtl.In_Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                                    stuCmdDtl.Item_No = Item_No;
+                                    stuCmdDtl.Lot_No = Lot_No;
+                                    stuCmdDtl.Plt_Id = Plt_Id;
+                                    stuCmdDtl.Company_ID = "ASRS";
+                                    stuCmdDtl.Item_Desc = Item_Desc;
+                                    stuCmdDtl.Uom = Item_Unit;
+                                    stuCmdDtl.Created_by = "WCS";
+                                    stuCmdDtl.Created_Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
-                                struCmdDtl stuCmdDtl = new struCmdDtl();   //命令交易編號 = 儲位交易編號
-                                stuCmdDtl.Cmd_Txno = SNO.FunGetSeqNo(clsEnum.enuSnoType.LOCTXNO, db);
-                                if (stuCmdDtl.Cmd_Txno == "" || stuCmdDtl.Cmd_Txno == "00000")
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
-                                            , $"Find cmd_Txno fail");
-                                    return false;
-                                }
-                                stuCmdDtl.Cmd_Sno = stuCmdMst.CmdSno;
-                                stuCmdDtl.Plt_Qty = Convert.ToDouble(Qty_Plt);
-                                stuCmdDtl.Trn_Qty = Convert.ToDouble(Qty_Plt);
-                                stuCmdDtl.In_Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                                stuCmdDtl.Item_No = Item_No;
-                                stuCmdDtl.Lot_No = Lot_No;
-                                stuCmdDtl.Plt_Id = Plt_Id;
-                                stuCmdDtl.Company_ID = "ASRS";
-                                stuCmdDtl.Item_Desc = Item_Desc;
-                                stuCmdDtl.Uom = Item_Unit;
-                                stuCmdDtl.Created_by = "WCS";
-                                stuCmdDtl.Created_Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                                    if (db.TransactionCtrl2(TransactionTypes.Begin).ResultCode != DBResult.Success)
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "begin fail");
+                                        return false;
+                                    }
+                                    if (CMD_MST.FunInsCmdMst(stuCmdMst, db).ResultCode == DBResult.Success)
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert cmd_mst succeess => {cmdSno}");
+                                    }
+                                    else
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert cmd_mst fail => {cmdSno}");
+                                        db.TransactionCtrl2(TransactionTypes.Rollback);
+                                        return false;
+                                    }
+                                    if (CMD_MST.FunInsCmdDtl(stuCmdDtl, db).ResultCode == DBResult.Success)
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert cmd_dtl succeess => {cmdSno}");
+                                    }
+                                    else
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert cmd_dtl fail => {cmdSno}");
+                                        db.TransactionCtrl2(TransactionTypes.Rollback);
+                                        return false;
+                                    }
+                                    if (Loc_Mst.UpdateStoreInLocMst(Loc, db).ResultCode == DBResult.Success)
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Update StoreIn Loc succeess => {cmdSno}");
+                                    }
+                                    else
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Update StoreIn Loc fail => {cmdSno}");
+                                        db.TransactionCtrl2(TransactionTypes.Rollback);
+                                        return false;
+                                    }
 
-                                if (db.TransactionCtrl2(TransactionTypes.Begin).ResultCode != DBResult.Success)
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "begin fail");
-                                    return false;
-                                }
-                                if (CMD_MST.FunInsCmdMst(stuCmdMst, db).ResultCode == DBResult.Success)
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert cmd_mst succeess => {cmdSno}");
-                                }
-                                else
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert cmd_mst fail => {cmdSno}");
-                                    db.TransactionCtrl2(TransactionTypes.Rollback);
-                                    return false;
-                                }
-                                if (CMD_MST.FunInsCmdDtl(stuCmdDtl, db).ResultCode == DBResult.Success)
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert cmd_dtl succeess => {cmdSno}");
-                                }
-                                else
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert cmd_dtl fail => {cmdSno}");
-                                    db.TransactionCtrl2(TransactionTypes.Rollback);
-                                    return false;
-                                }
-                                if (Loc_Mst.UpdateStoreInLocMst(Loc, db).ResultCode == DBResult.Success)
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Update StoreIn Loc succeess => {cmdSno}");
-                                }
-                                else
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Update StoreIn Loc fail => {cmdSno}");
-                                    db.TransactionCtrl2(TransactionTypes.Rollback);
-                                    return false;
-                                }
+                                    var WritePlccheck = _conveyor.GetBuffer(bufferIndex).WriteCommandIdAsync(cmdSno, 1).Result;//確認寫入PLC的方法是否正常運作，傳回結果和有異常的時候的訊息
+                                    bool Result = WritePlccheck;
+                                    if (Result != true)//寫入命令和模式
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC Command-mode Fail");
 
-                                var WritePlccheck = _conveyor.GetBuffer(bufferIndex).WriteCommandIdAsync(cmdSno, 1).Result;//確認寫入PLC的方法是否正常運作，傳回結果和有異常的時候的訊息
-                                bool Result = WritePlccheck;
-                                if (Result != true)//寫入命令和模式
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC Command-mode Fail");
+                                        db.TransactionCtrl2(TransactionTypes.Rollback);
+                                        return false;
+                                    }
 
-                                    db.TransactionCtrl2(TransactionTypes.Rollback);
-                                    return false;
+                                    path = StoreInfindpathbyEquNo(Convert.ToInt32(Equ_No));//根據線別選入庫站
+
+                                    WritePlccheck = _conveyor.GetBuffer(bufferIndex).WritePathChabgeNotice(path).Result;
+                                    Result = WritePlccheck;
+                                    if (Result != true)//寫入路徑
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC Path-mode Fail");
+
+                                        db.TransactionCtrl2(TransactionTypes.Rollback);
+                                        return false;
+                                    }
+                                    WritePlccheck = _conveyor.GetBuffer(bufferIndex).BCRNoticeComplete(1).Result;
+                                    Result = WritePlccheck;
+                                    if (Result != true)//通知讀取完成
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC BCR-Notice Fail");
+
+                                        db.TransactionCtrl2(TransactionTypes.Rollback);
+                                        return false;
+                                    }
+                                    if (db.TransactionCtrl2(TransactionTypes.Commit).ResultCode != DBResult.Success)
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "Commit Fail");
+
+                                        db.TransactionCtrl2(TransactionTypes.Rollback);
+                                        return false;
+                                    }
+                                    return true;
+
                                 }
-
-                                path = StoreInfindpathbyEquNo(Convert.ToInt32(Equ_No));//根據線別選入庫站
-
-                                WritePlccheck = _conveyor.GetBuffer(bufferIndex).WritePathChabgeNotice(path).Result;
-                                Result = WritePlccheck;
-                                if (Result != true)//寫入路徑
+                                else//當搜尋不到料號資料，無法找到線別與儲位，執行退版動作
                                 {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC Path-mode Fail");
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "Produce WithDraw Start");
 
-                                    db.TransactionCtrl2(TransactionTypes.Rollback);
-                                    return false;
+                                    cmdSno = SNO.FunGetSeqNo(clsEnum.enuSnoType.CMDSNO, db);
+                                    if (cmdSno == "" || cmdSno == "00000")
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                                , $"Abnormal Produce process find cmdSno fail");
+                                        return false;
+                                    }
+
+                                    struCmdMst stuCmdMst = new struCmdMst();
+                                    stuCmdMst.CmdSno = cmdSno;
+                                    stuCmdMst.CmdSts = "1";
+                                    stuCmdMst.CmdAbnormal = "NA";
+                                    stuCmdMst.Prty = "5";
+                                    stuCmdMst.StnNo = sStnNo;
+                                    stuCmdMst.CmdMode = "9";
+                                    stuCmdMst.IoType = "9";
+                                    stuCmdMst.WhId = "ASRS";
+                                    stuCmdMst.EquNo = "";
+                                    stuCmdMst.Loc = "";
+                                    stuCmdMst.NewLoc = "";
+                                    stuCmdMst.CrtDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                                    stuCmdMst.TrnUser = "WCS";
+                                    stuCmdMst.HostName = System.Environment.MachineName;
+                                    stuCmdMst.Trace = "0";
+                                    stuCmdMst.Plt_Id = Plt_Id;
+
+                                    struCmdDtl stuCmdDtl = new struCmdDtl();   //命令交易編號 = 儲位交易編號
+                                    stuCmdDtl.Cmd_Txno = SNO.FunGetSeqNo(clsEnum.enuSnoType.LOCTXNO, db);
+                                    if (stuCmdDtl.Cmd_Txno == "" || stuCmdDtl.Cmd_Txno == "00000")
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                                , $"Find cmd_Txno fail");
+                                        return false;
+                                    }
+                                    stuCmdDtl.Cmd_Sno = stuCmdMst.CmdSno;
+                                    stuCmdDtl.Plt_Qty = 0;
+                                    stuCmdDtl.Trn_Qty = 0;
+                                    stuCmdDtl.Loc = "";
+                                    stuCmdDtl.In_Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                                    stuCmdDtl.Item_No = Item_No;
+                                    stuCmdDtl.Lot_No = Lot_No;
+                                    stuCmdDtl.Plt_Id = Plt_Id;
+                                    stuCmdDtl.Company_ID = "";
+                                    stuCmdDtl.Item_Desc = Item_Desc;
+                                    stuCmdDtl.Uom = Item_Unit;
+                                    stuCmdDtl.Created_by = "WCS";
+                                    stuCmdDtl.Created_Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+                                    if (db.TransactionCtrl2(TransactionTypes.Begin).ResultCode != DBResult.Success)
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "begin fail");
+                                        return false;
+                                    }
+                                    if (CMD_MST.FunInsCmdMst(stuCmdMst, db).ResultCode == DBResult.Success)
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert cmd_mst succeess => {cmdSno}");
+                                    }
+                                    else
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert cmd_mst fail => {cmdSno}");
+                                        db.TransactionCtrl2(TransactionTypes.Rollback);
+                                        return false;
+                                    }
+                                    if (CMD_MST.FunInsCmdDtl(stuCmdDtl, db).ResultCode == DBResult.Success)
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert cmd_dtl succeess => {cmdSno}");
+                                    }
+                                    else
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert cmd_dtl fail => {cmdSno}");
+                                        db.TransactionCtrl2(TransactionTypes.Rollback);
+                                        return false;
+                                    }
+                                    var WritePlccheck = _conveyor.GetBuffer(bufferIndex).WriteCommandIdAsync(cmdSno, 9).Result;//確認寫入PLC的方法是否正常運作，傳回結果和有異常的時候的訊息
+                                    bool Result = WritePlccheck;
+                                    if (Result != true)//寫入命令和模式
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC Command-mode Fail");
+
+                                        db.TransactionCtrl2(TransactionTypes.Rollback);
+                                        return false;
+                                    }
+                                    WritePlccheck = _conveyor.GetBuffer(bufferIndex).WritePathChabgeNotice(31).Result; //退版路徑編號
+                                    Result = WritePlccheck;
+                                    if (Result != true)//寫入路徑
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC Path-mode Fail");
+
+                                        db.TransactionCtrl2(TransactionTypes.Rollback);
+                                        return false;
+                                    }
+                                    WritePlccheck = _conveyor.GetBuffer(bufferIndex).BCRNoticeComplete(1).Result;
+                                    Result = WritePlccheck;
+                                    if (Result != true)//通知讀取完成
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC BCR-Notice Fail");
+
+                                        db.TransactionCtrl2(TransactionTypes.Rollback);
+                                        return false;
+                                    }
+                                    if (db.TransactionCtrl2(TransactionTypes.Commit).ResultCode != DBResult.Success)
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "Commit Fail");
+
+                                        db.TransactionCtrl2(TransactionTypes.Rollback);
+                                        return false;
+                                    }
+                                    return true;
                                 }
-                                WritePlccheck = _conveyor.GetBuffer(bufferIndex).BCRNoticeComplete(1).Result;
-                                Result = WritePlccheck;
-                                if (Result != true)//通知讀取完成
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC BCR-Notice Fail");
-
-                                    db.TransactionCtrl2(TransactionTypes.Rollback);
-                                    return false;
-                                }
-                                if (db.TransactionCtrl2(TransactionTypes.Commit).ResultCode != DBResult.Success)
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "Commit Fail");
-
-                                    db.TransactionCtrl2(TransactionTypes.Rollback);
-                                    return false;
-                                }
-                                return true;
-
-                            }
-                            else //當搜尋不到料號資料，執行退版動作
-                            {
-                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "Produce WithDraw Start");
-
-                                cmdSno = SNO.FunGetSeqNo(clsEnum.enuSnoType.CMDSNO, db);
-                                if (cmdSno == "" || cmdSno == "00000")
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
-                                            , $"Abnormal Produce process find cmdSno fail");
-                                    return false;
-                                }
-
-                                struCmdMst stuCmdMst = new struCmdMst();
-                                stuCmdMst.CmdSno = cmdSno;
-                                stuCmdMst.CmdSts = "1";
-                                stuCmdMst.CmdAbnormal = "NA";
-                                stuCmdMst.Prty = "5";
-                                stuCmdMst.StnNo = sStnNo;
-                                stuCmdMst.CmdMode = "9";
-                                stuCmdMst.IoType = "9";
-                                stuCmdMst.WhId = "ASRS";
-                                stuCmdMst.EquNo = "";
-                                stuCmdMst.Loc = "";
-                                stuCmdMst.NewLoc = "";
-                                stuCmdMst.CrtDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                                stuCmdMst.TrnUser = "WCS";
-                                stuCmdMst.HostName = System.Environment.MachineName;
-                                stuCmdMst.Trace = "0";
-                                stuCmdMst.Plt_Id = Plt_Id;
-
-                                struCmdDtl stuCmdDtl = new struCmdDtl();   //命令交易編號 = 儲位交易編號
-                                stuCmdDtl.Cmd_Txno = SNO.FunGetSeqNo(clsEnum.enuSnoType.LOCTXNO, db);
-                                if (stuCmdDtl.Cmd_Txno == "" || stuCmdDtl.Cmd_Txno == "00000")
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
-                                            , $"Find cmd_Txno fail");
-                                    return false;
-                                }
-                                stuCmdDtl.Cmd_Sno = stuCmdMst.CmdSno;
-                                stuCmdDtl.Plt_Qty = 0;
-                                stuCmdDtl.Trn_Qty = 0;
-                                stuCmdDtl.Loc = "";
-                                stuCmdDtl.In_Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                                stuCmdDtl.Item_No = Item_No;
-                                stuCmdDtl.Lot_No = Lot_No;
-                                stuCmdDtl.Plt_Id = Plt_Id;
-                                stuCmdDtl.Company_ID = "";
-                                stuCmdDtl.Item_Desc = Item_Desc;
-                                stuCmdDtl.Uom = Item_Unit;
-                                stuCmdDtl.Created_by = "WCS";
-                                stuCmdDtl.Created_Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-
-                                if (db.TransactionCtrl2(TransactionTypes.Begin).ResultCode != DBResult.Success)
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "begin fail");
-                                    return false;
-                                }
-                                if (CMD_MST.FunInsCmdMst(stuCmdMst, db).ResultCode == DBResult.Success)
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert cmd_mst succeess => {cmdSno}");
-                                }
-                                else
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert cmd_mst fail => {cmdSno}");
-                                    db.TransactionCtrl2(TransactionTypes.Rollback);
-                                    return false;
-                                }
-                                if (CMD_MST.FunInsCmdDtl(stuCmdDtl, db).ResultCode == DBResult.Success)
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert cmd_dtl succeess => {cmdSno}");
-                                }
-                                else
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Insert cmd_dtl fail => {cmdSno}");
-                                    db.TransactionCtrl2(TransactionTypes.Rollback);
-                                    return false;
-                                }
-                                var WritePlccheck = _conveyor.GetBuffer(bufferIndex).WriteCommandIdAsync(cmdSno, 9).Result;//確認寫入PLC的方法是否正常運作，傳回結果和有異常的時候的訊息
-                                bool Result = WritePlccheck;
-                                if (Result != true)//寫入命令和模式
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC Command-mode Fail");
-
-                                    db.TransactionCtrl2(TransactionTypes.Rollback);
-                                    return false;
-                                }
-                                WritePlccheck = _conveyor.GetBuffer(bufferIndex).WritePathChabgeNotice(31).Result; //退版路徑編號
-                                Result = WritePlccheck;
-                                if (Result != true)//寫入路徑
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC Path-mode Fail");
-
-                                    db.TransactionCtrl2(TransactionTypes.Rollback);
-                                    return false;
-                                }
-                                WritePlccheck = _conveyor.GetBuffer(bufferIndex).BCRNoticeComplete(1).Result;
-                                Result = WritePlccheck;
-                                if (Result != true)//通知讀取完成
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"WritePLC BCR-Notice Fail");
-
-                                    db.TransactionCtrl2(TransactionTypes.Rollback);
-                                    return false;
-                                }
-                                if (db.TransactionCtrl2(TransactionTypes.Commit).ResultCode != DBResult.Success)
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "Commit Fail");
-
-                                    db.TransactionCtrl2(TransactionTypes.Rollback);
-                                    return false;
-                                }
-
-
-                                return false;
-                            }
-
                         }
                         else
                         {
@@ -723,8 +752,7 @@ namespace Mirle.DB.Proc
                             return false;
                         }
                     }
-                }
-                else return false;
+                }else return false;
             }
             catch (Exception ex)
             {
@@ -1002,7 +1030,7 @@ namespace Mirle.DB.Proc
                                 }
                                 #endregion
 
-                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Ready BCRCheck=> {cmdSno}");
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"2F Buffer Ready BCRCheck=> {cmdSno}");
 
                                 string IOType = dataObject[0].IO_Type;
                                 string dest = "";
@@ -1011,17 +1039,11 @@ namespace Mirle.DB.Proc
                                 if(Item_No!=dataObject[0].Item_No || Plt_Id!=dataObject[0].Plt_Id || Lot_No!=dataObject[0].Lot_No)
                                 {
                                     //掃到與資料庫不一樣做異常處理
-
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"2F Buffer BCRCheck=>Warning:BCR different from DB!  => {cmdSno}");
                                 }
 
-                                if (Cmd_mode == "3")//如果是撿料，入庫儲位欄位是LOC，一般入庫是NewLoc
-                                {
-                                    dest = $"{dataObject[0].Loc}";
-                                }
-                                else
-                                {
-                                    dest = $"{dataObject[0].Loc}";
-                                }
+                                dest = $"{dataObject[0].Loc}";
+                                
 
                                 var WritePlccheck = _conveyor.GetBuffer(bufferIndex).BCRNoticeComplete(1).Result;
                                 bool Result = WritePlccheck;
