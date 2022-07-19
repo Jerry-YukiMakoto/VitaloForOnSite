@@ -31,23 +31,42 @@ namespace Mirle.DB.Fun
                 return DBResult.Exception;
             }
         }
-        public GetDataResult GetLocMst_EmptyLoc(string Equ_No,string Item_Type, out DataObject<LocMst> dataObject, SqlServer db)
+        //public GetDataResult GetLocMst_EmptyLoc(string Equ_No,string Item_Type, out DataObject<LocMst> dataObject, SqlServer db)
+        //{
+        //    {
+        //        string strSql = $"select Top 1 Loc from Loc_Mst where LOC_STS='N' and Equ_No ='{Equ_No}' and Loc_Size='L'";
+        //        strSql += $" AND Storage_Type = '{Item_Type}'";
+        //        strSql += $" ORDER BY LVL_Z,BAY_Y,ROW_X desc ";
+
+        //        return db.GetData(strSql, out dataObject);
+        //    }
+        //}
+        //public GetDataResult GetLocMst_EmptyLochigh(string Equ_No,string Item_Type, out DataObject<LocMst> dataObject, SqlServer db)
+        //{   
+        //    {
+        //        string strSql = $"select Top 1 Loc from Loc_Mst where LOC_STS='N' and Equ_No ='{Equ_No}' and Loc_Size='H'";
+        //        strSql += $" AND Storage_Type = '{Item_Type}'";
+        //        strSql += $" ORDER BY LVL_Z,BAY_Y,ROW_X desc ";
+                
+        //        return db.GetData(strSql, out dataObject);
+        //    }
+        //}
+
+        public GetDataResult GetLocMst_EmptyLoc(string Equ_No, out DataObject<LocMst> dataObject, SqlServer db)
         {
             {
-                string strSql = $"select Top 1 Loc from Loc_Mst where LOC_STS='N' and Equ_No ='{Equ_No}' and Loc_Size='L'";
-                strSql += $" AND Storage_Type = '{Item_Type}'";
+                string strSql = $"select Top 1 Loc from Loc_Mst where LOC_STS='N' and Equ_No ='{Equ_No}' and Loc_Size='L' ";
                 strSql += $" ORDER BY LVL_Z,BAY_Y,ROW_X desc ";
 
                 return db.GetData(strSql, out dataObject);
             }
         }
-        public GetDataResult GetLocMst_EmptyLochigh(string Equ_No,string Item_Type, out DataObject<LocMst> dataObject, SqlServer db)
-        {   
+        public GetDataResult GetLocMst_EmptyLochigh(string Equ_No, out DataObject<LocMst> dataObject, SqlServer db)
+        {
             {
-                string strSql = $"select Top 1 Loc from Loc_Mst where LOC_STS='N' and Equ_No ='{Equ_No}' and Loc_Size='H'";
-                strSql += $" AND Storage_Type = '{Item_Type}'";
+                string strSql = $"select Top 1 Loc from Loc_Mst where LOC_STS='N' and Equ_No ='{Equ_No}' and Loc_Size='H' ";
                 strSql += $" ORDER BY LVL_Z,BAY_Y,ROW_X desc ";
-                
+
                 return db.GetData(strSql, out dataObject);
             }
         }

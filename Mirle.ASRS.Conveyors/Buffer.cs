@@ -167,8 +167,7 @@ namespace Mirle.ASRS.Conveyors
             {
                 try
                 {
-                    if (CommandId != 0) return false;
-
+                   
                     Signal.ControllerSignal.BcrComplete.SetValue(BCRNoticeComplete);
                     Task.Delay(500).Wait();
                     return true;

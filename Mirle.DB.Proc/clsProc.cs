@@ -74,7 +74,7 @@ namespace Mirle.DB.Proc
             string cmdPlt_Id;
             bool cmdcheck = true;
             string Plt_Qty="";
-            string Item_Type = "";
+            //string Item_Type = "";
             bool IsCycle=false;
             try
             {
@@ -161,15 +161,15 @@ namespace Mirle.DB.Proc
                                 clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Can't Find Plt_Qty Please Check ");
                             }
 
-                            if(Itm_Mst.GetItmMstDtl(Item_No, out var dataObject3,db).ResultCode==DBResult.Success)
-                            {
-                                Item_Type = dataObject3[0].Item_Type;//根據料號的群組決定儲位的放法
-                            }
-                            else
-                            {
-                                cmdcheck=false;
-                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Can't find Itm_Grp Pease Check ");
-                            }
+                            //if(Itm_Mst.GetItmMstDtl(Item_No, out var dataObject3,db).ResultCode==DBResult.Success)
+                            //{
+                            //    Item_Type = dataObject3[0].Item_Type;//根據料號的群組決定儲位的放法
+                            //}
+                            //else
+                            //{
+                            //    cmdcheck=false;
+                            //    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Can't find Itm_Grp Pease Check ");
+                            //}
 
                             bool FindEqu = false;
                             if (!IsCycle)//盤點不需尋找新儲位，盤點會回到原本的儲位
@@ -201,11 +201,47 @@ namespace Mirle.DB.Proc
                                         cmdcheck = false;
                                     }
                                 }
-                                IsHigh = _conveyor.GetBuffer(bufferIndex).LoadHeight;//根據荷高去選儲位位置
+                                IsHigh = _conveyor.GetBuffer(bufferIndex).LoadHeight;
+                                #region//儲位尋找加物料分群
+                                //根據荷高去選儲位位置
+                                //if (IsHigh == 1)
+                                //{
+                                //    if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, Item_Type, out var dataObject2, db).ResultCode == DBResult.Success)
+                                //    {
+                                //        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find High Loc succeess => {cmdSno}");
+                                //        Loc = dataObject2[0].Loc;
+                                //    }
+                                //    else
+                                //    {
+                                //        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                //            , $"Find High Loc fail");
+                                //        return false;//這邊不選擇直接退板因為其他線別可能有位子，讓他重進function選擇新線別
+                                //    }
+                                //}
+                                //else
+                                //{
+                                //    if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No, Item_Type, out var dataObject2, db).ResultCode == DBResult.Success)
+                                //    {
+                                //        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Low Loc succeess => {cmdSno}");
+                                //        Loc = dataObject2[0].Loc;
+                                //    }
+                                //    else if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, Item_Type, out var dataObject4, db).ResultCode == DBResult.Success)
+                                //    {
+                                //        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Cant find low loc => Find high Loc succeess => {cmdSno}");
+                                //        Loc = dataObject4[0].Loc;
+                                //    }
+                                //    else
+                                //    {
+                                //        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                //            , $"Find Loc fail");
+                                //        return false;//這邊不選擇直接退板因為其他線別可能有位子，讓他重進function選擇新線別
+                                //    }
+                                //}
+                                #endregion
 
                                 if (IsHigh == 1)
                                 {
-                                    if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, Item_Type, out var dataObject2, db).ResultCode == DBResult.Success)
+                                    if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, out var dataObject2, db).ResultCode == DBResult.Success)
                                     {
                                         clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find High Loc succeess => {cmdSno}");
                                         Loc = dataObject2[0].Loc;
@@ -219,12 +255,12 @@ namespace Mirle.DB.Proc
                                 }
                                 else
                                 {
-                                    if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No, Item_Type, out var dataObject2, db).ResultCode == DBResult.Success)
+                                    if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No, out var dataObject2, db).ResultCode == DBResult.Success)
                                     {
                                         clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Low Loc succeess => {cmdSno}");
                                         Loc = dataObject2[0].Loc;
                                     }
-                                    else if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, Item_Type, out var dataObject4, db).ResultCode == DBResult.Success)
+                                    else if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, out var dataObject4, db).ResultCode == DBResult.Success)
                                     {
                                         clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Cant find low loc => Find high Loc succeess => {cmdSno}");
                                         Loc = dataObject4[0].Loc;
@@ -375,7 +411,7 @@ namespace Mirle.DB.Proc
             string cmdSno="";
             string Item_Desc = "";
             string Item_Unit = "";
-            string Item_Type = "";
+            //string Item_Type = "";
             string Item_Grp = "";
             string Qty_Plt ="";
             int path = 0;
@@ -430,7 +466,7 @@ namespace Mirle.DB.Proc
                             {
                                 Item_Desc = dataObject3[0].Item_Desc;
                                 Item_Unit = dataObject3[0].Item_Unit;
-                                Item_Type = dataObject3[0].Item_Type;//根據料號的群組決定儲位的放法 U高價位/D低價位
+                               /* Item_Type = dataObject3[0].Item_Type;*///根據料號的群組決定儲位的放法 U高價位/D低價位
                                 Qty_Plt = dataObject3[0].Qty_Plt;
                                 Item_Grp = dataObject3[0].Item_Grp;
                             }
@@ -466,46 +502,83 @@ namespace Mirle.DB.Proc
                                     cmdcheck = false;
                                 }
                             }
-                                IsHigh = _conveyor.GetBuffer(bufferIndex).LoadHeight;//根據荷高去選儲位位置，高荷高只找高儲位，低荷高先找低再找高
+                            IsHigh = _conveyor.GetBuffer(bufferIndex).LoadHeight;//根據荷高去選儲位位置，高荷高只找高儲位，低荷高先找低再找高
 
-                                if (IsHigh == 1)
+                            #region//儲位加物料群組
+                            //if (IsHigh == 1)
+                            //{
+                            //    if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, Item_Type, out var dataObject2, db).ResultCode == DBResult.Success)
+                            //    {
+                            //        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                            //            , $"Find High Loc success");
+                            //        Loc = dataObject2[0].Loc;
+                            //    }
+                            //    else
+                            //    {
+                            //        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                            //            , $"Find High Loc fail");
+                            //    return false;//這邊不選擇直接退板因為其他線別可能有位子，讓他重進function選擇新線別
+                            //    }
+                            //}
+                            //else
+                            //{
+                            //    if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No, Item_Type, out var dataObject2, db).ResultCode == DBResult.Success)
+                            //    {
+                            //        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                            //            , $"Find Low Loc success");
+                            //        Loc = dataObject2[0].Loc;
+                            //    }
+                            //    else if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, Item_Type, out var dataObject4, db).ResultCode == DBResult.Success)
+                            //    {
+                            //        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Low fail=>Find high Loc succeess");
+                            //        Loc = dataObject4[0].Loc;
+                            //    }
+                            //    else
+                            //    {
+                            //        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                            //            , $"Find Loc fail");
+                            //    return false;//這邊不選擇直接退板因為其他線別可能有位子，讓他重進function選擇新線別
+                            //    }
+                            //}
+                            #endregion
+
+                            if (IsHigh == 1)
+                            {
+                                if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, out var dataObject2, db).ResultCode == DBResult.Success)
                                 {
-                                    if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, Item_Type, out var dataObject2, db).ResultCode == DBResult.Success)
-                                    {
-                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
-                                            , $"Find High Loc success");
-                                        Loc = dataObject2[0].Loc;
-                                    }
-                                    else
-                                    {
-                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
-                                            , $"Find High Loc fail");
-                                    return false;//這邊不選擇直接退板因為其他線別可能有位子，讓他重進function選擇新線別
-                                    }
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find High Loc succeess => {cmdSno}");
+                                    Loc = dataObject2[0].Loc;
                                 }
                                 else
                                 {
-                                    if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No, Item_Type, out var dataObject2, db).ResultCode == DBResult.Success)
-                                    {
-                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
-                                            , $"Find Low Loc success");
-                                        Loc = dataObject2[0].Loc;
-                                    }
-                                    else if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, Item_Type, out var dataObject4, db).ResultCode == DBResult.Success)
-                                    {
-                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Low fail=>Find high Loc succeess");
-                                        Loc = dataObject4[0].Loc;
-                                    }
-                                    else
-                                    {
-                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
-                                            , $"Find Loc fail");
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                        , $"Find High Loc fail");
                                     return false;//這邊不選擇直接退板因為其他線別可能有位子，讓他重進function選擇新線別
                                 }
-                                }
-
-                                if (cmdcheck)
+                            }
+                            else
+                            {
+                                if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No, out var dataObject2, db).ResultCode == DBResult.Success)
                                 {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Low Loc succeess => {cmdSno}");
+                                    Loc = dataObject2[0].Loc;
+                                }
+                                else if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, out var dataObject4, db).ResultCode == DBResult.Success)
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Cant find low loc => Find high Loc succeess => {cmdSno}");
+                                    Loc = dataObject4[0].Loc;
+                                }
+                                else
+                                {
+                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                        , $"Find Loc fail");
+                                    return false;//這邊不選擇直接退板因為其他線別可能有位子，讓他重進function選擇新線別
+                                }
+                            }
+
+                        if (cmdcheck)
+
+                        {
                                     clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "Produce Normal Start");
 
                                     cmdSno = SNO.FunGetSeqNo(clsEnum.enuSnoType.CMDSNO, db); //尋找最新不重複的命令號
@@ -914,7 +987,6 @@ namespace Mirle.DB.Proc
 
         public bool StoreIn_ShowOnKanBanFinish(string sStnNo, int bufferIndex)//為了看板程式，更新命令Trace，使其可以停止顯示此命令
         {
-
             try
             {
                 using (var db = clsGetDB.GetDB(_config))
