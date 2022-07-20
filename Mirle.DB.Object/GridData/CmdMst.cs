@@ -29,6 +29,7 @@ namespace Mirle.DB.Object.GridData
                         oGrid[ColumnDef.CMD_MST.CmdSts.Index, oGrid.Rows.Count - 1].Value = Convert.ToString(dtTmp.Rows[i]["CMD_STS"]);
                         oGrid[ColumnDef.CMD_MST.PRT.Index, oGrid.Rows.Count - 1].Value = Convert.ToString(dtTmp.Rows[i]["prty"]);
                         oGrid[ColumnDef.CMD_MST.CmdMode.Index, oGrid.Rows.Count - 1].Value = Convert.ToString(dtTmp.Rows[i]["Cmd_Mode"]);
+                        oGrid[ColumnDef.CMD_MST.IOType.Index, oGrid.Rows.Count - 1].Value = Convert.ToString(dtTmp.Rows[i]["IO_Type"]);
                         oGrid[ColumnDef.CMD_MST.Trace.Index, oGrid.Rows.Count - 1].Value = Convert.ToString(dtTmp.Rows[i]["Trace"]);
                         oGrid[ColumnDef.CMD_MST.StnNo.Index, oGrid.Rows.Count - 1].Value = Convert.ToString(dtTmp.Rows[i]["Stn_No"]);
                         oGrid[ColumnDef.CMD_MST.Loc.Index, oGrid.Rows.Count - 1].Value = Convert.ToString(dtTmp.Rows[i]["Loc"]);

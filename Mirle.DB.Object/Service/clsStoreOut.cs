@@ -14,34 +14,34 @@ namespace Mirle.DB.Object.Service
         {
             try
             {
-                string stn = "";
+                string EquNo = "";
                 for (int bufferIndex = 1; bufferIndex <= 11; bufferIndex += 2)
                 {
                     if (bufferIndex == 1)
                     {
-                        stn = StnNo.A01_01;
+                        EquNo = "1";
                     }
                     else if (bufferIndex == 3)
                     {
-                        stn = StnNo.A01_03;
+                        EquNo = "2";
                     }
                     else if (bufferIndex == 5)
                     {
-                        stn = StnNo.A01_05;
+                        EquNo = "3";
                     }
                     else if (bufferIndex == 7)
                     {
-                        stn = StnNo.A01_07;
+                        EquNo = "4";
                     }
                     else if(bufferIndex == 9)
                     {
-                        stn = StnNo.A01_09;
+                        EquNo = "5";
                     }
                     else if(bufferIndex == 11)
                     {
-                        stn = StnNo.A01_11;
+                        EquNo = "6";
                     }
-                    clsDB_Proc.GetDB_Object().GetProcess().FunStoreOut_A01_01ToA01_11_WriPlc(stn, bufferIndex);
+                    clsDB_Proc.GetDB_Object().GetProcess().FunStoreOut_A01_01ToA01_11_WriPlc(EquNo, bufferIndex);
                 }
             }
             catch (Exception ex)
@@ -73,16 +73,16 @@ namespace Mirle.DB.Object.Service
         {
             try
             {
-                var stn = new List<string>()
+                var EQU = new List<string>()
                 {
-                    StnNo.A01_01,
-                    StnNo.A01_03,
-                    StnNo.A01_05,
-                    StnNo.A01_07,
-                    StnNo.A01_09,
-                    StnNo.A01_11,
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                    "6",
                 };
-                clsDB_Proc.GetDB_Object().GetProcess().FunStoreOutEquCmdFinish(stn);
+                clsDB_Proc.GetDB_Object().GetProcess().FunStoreOutEquCmdFinish(EQU);
             }
             catch (Exception ex)
             {

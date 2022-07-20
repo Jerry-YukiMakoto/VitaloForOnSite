@@ -10,9 +10,9 @@
         //public const int EmptyStoreOutbyWMS = 11;//由WMS發起，單純出空棧板
 
         public const int Cycle = 31;
-        public const int ErpStoreIn = 11;
-        public const int NoTktStoreIn = 12;
-        public const int ProduceStoreIn = 13;
+        public const int ErpStoreIn = 12;
+        public const int NoTktStoreIn = 13;
+        public const int ProduceStoreIn = 11;
         public const int abnormalOUT = 9;
         public const int ERPtktabnormalOUT = 61;
     }

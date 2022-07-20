@@ -156,11 +156,11 @@ namespace Mirle.ASRS.WCS
 
                     clsOther.clsL2L.Other_LocToLocfinish();
 
-                    //clsSTSabnormal.StoreAbnormalSTS_WriteCV();
+                    clsSTSabnormal.StoreAbnormalSTS_WriteCV();
 
-                    //clsSTSabnormal.StoreAbnormalSTS_CrateCrane();
+                    clsSTSabnormal.StoreAbnormalSTS_CrateCrane();
 
-                    //clsSTSabnormal.StoreAbnormalSTS_Finish();
+                    clsSTSabnormal.StoreAbnormalSTS_Finish();
                 }
             }
             catch (Exception ex)

@@ -22,6 +22,7 @@ namespace Mirle.ASRS.WCS.Model.DataAccess
         public string Equ_No { get; private set; }
         public string Plt_Id { get; private set; }
         public string Plt_Qty { get; private set; }
+        public string Trn_Qty { get; private set; }
         public string Item_No { get; private set; }
         public string Lot_No { get; private set; }
 
@@ -67,6 +68,10 @@ namespace Mirle.ASRS.WCS.Model.DataAccess
             if (row.Table.Columns.Contains("Plt_Qty"))
             {
                 Plt_Qty = Convert.ToString(row["Plt_Qty"]);
+            }
+            if (row.Table.Columns.Contains("Trn_Qty"))
+            {
+                Trn_Qty = Convert.ToString(row["Trn_Qty"]);
             }
             if (row.Table.Columns.Contains("Plt_Id"))
             {

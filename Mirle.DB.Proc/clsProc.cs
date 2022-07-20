@@ -73,7 +73,7 @@ namespace Mirle.DB.Proc
             int IOType;
             string cmdPlt_Id;
             bool cmdcheck = true;
-            string Plt_Qty="";
+            string Trn_Qty="";
             //string Item_Type = "";
             bool IsCycle=false;
             try
@@ -104,7 +104,7 @@ namespace Mirle.DB.Proc
                                 CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.BufferError, db);
                                 return false;
                             }
-                            if (_conveyor.GetBuffer(bufferIndex).CommandId > 0)
+                            if (_conveyor.GetBuffer(bufferIndex).CommandId > 0 || _conveyor.GetBuffer(bufferIndex).PCCommandId > 0)
                             {
                                 CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.CmdLeftOver, db);
                                 return false;
@@ -124,7 +124,7 @@ namespace Mirle.DB.Proc
                                 CmdMode = Convert.ToInt32(dataObject1[0].Cmd_Mode);
                                 IOType = Convert.ToInt32(dataObject1[0].IO_Type);
                                 cmdPlt_Id = dataObject1[0].Plt_Id;
-                                Plt_Qty = dataObject1[0].Plt_Qty;
+                                Trn_Qty = dataObject1[0].Trn_Qty;
                                 cmdcheck = true;
                             }
                             else if (CMD_MST.GetCmdMstByCycleStart(sStnNo, Item_No, Lot_No, Pltfish, Plt_Id, out var dataObject, db).ResultCode == DBResult.Success)
@@ -134,7 +134,7 @@ namespace Mirle.DB.Proc
                                 IOType = Convert.ToInt32(dataObject[0].IO_Type);
                                 Equ_No = dataObject[0].Equ_No;
                                 cmdPlt_Id = dataObject[0].Plt_Id;
-                                Plt_Qty = dataObject[0].Plt_Qty;
+                                Trn_Qty = dataObject[0].Trn_Qty;
                                 Loc = dataObject[0].Loc;
                                 IsCycle = true;//確認是盤點命令參數
                                 cmdcheck = true;
@@ -145,7 +145,7 @@ namespace Mirle.DB.Proc
                                 CmdMode = Convert.ToInt32(dataObject1[0].Cmd_Mode);
                                 IOType = Convert.ToInt32(dataObject1[0].IO_Type);
                                 cmdPlt_Id = dataObject1[0].Plt_Id;
-                                Plt_Qty = dataObject1[0].Plt_Qty;
+                                Trn_Qty = dataObject1[0].Trn_Qty;
                                 cmdcheck = true;
                             }
                             else//都蒐集不到資料執行退板
@@ -155,7 +155,7 @@ namespace Mirle.DB.Proc
                             }
 
 
-                            if (string.IsNullOrWhiteSpace(Plt_Qty)) //數量並未填入，發出異常(像餘板一定要額外輸)
+                            if (string.IsNullOrWhiteSpace(Trn_Qty)) //數量並未填入，發出異常(像餘板一定要額外輸)
                             {
                                 cmdcheck = false;
                                 clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Can't Find Plt_Qty Please Check ");
@@ -239,37 +239,40 @@ namespace Mirle.DB.Proc
                                 //}
                                 #endregion
 
-                                if (IsHigh == 1)
+                                if (cmdcheck)
                                 {
-                                    if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, out var dataObject2, db).ResultCode == DBResult.Success)
+                                    if (IsHigh == 1)
                                     {
-                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find High Loc succeess => {cmdSno}");
-                                        Loc = dataObject2[0].Loc;
+                                        if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, out var dataObject2, db).ResultCode == DBResult.Success)
+                                        {
+                                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find High Loc succeess => {cmdSno}");
+                                            Loc = dataObject2[0].Loc;
+                                        }
+                                        else
+                                        {
+                                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                                , $"Find High Loc fail");
+                                            return false;//這邊不選擇直接退板因為其他線別可能有位子，讓他重進function選擇新線別
+                                        }
                                     }
                                     else
                                     {
-                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
-                                            , $"Find High Loc fail");
-                                        return false;//這邊不選擇直接退板因為其他線別可能有位子，讓他重進function選擇新線別
-                                    }
-                                }
-                                else
-                                {
-                                    if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No, out var dataObject2, db).ResultCode == DBResult.Success)
-                                    {
-                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Low Loc succeess => {cmdSno}");
-                                        Loc = dataObject2[0].Loc;
-                                    }
-                                    else if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, out var dataObject4, db).ResultCode == DBResult.Success)
-                                    {
-                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Cant find low loc => Find high Loc succeess => {cmdSno}");
-                                        Loc = dataObject4[0].Loc;
-                                    }
-                                    else
-                                    {
-                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
-                                            , $"Find Loc fail");
-                                        return false;//這邊不選擇直接退板因為其他線別可能有位子，讓他重進function選擇新線別
+                                        if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No, out var dataObject2, db).ResultCode == DBResult.Success)
+                                        {
+                                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Low Loc succeess => {cmdSno}");
+                                            Loc = dataObject2[0].Loc;
+                                        }
+                                        else if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, out var dataObject4, db).ResultCode == DBResult.Success)
+                                        {
+                                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Cant find low loc => Find high Loc succeess => {cmdSno}");
+                                            Loc = dataObject4[0].Loc;
+                                        }
+                                        else
+                                        {
+                                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                                , $"Find Loc fail");
+                                            return false;//這邊不選擇直接退板因為其他線別可能有位子，讓他重進function選擇新線別
+                                        }
                                     }
                                 }
                             }
@@ -542,37 +545,41 @@ namespace Mirle.DB.Proc
                             //}
                             #endregion
 
-                            if (IsHigh == 1)
+
+                            if (cmdcheck)
                             {
-                                if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, out var dataObject2, db).ResultCode == DBResult.Success)
+                                if (IsHigh == 1)
                                 {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find High Loc succeess => {cmdSno}");
-                                    Loc = dataObject2[0].Loc;
+                                    if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, out var dataObject2, db).ResultCode == DBResult.Success)
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find High Loc succeess => {cmdSno}");
+                                        Loc = dataObject2[0].Loc;
+                                    }
+                                    else
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                            , $"Find High Loc fail");
+                                        return false;//這邊不選擇直接退板因為其他線別可能有位子，讓他重進function選擇新線別
+                                    }
                                 }
                                 else
                                 {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
-                                        , $"Find High Loc fail");
-                                    return false;//這邊不選擇直接退板因為其他線別可能有位子，讓他重進function選擇新線別
-                                }
-                            }
-                            else
-                            {
-                                if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No, out var dataObject2, db).ResultCode == DBResult.Success)
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Low Loc succeess => {cmdSno}");
-                                    Loc = dataObject2[0].Loc;
-                                }
-                                else if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, out var dataObject4, db).ResultCode == DBResult.Success)
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Cant find low loc => Find high Loc succeess => {cmdSno}");
-                                    Loc = dataObject4[0].Loc;
-                                }
-                                else
-                                {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
-                                        , $"Find Loc fail");
-                                    return false;//這邊不選擇直接退板因為其他線別可能有位子，讓他重進function選擇新線別
+                                    if (Loc_Mst.GetLocMst_EmptyLoc(Equ_No, out var dataObject2, db).ResultCode == DBResult.Success)
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Find Low Loc succeess => {cmdSno}");
+                                        Loc = dataObject2[0].Loc;
+                                    }
+                                    else if (Loc_Mst.GetLocMst_EmptyLochigh(Equ_No, out var dataObject4, db).ResultCode == DBResult.Success)
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Cant find low loc => Find high Loc succeess => {cmdSno}");
+                                        Loc = dataObject4[0].Loc;
+                                    }
+                                    else
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName
+                                            , $"Find Loc fail");
+                                        return false;//這邊不選擇直接退板因為其他線別可能有位子，讓他重進function選擇新線別
+                                    }
                                 }
                             }
 
@@ -596,7 +603,7 @@ namespace Mirle.DB.Proc
                                     stuCmdMst.Prty = "5";
                                     stuCmdMst.StnNo = sStnNo;
                                     stuCmdMst.CmdMode = "1";
-                                    stuCmdMst.IoType = "13";
+                                    stuCmdMst.IoType = IOtype.ProduceStoreIn.ToString();
                                     stuCmdMst.WhId = "ASRS";
                                     stuCmdMst.EquNo = Equ_No;
                                     stuCmdMst.Loc = Loc;
@@ -622,6 +629,8 @@ namespace Mirle.DB.Proc
                                     stuCmdDtl.Item_No = Item_No;
                                     stuCmdDtl.Lot_No = Lot_No;
                                     stuCmdDtl.Plt_Id = Plt_Id;
+                                    stuCmdDtl.Tkt_Io = "";
+                                    stuCmdDtl.Tkt_Type = "";
                                     stuCmdDtl.Company_ID = "ASRS";
                                     stuCmdDtl.Item_Desc = Item_Desc;
                                     stuCmdDtl.Uom = Item_Unit;
@@ -750,6 +759,8 @@ namespace Mirle.DB.Proc
                                     stuCmdDtl.Item_No = Item_No;
                                     stuCmdDtl.Lot_No = Lot_No;
                                     stuCmdDtl.Plt_Id = Plt_Id;
+                                    stuCmdDtl.Tkt_Io = "";
+                                    stuCmdDtl.Tkt_Type = "";
                                     stuCmdDtl.Company_ID = "";
                                     stuCmdDtl.Item_Desc = Item_Desc;
                                     stuCmdDtl.Uom = Item_Unit;
@@ -1410,7 +1421,7 @@ namespace Mirle.DB.Proc
                                 clsWriLog.StoreOutLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Begin Fail => {cmd_Sno}");
                                 return false;
                             }
-                            if (CMD_MST.UpdateCmdMstTransferring(cmd_Sno, Trace.StoreInAbnormalWritePLC, db).ResultCode == DBResult.Success)
+                            if (CMD_MST.UpdateCmdMstTransferringSTS(cmd_Sno, Trace.StoreInAbnormalWritePLC, db).ResultCode == DBResult.Success)
                             {
                                 clsWriLog.StoreOutLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Upadte STS cmd Success => {cmd_Sno}, " +
                                 $"{Cmd_Mode}");
@@ -1477,7 +1488,7 @@ namespace Mirle.DB.Proc
                     int iRet = clsGetDB.FunDbOpen(db);
                     if (iRet == DBResult.Success)
                     {
-                        var _conveyor = ControllerReader.GetCVControllerr().GetConveryor();
+                        var _conveyor = ControllerReader.GetCVControllerr().GetConveryor2();
                         string cmdSno = _conveyor.GetBuffer(bufferIndex).CommandId.ToString().PadLeft(5, '0');
 
                         if (CMD_MST.GetCmdMstBySTSabnormal(cmdSno, out var dataObject, db).ResultCode == DBResult.Success)
@@ -1526,9 +1537,9 @@ namespace Mirle.DB.Proc
                                 CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.BufferError, db);
                                 return false;
                             }
-                            if (_conveyor.GetBuffer(bufferIndex).Presence == true)
+                            if (_conveyor.GetBuffer(bufferIndex).Presence != true)
                             {
-                                CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.PresenceExist, db);
+                                CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.PresenceNotExist, db);
                                 return false;
                             }
                             #endregion
@@ -1795,7 +1806,7 @@ namespace Mirle.DB.Proc
 
         #region StoreOut
 
-        public bool FunStoreOut_A01_01ToA01_11_WriPlc(string sStnNo, int bufferIndex) //出庫與盤點共用
+        public bool FunStoreOut_A01_01ToA01_11_WriPlc(string EquNo, int bufferIndex) //出庫與盤點共用
         {
             try
             {
@@ -1804,7 +1815,7 @@ namespace Mirle.DB.Proc
                     int iRet = clsGetDB.FunDbOpen(db);
                     if (iRet == DBResult.Success)
                     {
-                        if (CMD_MST.GetCmdMstByStoreOutStart(sStnNo, out var dataObject, db).ResultCode == DBResult.Success)
+                        if (CMD_MST.GetCmdMstByStoreOutStart(EquNo, out var dataObject, db).ResultCode == DBResult.Success)
                         {
                             string cmd_Sno = dataObject[0].Cmd_Sno;
                             int Cmd_Mode = Convert.ToInt32(dataObject[0].Cmd_Mode);
@@ -2010,7 +2021,7 @@ namespace Mirle.DB.Proc
             }
         }
 
-        public bool FunStoreOutEquCmdFinish(IEnumerable<string> stations) 
+        public bool FunStoreOutEquCmdFinish(IEnumerable<string> EquNo) 
         {
             try
             {
@@ -2019,7 +2030,7 @@ namespace Mirle.DB.Proc
                     int iRet = clsGetDB.FunDbOpen(db);
                     if (iRet == DBResult.Success)
                     {
-                        if (CMD_MST.GetCmdMstByStoreOutFinish(stations, out var dataObject, db).ResultCode == DBResult.Success)
+                        if (CMD_MST.GetCmdMstByStoreOutFinish(EquNo, out var dataObject, db).ResultCode == DBResult.Success)
                         {
                             foreach (var cmdMst in dataObject.Data)
                             {

@@ -74,6 +74,8 @@ namespace Mirle.ASRS.WCS.Model.DataAccess
         public string Item_No { get; set; }
         public string Lot_No { get; set; }
         public string Plt_Id { get; set; }
+        public string Tkt_Io { get; set; }
+        public string Tkt_Type { get; set; }
         public string Company_ID { get; set; }
         public string Item_Desc { get; set; }
         public string Uom { get; set; }
@@ -100,6 +102,8 @@ namespace Mirle.ASRS.WCS.Model.DataAccess
             Uom = "";
             Created_by = "";
             Created_Date = "";
+            Tkt_Io = "";
+            Tkt_Type = "";
         }
     }
 }

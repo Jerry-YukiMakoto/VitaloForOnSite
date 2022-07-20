@@ -276,6 +276,10 @@ namespace Mirle.ASRS.Conveyors.Signal
                         buffer.BCRsignal.Plt_Id3 = new Word(_mplc, $"D608");
                         buffer.BCRsignal.Plt_Id4 = new Word(_mplc, $"D609");
                         buffer.BCRsignal.Plt_Id5 = new Word(_mplc, $"D610");
+
+                        buffer.ItemNo = new WordBlock(_mplc, $"D591", 10);
+                        buffer.LotNo = new WordBlock(_mplc, $"D601", 5);
+                        buffer.PltID=new WordBlock(_mplc, $"D606",5);
                     }
                     else
                     {
@@ -299,6 +303,9 @@ namespace Mirle.ASRS.Conveyors.Signal
                         buffer.BCRsignal.Plt_Id3 = new Word();
                         buffer.BCRsignal.Plt_Id4 = new Word();
                         buffer.BCRsignal.Plt_Id5 = new Word();
+                        buffer.ItemNo = new WordBlock();
+                        buffer.PltID = new WordBlock();
+                        buffer.LotNo = new WordBlock();
                     }
 
                     if (bufferIndex + 1 == 48)
@@ -325,6 +332,10 @@ namespace Mirle.ASRS.Conveyors.Signal
                         buffer.BCRsignal.Plt_Id3 = new Word(_mplc, $"D628");
                         buffer.BCRsignal.Plt_Id4 = new Word(_mplc, $"D629");
                         buffer.BCRsignal.Plt_Id5 = new Word(_mplc, $"D630");
+
+                        buffer.ItemNo = new WordBlock(_mplc, $"D611", 10);
+                        buffer.LotNo = new WordBlock(_mplc, $"D621", 5);
+                        buffer.PltID = new WordBlock(_mplc, $"D626", 5);
                     }
                     else if(bufferIndex + 1 != 43)
                     {
@@ -348,6 +359,10 @@ namespace Mirle.ASRS.Conveyors.Signal
                         buffer.BCRsignal.Plt_Id3 = new Word();
                         buffer.BCRsignal.Plt_Id4 = new Word();
                         buffer.BCRsignal.Plt_Id5 = new Word();
+
+                        buffer.ItemNo = new WordBlock();
+                        buffer.PltID = new WordBlock();
+                        buffer.LotNo = new WordBlock();
                     }
                     #endregion
 
@@ -460,6 +475,10 @@ namespace Mirle.ASRS.Conveyors.Signal
                         buffer.BCRsignal.Plt_Id3 = new Word(_mplc, $"D378");
                         buffer.BCRsignal.Plt_Id4 = new Word(_mplc, $"D379");
                         buffer.BCRsignal.Plt_Id5 = new Word(_mplc, $"D380");
+
+                        buffer.ItemNo = new WordBlock(_mplc, $"D361", 10);
+                        buffer.LotNo = new WordBlock(_mplc, $"D371", 5);
+                        buffer.PltID = new WordBlock(_mplc, $"D376", 5);
                     }
                     else
                     {
@@ -484,6 +503,10 @@ namespace Mirle.ASRS.Conveyors.Signal
                         buffer.BCRsignal.Plt_Id3 = new Word();
                         buffer.BCRsignal.Plt_Id4 = new Word();
                         buffer.BCRsignal.Plt_Id5 = new Word();
+
+                        buffer.ItemNo = new WordBlock();
+                        buffer.PltID = new WordBlock();
+                        buffer.LotNo = new WordBlock();
                     }
                     #endregion
 

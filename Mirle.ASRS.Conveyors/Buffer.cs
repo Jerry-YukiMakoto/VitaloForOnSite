@@ -49,27 +49,30 @@ namespace Mirle.ASRS.Conveyors
         public bool Manual => Signal.StatusSignal.Auto.IsOff() && Signal.StatusSignal.Manual.IsOn();
         public bool Presence => Signal.StatusSignal.Presence.IsOn();
         public bool Position => Signal.StatusSignal.Position.IsOn();
-        public string Item_No => (GetAscii_LowByte(Signal.BCRsignal.Item_No1.GetValue()).ToString()+ GetAscii_HiByte(Signal.BCRsignal.Item_No1.GetValue()).ToString()
-            + GetAscii_LowByte(Signal.BCRsignal.Item_No2.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Item_No2.GetValue()).ToString()
-            + GetAscii_LowByte(Signal.BCRsignal.Item_No3.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Item_No3.GetValue()).ToString()
-            + GetAscii_LowByte(Signal.BCRsignal.Item_No4.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Item_No4.GetValue()).ToString()
-            + GetAscii_LowByte(Signal.BCRsignal.Item_No5.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Item_No5.GetValue()).ToString()
-            + GetAscii_LowByte(Signal.BCRsignal.Item_No6.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Item_No6.GetValue()).ToString()
-            + GetAscii_LowByte(Signal.BCRsignal.Item_No7.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Item_No7.GetValue()).ToString()
-            + GetAscii_LowByte(Signal.BCRsignal.Item_No8.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Item_No8.GetValue()).ToString()
-            + GetAscii_LowByte(Signal.BCRsignal.Item_No9.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Item_No9.GetValue()).ToString()
-            + GetAscii_LowByte(Signal.BCRsignal.Item_No10.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Item_No10.GetValue()).ToString()).Replace(" ", "").Trim();
-        public string Lot_ID => (GetAscii_LowByte(Signal.BCRsignal.Lot_ID1.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Lot_ID1.GetValue()).ToString()
-            + GetAscii_LowByte(Signal.BCRsignal.Lot_ID2.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Lot_ID2.GetValue()).ToString()
-            + GetAscii_LowByte(Signal.BCRsignal.Lot_ID3.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Lot_ID3.GetValue()).ToString()
-            + GetAscii_LowByte(Signal.BCRsignal.Lot_ID4.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Lot_ID4.GetValue()).ToString()
-            + GetAscii_LowByte(Signal.BCRsignal.Lot_ID5.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Lot_ID5.GetValue()).ToString()).Replace(" ", "").Trim();
-        public string Plt_Id =>(GetAscii_LowByte(Signal.BCRsignal.Plt_Id1.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Plt_Id1.GetValue()).ToString()
-            + GetAscii_LowByte(Signal.BCRsignal.Plt_Id2.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Plt_Id2.GetValue()).ToString()
-            + GetAscii_LowByte(Signal.BCRsignal.Plt_Id3.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Plt_Id3.GetValue()).ToString()
-            + GetAscii_LowByte(Signal.BCRsignal.Plt_Id4.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Plt_Id4.GetValue()).ToString()
-            + GetAscii_LowByte(Signal.BCRsignal.Plt_Id5.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Plt_Id5.GetValue()).ToString()).Replace(" ", "").Trim();
+        //public string Item_No => (GetAscii_LowByte(Signal.BCRsignal.Item_No1.GetValue()).ToString()+ GetAscii_HiByte(Signal.BCRsignal.Item_No1.GetValue()).ToString()
+        //    + GetAscii_LowByte(Signal.BCRsignal.Item_No2.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Item_No2.GetValue()).ToString()
+        //    + GetAscii_LowByte(Signal.BCRsignal.Item_No3.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Item_No3.GetValue()).ToString()
+        //    + GetAscii_LowByte(Signal.BCRsignal.Item_No4.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Item_No4.GetValue()).ToString()
+        //    + GetAscii_LowByte(Signal.BCRsignal.Item_No5.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Item_No5.GetValue()).ToString()
+        //    + GetAscii_LowByte(Signal.BCRsignal.Item_No6.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Item_No6.GetValue()).ToString()
+        //    + GetAscii_LowByte(Signal.BCRsignal.Item_No7.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Item_No7.GetValue()).ToString()
+        //    + GetAscii_LowByte(Signal.BCRsignal.Item_No8.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Item_No8.GetValue()).ToString()
+        //    + GetAscii_LowByte(Signal.BCRsignal.Item_No9.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Item_No9.GetValue()).ToString()
+        //    + GetAscii_LowByte(Signal.BCRsignal.Item_No10.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Item_No10.GetValue()).ToString()).Replace(" ", "").Trim();
+        //public string Lot_ID => (GetAscii_LowByte(Signal.BCRsignal.Lot_ID1.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Lot_ID1.GetValue()).ToString()
+        //    + GetAscii_LowByte(Signal.BCRsignal.Lot_ID2.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Lot_ID2.GetValue()).ToString()
+        //    + GetAscii_LowByte(Signal.BCRsignal.Lot_ID3.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Lot_ID3.GetValue()).ToString()
+        //    + GetAscii_LowByte(Signal.BCRsignal.Lot_ID4.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Lot_ID4.GetValue()).ToString()
+        //    + GetAscii_LowByte(Signal.BCRsignal.Lot_ID5.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Lot_ID5.GetValue()).ToString()).Replace(" ", "").Trim();
+        //public string Plt_Id =>(GetAscii_LowByte(Signal.BCRsignal.Plt_Id1.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Plt_Id1.GetValue()).ToString()
+        //    + GetAscii_LowByte(Signal.BCRsignal.Plt_Id2.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Plt_Id2.GetValue()).ToString()
+        //    + GetAscii_LowByte(Signal.BCRsignal.Plt_Id3.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Plt_Id3.GetValue()).ToString()
+        //    + GetAscii_LowByte(Signal.BCRsignal.Plt_Id4.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Plt_Id4.GetValue()).ToString()
+        //    + GetAscii_LowByte(Signal.BCRsignal.Plt_Id5.GetValue()).ToString() + GetAscii_HiByte(Signal.BCRsignal.Plt_Id5.GetValue()).ToString()).Replace(" ", "").Trim();
 
+        public string Item_No => Signal.ItemNo.GetValue().ToASCII();
+        public string Lot_ID => Signal.LotNo.GetValue().ToASCII();
+        public string Plt_Id => Signal.PltID.GetValue().ToASCII();
 
 
         public Buffer(BufferSignal signal)

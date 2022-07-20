@@ -15,7 +15,9 @@ namespace Mirle.ASRS.Conveyors.Signal
         public Word Ready { get; protected internal set; }
         public Word BCRnotice { get; protected internal set; }
         public BufferBCRsignal BCRsignal { get; protected internal set; }
-
+        public WordBlock ItemNo { get; protected internal set; }
+        public WordBlock LotNo { get; protected internal set; }
+        public WordBlock PltID { get; protected internal set; }
         public Word LoadHeight { get; protected internal set; }
         public Word Switch_Ack { get; protected internal set; }
         public Word A2LV2 { get; protected internal set; }
