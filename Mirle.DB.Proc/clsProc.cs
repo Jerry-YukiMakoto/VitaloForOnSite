@@ -126,6 +126,7 @@ namespace Mirle.DB.Proc
                                 cmdPlt_Id = dataObject1[0].Plt_Id;
                                 Trn_Qty = dataObject1[0].Trn_Qty;
                                 cmdcheck = true;
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Receive StoreIn Command=>有板號作業");
                             }
                             else if (CMD_MST.GetCmdMstByCycleStart(sStnNo, Item_No, Lot_No, Pltfish, Plt_Id, out var dataObject, db).ResultCode == DBResult.Success)
                             {
@@ -138,15 +139,17 @@ namespace Mirle.DB.Proc
                                 Loc = dataObject[0].Loc;
                                 IsCycle = true;//確認是盤點命令參數
                                 cmdcheck = true;
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Receive CYCLE Command");
                             }
                             else if (CMD_MST.GetCmdMstByStoreInStart(sStnNo, Item_No, Lot_No, out var dataObject2, db).ResultCode == DBResult.Success)
                             {
-                                cmdSno = dataObject1[0].Cmd_Sno;
-                                CmdMode = Convert.ToInt32(dataObject1[0].Cmd_Mode);
-                                IOType = Convert.ToInt32(dataObject1[0].IO_Type);
-                                cmdPlt_Id = dataObject1[0].Plt_Id;
-                                Trn_Qty = dataObject1[0].Trn_Qty;
+                                cmdSno = dataObject2[0].Cmd_Sno;
+                                CmdMode = Convert.ToInt32(dataObject2[0].Cmd_Mode);
+                                IOType = Convert.ToInt32(dataObject2[0].IO_Type);
+                                cmdPlt_Id = dataObject2[0].Plt_Id;
+                                Trn_Qty = dataObject2[0].Trn_Qty;
                                 cmdcheck = true;
+                                clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Receive StoreIn Command=>無板號作業");
                             }
                             else//都蒐集不到資料執行退板
                             {
@@ -2471,7 +2474,7 @@ namespace Mirle.DB.Proc
 
 
         #region//根據線別判斷路徑編號
-        private int StoreInfindpathbyEquNo(int Equ_No)
+        public int StoreInfindpathbyEquNo(int Equ_No)
         {
             if (Equ_No==1)
             {
@@ -2537,6 +2540,11 @@ namespace Mirle.DB.Proc
                     {
                         sLine = stemp;
                         dicCountByCrane[stemp]++;
+                        if (dicCountByCrane[stemp]==int.MaxValue)
+                        {
+                            var Reset = new ResetdicCountByCrane();
+                            Reset.ResetCrane();
+                        }
                         break;
                     }
                 }
@@ -2550,6 +2558,19 @@ namespace Mirle.DB.Proc
                 return "";
             }
 
+        }
+
+        public class ResetdicCountByCrane
+        {
+            public void ResetCrane()
+            {
+                dicCountByCrane["1"]=  1;
+                dicCountByCrane["2"] = 1;
+                dicCountByCrane["3"] = 1;
+                dicCountByCrane["4"] = 1;
+                dicCountByCrane["5"] = 1;
+                dicCountByCrane["6"] = 1;
+            }
         }
 
         public static string GetEquNoForProduction()
