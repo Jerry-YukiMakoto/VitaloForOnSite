@@ -39,10 +39,10 @@ namespace Mirle.ASRS.Conveyors.View
             this.lblPresence = new System.Windows.Forms.Label();
             this.lblBCRnotice = new System.Windows.Forms.Label();
             this.lblOther2 = new System.Windows.Forms.Label();
-            this.lblSwitch_Ack = new System.Windows.Forms.Label();
             this.lblInitialNotice = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.lblSwitch_Ack = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
@@ -197,21 +197,6 @@ namespace Mirle.ASRS.Conveyors.View
             this.lblOther2.TabIndex = 15;
             this.lblOther2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lblSwitch_Ack
-            // 
-            this.lblSwitch_Ack.AutoSize = true;
-            this.lblSwitch_Ack.BackColor = System.Drawing.Color.White;
-            this.lblSwitch_Ack.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblSwitch_Ack.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblSwitch_Ack.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lblSwitch_Ack.Location = new System.Drawing.Point(60, 44);
-            this.lblSwitch_Ack.Margin = new System.Windows.Forms.Padding(0);
-            this.lblSwitch_Ack.Name = "lblSwitch_Ack";
-            this.lblSwitch_Ack.Size = new System.Drawing.Size(30, 23);
-            this.lblSwitch_Ack.TabIndex = 5;
-            this.lblSwitch_Ack.Text = "0";
-            this.lblSwitch_Ack.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // lblInitialNotice
             // 
             this.lblInitialNotice.AutoSize = true;
@@ -276,6 +261,20 @@ namespace Mirle.ASRS.Conveyors.View
             this.tableLayoutPanel2.Size = new System.Drawing.Size(120, 30);
             this.tableLayoutPanel2.TabIndex = 14;
             // 
+            // lblSwitch_Ack
+            // 
+            this.lblSwitch_Ack.AutoSize = true;
+            this.lblSwitch_Ack.BackColor = System.Drawing.Color.White;
+            this.lblSwitch_Ack.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblSwitch_Ack.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblSwitch_Ack.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblSwitch_Ack.Location = new System.Drawing.Point(60, 44);
+            this.lblSwitch_Ack.Margin = new System.Windows.Forms.Padding(0);
+            this.lblSwitch_Ack.Name = "lblSwitch_Ack";
+            this.lblSwitch_Ack.Size = new System.Drawing.Size(30, 23);
+            this.lblSwitch_Ack.TabIndex = 5;
+            this.lblSwitch_Ack.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // BufferView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -307,10 +306,9 @@ namespace Mirle.ASRS.Conveyors.View
         private System.Windows.Forms.Label lblPresence;
         private System.Windows.Forms.Label lblBCRnotice;
         private System.Windows.Forms.Label lblOther2;
-        private System.Windows.Forms.Label lblSwitch_Ack;
         private System.Windows.Forms.Label lblInitialNotice;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        
+        private System.Windows.Forms.Label lblSwitch_Ack;
     }
 }

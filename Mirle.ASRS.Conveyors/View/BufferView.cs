@@ -86,10 +86,9 @@ namespace Mirle.ASRS.Conveyors.View
             string strCommandId = "序號\n未顯示表連線失敗";
             string strCmdMode = "模式:\n1 -> 入庫\n2 -> 出庫\n3 -> 盤點";
             string strAuto = "自動模式:\n綠燈A -> 自動ON\n黃燈M -> 手動\n紅燈M -> 連線失敗";
-            string strReady = "Ready訊號:\n0 -> No Ready\n1 -> 入庫Ready\n2 -> 出庫Ready"; //A1,4,5,7,9
-            string strPathNotice = "路徑編號:\n由WCS告知CV貨物該往哪走"; //A1~A4
+            string strReady = "Ready訊號:\n0 -> No Ready\n1 -> 入庫Ready\n2 -> 出庫Ready"; 
+            string strPathNotice = "路徑編號:\n由WCS告知CV貨物該往哪走"; 
             string strPresence = "荷有:\n橘色V -> 此位置有物";
-            string strSwitch_Ack = "站口模式切換:\n0 -> 不允許ON\n1 -> 允許"; //A1
             string strInitialNotice = "初始通知:\n1 -> CV通知WCS輸送機初始已完成";
             string BCRnotice = "讀取通知:\n0 -> OFF\n1 -> ON"; 
             //string strError = "異常碼";
@@ -111,7 +110,6 @@ namespace Mirle.ASRS.Conveyors.View
             objToolTip.SetToolTip(lblReady, strReady);
             objToolTip.SetToolTip(lblPathNotice, strPathNotice);
             objToolTip.SetToolTip(lblPresence, strPresence);
-            objToolTip.SetToolTip(lblSwitch_Ack, strSwitch_Ack);
             objToolTip.SetToolTip(lblInitialNotice, strInitialNotice);
             objToolTip.SetToolTip(lblBCRnotice, BCRnotice);
 
@@ -138,7 +136,6 @@ namespace Mirle.ASRS.Conveyors.View
             Refresh(lblReady, Ready.NoReady.ToString());
             Refresh(lblPathNotice, "X");
             Refresh(lblPresence, String.Empty, Color.White);
-            Refresh(lblSwitch_Ack, Switch_Ack.NoAck.ToString());
             Refresh(lblInitialNotice, InitialNotice.Initial.ToString());
             Refresh(lblBCRnotice, InitialNotice.Initial.ToString());
         }

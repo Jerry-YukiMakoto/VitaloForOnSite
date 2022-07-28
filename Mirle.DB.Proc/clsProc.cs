@@ -90,7 +90,7 @@ namespace Mirle.DB.Proc
                             Lot_No = Regex.Replace(_conveyor.GetBuffer(bufferIndex).Lot_ID.Trim(), @"[^A-Z,a-z,0-9]", string.Empty);
                             bool Pltfish= Plt_Id.Contains("-");//如果是餘板會有槓槓來與滿板分別，可以根據此條件尋找餘板的命令
 
-                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"BCR Notice Start:Item_No=>{Item_No} Plt_Id=>{Plt_Id} Lot_No=>{Lot_No}");//當讀取通知開始，紀錄讀到的的值
+                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Outsource:BCR Notice Start:Item_No=>{Item_No} Plt_Id=>{Plt_Id} Lot_No=>{Lot_No}");//當讀取通知開始，紀錄讀到的的值
 
                             #region//根據buffer狀態更新命令
                             if (_conveyor.GetBuffer(bufferIndex).Auto != true)
@@ -297,7 +297,6 @@ namespace Mirle.DB.Proc
                                     else
                                     {
                                         clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Upadte cmd_mst fail => {cmdSno}");
-
                                         db.TransactionCtrl2(TransactionTypes.Rollback);
                                         return false;
                                     }
@@ -450,7 +449,7 @@ namespace Mirle.DB.Proc
                             Plt_Id = Regex.Replace(_conveyor.GetBuffer(bufferIndex).Plt_Id.Trim(), @"[^A-Z,a-z,0-9]", string.Empty);
                             Lot_No = Regex.Replace(_conveyor.GetBuffer(bufferIndex).Lot_ID.Trim(), @"[^A-Z,a-z,0-9]", string.Empty);
 
-                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"BCR Notice Start:Item_No=>{Item_No} Plt_Id=>{Plt_Id} Lot_No=>{Lot_No}");//當讀取通知開始，紀錄讀到的的值
+                            clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Produce:BCR Notice Start:Item_No=>{Item_No} Plt_Id=>{Plt_Id} Lot_No=>{Lot_No}");//當讀取通知開始，紀錄讀到的的值
 
                             #region//根據buffer狀態更新命令
                             if (_conveyor.GetBuffer(bufferIndex).Auto != true)
@@ -889,14 +888,14 @@ namespace Mirle.DB.Proc
 
                                     return false;
                                 }
-                                if (CMD_MST.UpdateCmdMstEnd(cmdSno, CmdSts.CompleteWaitUpdate, Trace.StoreInReject, db).ResultCode != DBResult.Success)
+                                if (CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.StoreInRejectFinish, db).ResultCode != DBResult.Success)
                                 {
                                     clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreIn)Buffer Get cmdsno To Reject, Update CmdMst Fail => {cmdSno}");
 
                                     db.TransactionCtrl2(TransactionTypes.Rollback);
                                     return false;
                                 }
-                                if (CMD_MST.UpdateCmdMstRemark(cmdSno, Remark.StoreInRejectFinish, db).ResultCode != DBResult.Success)
+                                if (CMD_MST.UpdateCmdMstEnd(cmdSno, CmdSts.CompleteWaitUpdate, Trace.StoreInReject, db).ResultCode != DBResult.Success)
                                 {
                                     clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"(StoreIn)Buffer Get cmdsno To Reject, Update CmdMst Fail => {cmdSno}");
 
@@ -1106,9 +1105,10 @@ namespace Mirle.DB.Proc
                         if (_conveyor.GetBuffer(bufferIndex).BcrNotice == 1)
                         {
                             string cmdSno = (_conveyor.GetBuffer(bufferIndex).CommandId).ToString().PadLeft(5, '0');
-                            Item_No = _conveyor.GetBuffer(bufferIndex).Item_No;
-                            Plt_Id = _conveyor.GetBuffer(bufferIndex).Plt_Id;
-                            Lot_No = _conveyor.GetBuffer(bufferIndex).Lot_ID;
+                            Item_No = Regex.Replace(_conveyor.GetBuffer(bufferIndex).Item_No.Trim(), @"[^A-Z,a-z,0-9]", string.Empty);
+                            Plt_Id = Regex.Replace(_conveyor.GetBuffer(bufferIndex).Plt_Id.Trim(), @"[^A-Z,a-z,0-9]", string.Empty);
+                            Lot_No = Regex.Replace(_conveyor.GetBuffer(bufferIndex).Lot_ID.Trim(), @"[^A-Z,a-z,0-9]", string.Empty);
+
                             if (CMD_MST.GetCmdMstAndDtlCheck(cmdSno, out var dataObject, db).ResultCode == DBResult.Success)
                             {
                                 #region//根據buffer狀態更新命令
@@ -1132,7 +1132,7 @@ namespace Mirle.DB.Proc
                                 clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"2F Buffer Ready BCRCheck=> {cmdSno}");
 
                                 string IOType = dataObject[0].IO_Type;
-                                string dest = "";
+                                string dest = $"{dataObject[0].Loc}";
                                 string Cmd_mode = dataObject[0].Cmd_Mode;
 
                                 if(Item_No!=dataObject[0].Item_No || Plt_Id!=dataObject[0].Plt_Id || Lot_No!=dataObject[0].Lot_No)
@@ -1140,8 +1140,6 @@ namespace Mirle.DB.Proc
                                     //掃到與資料庫不一樣做異常處理
                                     clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"2F Buffer BCRCheck=>Warning:BCR different from DB!  => {cmdSno}");
                                 }
-
-                                dest = $"{dataObject[0].Loc}";
                                 
                                 var WritePlccheck = _conveyor.GetBuffer(bufferIndex).BCRNoticeComplete(1).Result;
                                 bool Result = WritePlccheck;
@@ -1835,7 +1833,6 @@ namespace Mirle.DB.Proc
                         {
                             string cmd_Sno = dataObject[0].Cmd_Sno;
                             int Cmd_Mode = Convert.ToInt32(dataObject[0].Cmd_Mode);
-                            string io_type = dataObject[0].IO_Type;
                             string Stn_No = dataObject[0].Stn_No;
                             var _conveyor = ControllerReader.GetCVControllerr().GetConveryor();
 
@@ -2018,7 +2015,7 @@ namespace Mirle.DB.Proc
                             return true;
                             
                         }
-                            return true;
+                         return true;
                     }
                     else
                     {

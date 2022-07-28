@@ -18,8 +18,6 @@ namespace Mirle.ASRS.WCS
     {
         private readonly LoggerManager _loggerManager;
 
-        private readonly Timer _ErrorReport = new Timer();
-
         private readonly Timer _storeInProcess = new Timer();
         private readonly Timer _storeOutProcess = new Timer();
         private readonly Timer _otherProcess = new Timer();
@@ -33,8 +31,6 @@ namespace Mirle.ASRS.WCS
             _storeOutProcess.Interval = 500;
             _storeInProcess.Interval = 500;
             _otherProcess.Interval = 500;
-
-            _ErrorReport.Interval = 500;
 
             _storeOutProcess.Elapsed += StoreOutProcess;
             _storeInProcess.Elapsed += StoreInProcess;
