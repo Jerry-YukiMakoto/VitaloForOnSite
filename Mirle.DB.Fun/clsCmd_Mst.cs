@@ -359,6 +359,18 @@ namespace Mirle.DB.Fun
             return db.ExecuteSQL2(sql);
         }
 
+        public ExecuteSQLResult UpdateCmdMstTransferringCycle(string cmdSno, string trace, string Plt_Id, SqlServer db)
+        {
+            string sql = "UPDATE Cmd_Mst ";
+            sql += $"SET TRACE='{trace}', ";
+            sql += $"Plt_Id='{Plt_Id}', ";
+            sql += $"Remark='', ";
+            sql += $"EXP_Date='{DateTime.Now:yyyy-MM-dd HH:mm:ss}' ";
+            sql += $"WHERE Cmd_Sno='{cmdSno}' ";
+            sql += $"AND Cmd_Sts='{clsConstValue.CmdSts.strCmd_Running}' ";
+            return db.ExecuteSQL2(sql);
+        }
+
         public ExecuteSQLResult UpdateCmdDtlTransferring(string cmdSno, string Plt_Id, SqlServer db)
         {
             string sql = "UPDATE Cmd_Dtl ";

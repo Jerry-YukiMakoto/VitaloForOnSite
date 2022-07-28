@@ -71,7 +71,6 @@ namespace Mirle.DB.Proc
             string cmdSno="";
             int CmdMode=0;
             int IOType;
-            string cmdPlt_Id;
             bool cmdcheck = true;
             string Trn_Qty="";
             //string Item_Type = "";
@@ -123,7 +122,6 @@ namespace Mirle.DB.Proc
                                 cmdSno = dataObject1[0].Cmd_Sno;
                                 CmdMode = Convert.ToInt32(dataObject1[0].Cmd_Mode);
                                 IOType = Convert.ToInt32(dataObject1[0].IO_Type);
-                                cmdPlt_Id = dataObject1[0].Plt_Id;
                                 Trn_Qty = dataObject1[0].Trn_Qty;
                                 cmdcheck = true;
                                 clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Receive StoreIn Command=>有板號作業");
@@ -133,8 +131,7 @@ namespace Mirle.DB.Proc
                                 cmdSno = dataObject[0].Cmd_Sno;
                                 CmdMode = Convert.ToInt32(dataObject[0].Cmd_Mode);
                                 IOType = Convert.ToInt32(dataObject[0].IO_Type);
-                                Equ_No = dataObject[0].Equ_No;
-                                cmdPlt_Id = dataObject[0].Plt_Id;
+                                Equ_No = dataObject[0].Equ_No;                              
                                 Trn_Qty = dataObject[0].Trn_Qty;
                                 Loc = dataObject[0].Loc;
                                 IsCycle = true;//確認是盤點命令參數
@@ -146,7 +143,6 @@ namespace Mirle.DB.Proc
                                 cmdSno = dataObject2[0].Cmd_Sno;
                                 CmdMode = Convert.ToInt32(dataObject2[0].Cmd_Mode);
                                 IOType = Convert.ToInt32(dataObject2[0].IO_Type);
-                                cmdPlt_Id = dataObject2[0].Plt_Id;
                                 Trn_Qty = dataObject2[0].Trn_Qty;
                                 cmdcheck = true;
                                 clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Buffer Receive StoreIn Command=>無板號作業");
@@ -292,16 +288,33 @@ namespace Mirle.DB.Proc
                                     clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, "begin fail");
                                     return false;
                                 }
-                                if (CMD_MST.UpdateCmdMstTransferring(cmdSno, Trace.StoreInWriteCmdToCV, Loc, Plt_Id, db).ResultCode == DBResult.Success)
+                                if (!IsCycle)//盤點更新主檔方式與一般入庫有差別
                                 {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Upadte cmd_mst succeess => {cmdSno}");
+                                    if (CMD_MST.UpdateCmdMstTransferring(cmdSno, Trace.StoreInWriteCmdToCV, Loc, Plt_Id, db).ResultCode == DBResult.Success)
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Upadte cmd_mst succeess => {cmdSno}");
+                                    }
+                                    else
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Upadte cmd_mst fail => {cmdSno}");
+
+                                        db.TransactionCtrl2(TransactionTypes.Rollback);
+                                        return false;
+                                    }
                                 }
                                 else
                                 {
-                                    clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Upadte cmd_mst fail => {cmdSno}");
+                                    if (CMD_MST.UpdateCmdMstTransferringCycle(cmdSno, Trace.StoreInWriteCmdToCV, Plt_Id, db).ResultCode == DBResult.Success)
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Upadte cmd_mst succeess => {cmdSno}");
+                                    }
+                                    else
+                                    {
+                                        clsWriLog.StoreInLogTrace(_conveyor.GetBuffer(bufferIndex).BufferIndex, _conveyor.GetBuffer(bufferIndex).BufferName, $"Upadte cmd_mst fail => {cmdSno}");
 
-                                    db.TransactionCtrl2(TransactionTypes.Rollback);
-                                    return false;
+                                        db.TransactionCtrl2(TransactionTypes.Rollback);
+                                        return false;
+                                    }
                                 }
                                 if (!IsCycle)//盤點不須更新明細檔
                                 {
