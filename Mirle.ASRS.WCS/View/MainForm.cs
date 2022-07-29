@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using Mirle.Grid.T1JUMAK0;
 using Mirle.DB.Object;
-using Unity;
 using Mirle.Logger;
 using Mirle.ASRS.Close.Program;
 using System.Threading;
