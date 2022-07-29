@@ -45,12 +45,15 @@ namespace Mirle.DB.Proc
         {
             _config = config;
             _config_Sqlite = config_Sqlite;
-            dicCountByCrane.Add("1", 1);
-            dicCountByCrane.Add("2", 1);
-            dicCountByCrane.Add("3", 1);
-            dicCountByCrane.Add("4", 1);
-            dicCountByCrane.Add("5", 1);
-            dicCountByCrane.Add("6", 1);
+            if (!dicCountByCrane.ContainsKey("1"))
+            {
+                dicCountByCrane.Add("1", 1);
+                dicCountByCrane.Add("2", 1);
+                dicCountByCrane.Add("3", 1);
+                dicCountByCrane.Add("4", 1);
+                dicCountByCrane.Add("5", 1);
+                dicCountByCrane.Add("6", 1);
+            }
         }
 
         public Fun.clsProc GetFunProcess()
